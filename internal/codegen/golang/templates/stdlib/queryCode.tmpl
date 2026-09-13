@@ -22,6 +22,20 @@ type {{.Ret.Type}} struct { {{- range .Ret.Struct.Fields}}
 {{if eq .Cmd ":one"}}
 {{range .Comments}}//{{.}}
 {{end -}}
+{{if and $.AndurelRowMapping .AndurelGeneric}}
+func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) (T, error) {
+    {{- template "queryCodeStdExec" . }}
+	{{- if $.WrapErrors}}
+	item, err := scanAndurel[T](row, {{.Ret.ColumnNamesAsGoSlice}})
+	if err != nil {
+		err = fmt.Errorf("query {{.MethodName}}: %w", err)
+	}
+	return item, err
+	{{- else}}
+	return scanAndurel[T](row, {{.Ret.ColumnNamesAsGoSlice}})
+	{{- end}}
+}
+{{else}}
 func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) ({{.Ret.DefineType}}, error) {
     {{- template "queryCodeStdExec" . }}
 	{{- if or (ne .Arg.Pair .Ret.Pair) (ne .Arg.DefineType .Ret.DefineType) }}
@@ -36,10 +50,39 @@ func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}
 	return {{.Ret.ReturnName}}, err
 }
 {{end}}
+{{end}}
 
 {{if eq .Cmd ":many"}}
 {{range .Comments}}//{{.}}
 {{end -}}
+{{if and $.AndurelRowMapping .AndurelGeneric}}
+func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) ([]T, error) {
+    {{- template "queryCodeStdExec" . }}
+    if err != nil {
+        return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+    }
+    defer rows.Close()
+    {{- if $.EmitEmptySlices}}
+    items := []T{}
+    {{else}}
+    var items []T
+    {{end -}}
+    for rows.Next() {
+        item, err := scanAndurel[T](rows, {{.Ret.ColumnNamesAsGoSlice}})
+        if err != nil {
+            return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+        }
+        items = append(items, item)
+    }
+    if err := rows.Close(); err != nil {
+        return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+    }
+    if err := rows.Err(); err != nil {
+        return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+    }
+    return items, nil
+}
+{{else}}
 func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) ([]{{.Ret.DefineType}}, error) {
     {{- template "queryCodeStdExec" . }}
     if err != nil {
@@ -66,6 +109,7 @@ func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}
     }
     return items, nil
 }
+{{end}}
 {{end}}
 
 {{if eq .Cmd ":exec"}}

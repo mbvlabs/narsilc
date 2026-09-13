@@ -287,6 +287,17 @@ func (q Query) hasRetType() bool {
 	return scanned && !q.Ret.isEmpty()
 }
 
+// AndurelGeneric reports whether this query should emit a generic method that
+// scans into a caller-chosen struct via andurel tags.
+func (q Query) AndurelGeneric() bool {
+	switch q.Cmd {
+	case metadata.CmdOne, metadata.CmdMany:
+		return q.Ret.IsStruct()
+	default:
+		return false
+	}
+}
+
 func (q Query) TableIdentifierAsGoSlice() string {
 	escapedNames := make([]string, 0, 3)
 	for _, p := range []string{q.Table.Catalog, q.Table.Schema, q.Table.Name} {

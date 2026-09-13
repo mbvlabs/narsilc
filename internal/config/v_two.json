@@ -277,6 +277,12 @@
                                 },
                                 "omit_unused_structs": {
                                     "type": "boolean"
+                                },
+                                "row_mapping": {
+                                    "type": "string",
+                                    "enum": [
+                                        "andurel"
+                                    ]
                                 }
                             },
                             "json": {
