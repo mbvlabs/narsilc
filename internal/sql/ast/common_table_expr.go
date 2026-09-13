@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/sqlc-dev/sqlc/internal/sql/format"
+import "github.com/mbvlabs/narsilc/internal/sql/format"
 
 type CommonTableExpr struct {
 	Tag NodeTag[CommonTableExpr] `json:"tag"`

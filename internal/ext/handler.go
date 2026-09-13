@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/sqlc-dev/sqlc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/plugin"
 )
 
 type Handler interface {

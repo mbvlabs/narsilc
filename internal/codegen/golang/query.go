@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/codegen/golang/opts"
-	"github.com/sqlc-dev/sqlc/internal/metadata"
-	"github.com/sqlc-dev/sqlc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/codegen/golang/opts"
+	"github.com/mbvlabs/narsilc/internal/metadata"
+	"github.com/mbvlabs/narsilc/internal/plugin"
 )
 
 type QueryValue struct {

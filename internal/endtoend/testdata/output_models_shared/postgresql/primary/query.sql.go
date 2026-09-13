@@ -8,7 +8,7 @@ package primary
 import (
 	"context"
 
-	models "github.com/sqlc-dev/sqlc/endtoend/output_models_shared/postgresql/model"
+	models "github.com/mbvlabs/narsilc/endtoend/output_models_shared/postgresql/model"
 )
 
 const createAuthor = `-- name: CreateAuthor :one

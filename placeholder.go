@@ -1,6 +1,4 @@
-package sqlc
+package narsilc
 
-// This is a dummy file that allows SQLC to be "installed" as a module and locked using
-// go.mod and then run using "go run github.com/sqlc-dev/sqlc"
-
+// Placeholder lets the module be installed and run as github.com/mbvlabs/narsilc.
 type Placeholder struct{}

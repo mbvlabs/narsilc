@@ -6,7 +6,7 @@ import (
 
 	tsql "github.com/sqlc-dev/teesql/ast"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 type cc struct {

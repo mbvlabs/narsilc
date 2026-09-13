@@ -1,4 +1,4 @@
-module github.com/sqlc-dev/sqlc
+module github.com/mbvlabs/narsilc
 
 go 1.26.0
 

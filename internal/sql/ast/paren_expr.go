@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/sqlc-dev/sqlc/internal/sql/format"
+import "github.com/mbvlabs/narsilc/internal/sql/format"
 
 // ParenExpr represents a parenthesized expression
 type ParenExpr struct {

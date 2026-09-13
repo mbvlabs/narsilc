@@ -1,10 +1,10 @@
 package compiler
 
 import (
-	"github.com/sqlc-dev/sqlc/internal/core"
-	"github.com/sqlc-dev/sqlc/internal/metadata"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
-	"github.com/sqlc-dev/sqlc/internal/sql/catalog"
+	"github.com/mbvlabs/narsilc/internal/core"
+	"github.com/mbvlabs/narsilc/internal/metadata"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/catalog"
 )
 
 type Function struct {

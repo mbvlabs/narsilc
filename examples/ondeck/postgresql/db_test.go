@@ -10,7 +10,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	_ "github.com/lib/pq"
 
-	"github.com/sqlc-dev/sqlc/internal/sqltest/local"
+	"github.com/mbvlabs/narsilc/internal/sqltest/local"
 )
 
 func runOnDeckQueries(t *testing.T, q *Queries) {

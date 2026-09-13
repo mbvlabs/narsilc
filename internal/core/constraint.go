@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sqlc-dev/sqlc/internal/core/catalogdb"
+	"github.com/mbvlabs/narsilc/internal/core/catalogdb"
 )
 
 func (c *Catalog) CreateConstraint(classOID int64, name string, kind string, columns string) error {

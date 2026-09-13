@@ -1,6 +1,6 @@
 package sqlite
 
-import "github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
+import "github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
 
 // signature is what a function returns and what its arguments hold, read
 // from the amalgamation by source.signature. Args types the leading

@@ -3,8 +3,8 @@ package analyzer
 import (
 	"fmt"
 
-	"github.com/sqlc-dev/sqlc/internal/core"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/core"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 func Prepare(cat *core.Catalog, stmt ast.Node) (core.PrepareResult, error) {

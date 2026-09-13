@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/sqlc-dev/sqlc/internal/sql/format"
+import "github.com/mbvlabs/narsilc/internal/sql/format"
 
 // formatReturningOptions writes the PostgreSQL 18 RETURNING WITH (...) option
 // list that renames the OLD and NEW aliases available in a RETURNING clause.

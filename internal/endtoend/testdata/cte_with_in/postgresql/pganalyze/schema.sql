@@ -1,4 +1,4 @@
--- https://github.com/sqlc-dev/sqlc/issues/2153
+-- https://github.com/mbvlabs/narsilc/issues/2153
 
 CREATE TABLE L (
   id   BIGSERIAL PRIMARY KEY,

@@ -12,11 +12,11 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/sqlc-dev/sqlc/internal/config"
-	"github.com/sqlc-dev/sqlc/internal/source"
-	"github.com/sqlc-dev/sqlc/internal/sql/named"
-	"github.com/sqlc-dev/sqlc/internal/sql/preprocess"
-	"github.com/sqlc-dev/sqlc/internal/sql/sqlerr"
+	"github.com/mbvlabs/narsilc/internal/config"
+	"github.com/mbvlabs/narsilc/internal/source"
+	"github.com/mbvlabs/narsilc/internal/sql/named"
+	"github.com/mbvlabs/narsilc/internal/sql/preprocess"
+	"github.com/mbvlabs/narsilc/internal/sql/sqlerr"
 )
 
 var update = flag.Bool("update", false, "update the testdata golden files")

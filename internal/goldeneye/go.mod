@@ -1,4 +1,4 @@
-module github.com/sqlc-dev/sqlc/internal/goldeneye
+module github.com/mbvlabs/narsilc/internal/goldeneye
 
 go 1.26.0
 

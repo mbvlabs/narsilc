@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/analysis"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/analysis"
 )
 
 // catalog is what the database says about a schema: its tables and their

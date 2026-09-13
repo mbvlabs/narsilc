@@ -23,7 +23,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
 )
 
 // Engine is the name of the engine directory the dialect lives under.

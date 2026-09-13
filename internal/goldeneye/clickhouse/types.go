@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/analysis"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/analysis"
 )
 
 // A type is a call expression, the way ClickHouse itself models one: a

@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/endtoend"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/endtoend"
 )
 
 // TestDialect verifies the committed ClickHouse dialect against what the

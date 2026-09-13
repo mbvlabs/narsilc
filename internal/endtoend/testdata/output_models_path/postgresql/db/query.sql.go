@@ -9,7 +9,7 @@ import (
 	"context"
 	"database/sql"
 
-	models "github.com/sqlc-dev/sqlc/endtoend/output_models_path/postgresql/model"
+	models "github.com/mbvlabs/narsilc/endtoend/output_models_path/postgresql/model"
 )
 
 const createAuthor = `-- name: CreateAuthor :one

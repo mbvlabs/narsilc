@@ -4,11 +4,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/sqlc-dev/sqlc/internal/core"
-	"github.com/sqlc-dev/sqlc/internal/core/analyzer"
-	coreschema "github.com/sqlc-dev/sqlc/internal/core/schema"
-	"github.com/sqlc-dev/sqlc/internal/engine/googlesql"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/core"
+	"github.com/mbvlabs/narsilc/internal/core/analyzer"
+	coreschema "github.com/mbvlabs/narsilc/internal/core/schema"
+	"github.com/mbvlabs/narsilc/internal/engine/googlesql"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 const benchSchema = `

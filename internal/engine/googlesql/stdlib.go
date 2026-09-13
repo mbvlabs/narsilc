@@ -1,7 +1,7 @@
 package googlesql
 
 import (
-	"github.com/sqlc-dev/sqlc/internal/sql/catalog"
+	"github.com/mbvlabs/narsilc/internal/sql/catalog"
 )
 
 func defaultSchema(name string) *catalog.Schema {

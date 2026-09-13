@@ -5,7 +5,7 @@ import (
 
 	pg "github.com/sqlc-dev/oliphant"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 func convertFuncParamMode(m pg.FunctionParameterMode) (ast.FuncParamMode, error) {

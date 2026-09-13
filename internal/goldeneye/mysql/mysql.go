@@ -36,7 +36,7 @@ import (
 
 	driver "github.com/go-sql-driver/mysql"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
 )
 
 // Engine is the name sqlc knows the dialect by, and the name of the analyze

@@ -6,6 +6,8 @@ package queries
 import (
 	"context"
 	"database/sql"
+
+	"github.com/mbvlabs/narsilc"
 )
 
 const authorPostCounts = `-- name: AuthorPostCounts :many
@@ -23,7 +25,7 @@ func (q *Queries) AuthorPostCounts[T any](ctx context.Context) ([]T, error) {
 	defer rows.Close()
 	var items []T
 	for rows.Next() {
-		item, err := scanAndurel[T](rows, []string{"id", "name", "post_count"})
+		item, err := narsilc.Scan[T](rows, []string{"id", "name", "post_count"})
 		if err != nil {
 			return nil, err
 		}
@@ -65,7 +67,7 @@ type CreateAuthorParams struct {
 
 func (q *Queries) CreateAuthor[T any](ctx context.Context, arg CreateAuthorParams) (T, error) {
 	row := q.db.QueryRowContext(ctx, createAuthor, arg.Name, arg.Bio)
-	return scanAndurel[T](row, []string{"id", "name", "bio"})
+	return narsilc.Scan[T](row, []string{"id", "name", "bio"})
 }
 
 const deleteAuthor = `-- name: DeleteAuthor :exec
@@ -85,7 +87,7 @@ WHERE id = $1 LIMIT 1
 
 func (q *Queries) GetAuthor[T any](ctx context.Context, id int64) (T, error) {
 	row := q.db.QueryRowContext(ctx, getAuthor, id)
-	return scanAndurel[T](row, []string{"id", "name", "bio"})
+	return narsilc.Scan[T](row, []string{"id", "name", "bio"})
 }
 
 const listAuthors = `-- name: ListAuthors :many
@@ -101,7 +103,7 @@ func (q *Queries) ListAuthors[T any](ctx context.Context) ([]T, error) {
 	defer rows.Close()
 	var items []T
 	for rows.Next() {
-		item, err := scanAndurel[T](rows, []string{"id", "name", "bio"})
+		item, err := narsilc.Scan[T](rows, []string{"id", "name", "bio"})
 		if err != nil {
 			return nil, err
 		}

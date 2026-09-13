@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/core"
+	"github.com/mbvlabs/narsilc/internal/core"
 )
 
 // applyExtension applies the extension directory dir, relative to the

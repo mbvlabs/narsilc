@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"github.com/sqlc-dev/sqlc/internal/sql/format"
+	"github.com/mbvlabs/narsilc/internal/sql/format"
 )
 
 type SelectStmt struct {

@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/codegen/golang/opts"
-	"github.com/sqlc-dev/sqlc/internal/metadata"
+	"github.com/mbvlabs/narsilc/internal/codegen/golang/opts"
+	"github.com/mbvlabs/narsilc/internal/metadata"
 )
 
 type fileImports struct {
@@ -415,6 +415,15 @@ func (i *importer) queryImports(filename string) fileImports {
 
 	if i.Options.WrapErrors {
 		std["fmt"] = struct{}{}
+	}
+
+	if i.Options.AndurelRowMapping() {
+		for _, q := range gq {
+			if q.AndurelGeneric() {
+				pkg[ImportSpec{Path: "github.com/mbvlabs/narsilc"}] = struct{}{}
+				break
+			}
+		}
 	}
 
 	return sortedImports(std, pkg)

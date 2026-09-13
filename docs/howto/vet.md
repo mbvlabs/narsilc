@@ -223,7 +223,7 @@ sql:
 ```
 
 To see this in action, check out the [authors
-example](https://github.com/sqlc-dev/sqlc/blob/main/examples/authors/sqlc.yaml).
+example](https://github.com/mbvlabs/narsilc/blob/main/examples/authors/sqlc.yaml).
 
 ## Running lint rules
 

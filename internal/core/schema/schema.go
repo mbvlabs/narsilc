@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/core"
-	"github.com/sqlc-dev/sqlc/internal/core/analyzer"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/core"
+	"github.com/mbvlabs/narsilc/internal/core/analyzer"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 func Apply(cat *core.Catalog, n ast.Node) error {

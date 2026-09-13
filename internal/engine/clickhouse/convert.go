@@ -9,7 +9,7 @@ import (
 	chast "github.com/sqlc-dev/doubleclick/ast"
 	"github.com/sqlc-dev/doubleclick/token"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 type cc struct {

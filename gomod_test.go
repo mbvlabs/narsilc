@@ -1,4 +1,4 @@
-package sqlc
+package narsilc
 
 import (
 	"fmt"
@@ -8,13 +8,13 @@ import (
 )
 
 // TestGoModHasNoReplaceDirectives guards against regressions of
-// https://github.com/sqlc-dev/sqlc/issues/4397.
+// https://github.com/mbvlabs/narsilc/issues/4397.
 //
 // When go.mod contains a replace directive, the Go toolchain refuses to run
-// `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest` (and the equivalent
+// `go install github.com/mbvlabs/narsilc/cmd/sqlc@latest` (and the equivalent
 // `go run ...@latest`):
 //
-//	go: github.com/sqlc-dev/sqlc/cmd/sqlc@latest (in github.com/sqlc-dev/sqlc@v...):
+//	go: github.com/mbvlabs/narsilc/cmd/sqlc@latest (in github.com/mbvlabs/narsilc@v...):
 //	    The go.mod file for the module providing named packages contains one or
 //	    more replace directives. It must not contain directives that would cause
 //	    it to be interpreted differently than if it were the main module.
@@ -59,8 +59,8 @@ func TestGoModHasNoReplaceDirectives(t *testing.T) {
 
 	if len(offenders) > 0 {
 		t.Fatalf("go.mod must not contain replace directives; "+
-			"they break `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`.\n"+
-			"See https://github.com/sqlc-dev/sqlc/issues/4397\n%s",
+			"they break `go install github.com/mbvlabs/narsilc/cmd/sqlc@latest`.\n"+
+			"See https://github.com/mbvlabs/narsilc/issues/4397\n%s",
 			strings.Join(offenders, "\n"))
 	}
 }

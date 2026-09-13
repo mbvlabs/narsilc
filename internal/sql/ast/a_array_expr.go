@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/sqlc-dev/sqlc/internal/sql/format"
+import "github.com/mbvlabs/narsilc/internal/sql/format"
 
 type A_ArrayExpr struct {
 	Tag NodeTag[A_ArrayExpr] `json:"tag"`

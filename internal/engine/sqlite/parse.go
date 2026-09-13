@@ -9,9 +9,9 @@ import (
 	"github.com/sqlc-dev/meyer/parser"
 	mtoken "github.com/sqlc-dev/meyer/token"
 
-	"github.com/sqlc-dev/sqlc/internal/source"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
-	"github.com/sqlc-dev/sqlc/internal/sql/sqlerr"
+	"github.com/mbvlabs/narsilc/internal/source"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/sqlerr"
 )
 
 func NewParser() *Parser {

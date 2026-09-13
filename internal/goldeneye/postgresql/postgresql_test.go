@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
 )
 
 // TestDialect verifies the committed PostgreSQL dialect against what the

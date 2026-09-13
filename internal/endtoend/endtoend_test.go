@@ -15,12 +15,12 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
-	"github.com/sqlc-dev/sqlc/internal/cmd"
-	"github.com/sqlc-dev/sqlc/internal/config"
-	"github.com/sqlc-dev/sqlc/internal/opts"
-	"github.com/sqlc-dev/sqlc/internal/sqlcdebug"
-	"github.com/sqlc-dev/sqlc/internal/sqltest/docker"
-	"github.com/sqlc-dev/sqlc/internal/sqltest/native"
+	"github.com/mbvlabs/narsilc/internal/cmd"
+	"github.com/mbvlabs/narsilc/internal/config"
+	"github.com/mbvlabs/narsilc/internal/opts"
+	"github.com/mbvlabs/narsilc/internal/sqlcdebug"
+	"github.com/mbvlabs/narsilc/internal/sqltest/docker"
+	"github.com/mbvlabs/narsilc/internal/sqltest/native"
 )
 
 // withSQLCDEBUG installs the given SQLCDEBUG-formatted string for the

@@ -3,9 +3,9 @@ package compiler
 import (
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/core"
-	"github.com/sqlc-dev/sqlc/internal/source"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/core"
+	"github.com/mbvlabs/narsilc/internal/source"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 // expandCore rewrites the stars in a query's text with the columns the core

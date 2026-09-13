@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/analysis"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/endtoend"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/analysis"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/endtoend"
 )
 
 // The analyze cases are checked against the analysis shell, which is asked

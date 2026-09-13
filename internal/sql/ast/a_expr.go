@@ -3,7 +3,7 @@ package ast
 import (
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/format"
+	"github.com/mbvlabs/narsilc/internal/sql/format"
 )
 
 type A_Expr struct {

@@ -3,7 +3,7 @@ package ast
 import (
 	"sort"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/format"
+	"github.com/mbvlabs/narsilc/internal/sql/format"
 )
 
 // File is a parsed query file: its statements together with the comments

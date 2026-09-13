@@ -8,7 +8,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/sqlc-dev/sqlc/internal/info"
+	"github.com/mbvlabs/narsilc/internal/info"
 )
 
 // The sha256 of the sqlc binary is an input to every action — a rebuilt sqlc

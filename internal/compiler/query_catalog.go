@@ -3,9 +3,9 @@ package compiler
 import (
 	"fmt"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
-	"github.com/sqlc-dev/sqlc/internal/sql/catalog"
-	"github.com/sqlc-dev/sqlc/internal/sql/preprocess"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/catalog"
+	"github.com/mbvlabs/narsilc/internal/sql/preprocess"
 )
 
 type QueryCatalog struct {

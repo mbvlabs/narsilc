@@ -1,4 +1,4 @@
-package golang
+package narsilc
 
 import (
 	"database/sql"
@@ -19,7 +19,7 @@ func (a assignScanner) Scan(dest ...any) error {
 	return nil
 }
 
-func TestScanAndurel(t *testing.T) {
+func TestScan(t *testing.T) {
 	type author struct {
 		ID   int64          `andurel:"id"`
 		Name string         `andurel:"name"`
@@ -27,7 +27,7 @@ func TestScanAndurel(t *testing.T) {
 		Skip string
 	}
 
-	got, err := scanAndurel[author](assignScanner{int64(7), "ada", sql.NullString{String: "bio", Valid: true}}, []string{"id", "name", "bio"})
+	got, err := Scan[author](assignScanner{int64(7), "ada", sql.NullString{String: "bio", Valid: true}}, []string{"id", "name", "bio"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,14 +36,14 @@ func TestScanAndurel(t *testing.T) {
 	}
 }
 
-func TestScanAndurelProjection(t *testing.T) {
+func TestScanProjection(t *testing.T) {
 	type author struct {
 		ID        int64  `andurel:"id"`
 		Name      string `andurel:"name"`
 		PostCount int64  `andurel:"post_count"`
 	}
 
-	got, err := scanAndurel[author](assignScanner{int64(1), "ada"}, []string{"id", "name"})
+	got, err := Scan[author](assignScanner{int64(1), "ada"}, []string{"id", "name"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,30 +52,30 @@ func TestScanAndurelProjection(t *testing.T) {
 	}
 }
 
-func TestScanAndurelMissingTag(t *testing.T) {
+func TestScanMissingTag(t *testing.T) {
 	type author struct {
 		ID int64 `andurel:"id"`
 	}
-	_, err := scanAndurel[author](assignScanner{int64(1), "ada"}, []string{"id", "name"})
+	_, err := Scan[author](assignScanner{int64(1), "ada"}, []string{"id", "name"})
 	if err == nil {
 		t.Fatal("expected missing tag error")
 	}
 }
 
-func TestScanAndurelNotStruct(t *testing.T) {
-	_, err := scanAndurel[int](assignScanner{int64(1)}, []string{"id"})
+func TestScanNotStruct(t *testing.T) {
+	_, err := Scan[int](assignScanner{int64(1)}, []string{"id"})
 	if err == nil {
 		t.Fatal("expected not a struct error")
 	}
 }
 
-func TestScanAndurelDuplicateTag(t *testing.T) {
+func TestScanDuplicateTag(t *testing.T) {
 	type author struct {
 		ID   int64  `andurel:"id"`
 		Also int64  `andurel:"id"`
 		Name string `andurel:"name"`
 	}
-	_, err := scanAndurel[author](assignScanner{int64(1), "ada"}, []string{"id", "name"})
+	_, err := Scan[author](assignScanner{int64(1), "ada"}, []string{"id", "name"})
 	if err == nil {
 		t.Fatal("expected duplicate tag error")
 	}

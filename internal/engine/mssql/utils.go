@@ -6,8 +6,8 @@ import (
 
 	tsql "github.com/sqlc-dev/teesql/ast"
 
-	"github.com/sqlc-dev/sqlc/internal/debug"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/debug"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 // fragmented is satisfied by every teesql node via its embedded Fragment.

@@ -10,8 +10,8 @@ import (
 	"github.com/ncruces/go-sqlite3"
 	"github.com/ncruces/go-sqlite3/ext/serdes"
 
-	"github.com/sqlc-dev/sqlc/internal/cache"
-	"github.com/sqlc-dev/sqlc/internal/core/catalogdb"
+	"github.com/mbvlabs/narsilc/internal/cache"
+	"github.com/mbvlabs/narsilc/internal/core/catalogdb"
 )
 
 // The name of the sole output blob a CoreCatalog action produces.

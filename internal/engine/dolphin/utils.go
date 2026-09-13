@@ -4,7 +4,7 @@ import (
 	pcast "github.com/sqlc-dev/marino/ast"
 	"github.com/sqlc-dev/marino/mysql"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 func (c *cc) parseTableName(n *pcast.TableName) *ast.TableName {

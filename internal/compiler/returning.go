@@ -1,8 +1,8 @@
 package compiler
 
 import (
-	"github.com/sqlc-dev/sqlc/internal/config"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/config"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 // returningTables builds virtual tables for the OLD and NEW aliases that

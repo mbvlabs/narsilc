@@ -22,7 +22,7 @@ By default, sqlc runs its analysis using a built-in query analysis engine. While
 
 You can configure sqlc to use a database connection for enhanced analysis using metadata from that database.
 
-The database-backed analyzer currently supports PostgreSQL, with [MySQL](https://github.com/sqlc-dev/sqlc/issues/2902) and [SQLite](https://github.com/sqlc-dev/sqlc/issues/2903)
+The database-backed analyzer currently supports PostgreSQL, with [MySQL](https://github.com/mbvlabs/narsilc/issues/2902) and [SQLite](https://github.com/mbvlabs/narsilc/issues/2903)
 support planned in the future.
 
 ## Enhanced analysis with managed databases

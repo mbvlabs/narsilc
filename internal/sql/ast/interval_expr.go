@@ -1,6 +1,6 @@
 package ast
 
-import "github.com/sqlc-dev/sqlc/internal/sql/format"
+import "github.com/mbvlabs/narsilc/internal/sql/format"
 
 // IntervalExpr represents a MySQL INTERVAL expression like "INTERVAL 1 DAY"
 type IntervalExpr struct {

@@ -26,13 +26,13 @@ type {{.Ret.Type}} struct { {{- range .Ret.Struct.Fields}}
 func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) (T, error) {
     {{- template "queryCodeStdExec" . }}
 	{{- if $.WrapErrors}}
-	item, err := scanAndurel[T](row, {{.Ret.ColumnNamesAsGoSlice}})
+	item, err := narsilc.Scan[T](row, {{.Ret.ColumnNamesAsGoSlice}})
 	if err != nil {
 		err = fmt.Errorf("query {{.MethodName}}: %w", err)
 	}
 	return item, err
 	{{- else}}
-	return scanAndurel[T](row, {{.Ret.ColumnNamesAsGoSlice}})
+	return narsilc.Scan[T](row, {{.Ret.ColumnNamesAsGoSlice}})
 	{{- end}}
 }
 {{else}}
@@ -68,7 +68,7 @@ func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{ dbarg }} {{.Arg
     var items []T
     {{end -}}
     for rows.Next() {
-        item, err := scanAndurel[T](rows, {{.Ret.ColumnNamesAsGoSlice}})
+        item, err := narsilc.Scan[T](rows, {{.Ret.ColumnNamesAsGoSlice}})
         if err != nil {
             return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
         }
