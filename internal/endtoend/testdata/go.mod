@@ -1,11 +1,10 @@
 module github.com/mbvlabs/narsilc/endtoend
 
-go 1.24.0
-
-toolchain go1.24.7
+go 1.27.0
 
 require (
 	github.com/go-sql-driver/mysql v1.7.0
+	github.com/mbvlabs/narsilc v0.0.0
 	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/hexon/mysqltsv v0.1.0
@@ -35,3 +34,5 @@ require (
 	golang.org/x/text v0.29.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
+
+replace github.com/mbvlabs/narsilc => ../../..
