@@ -68,6 +68,11 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 	if filename != "" {
 		configPath = filepath.Join(dir, filename)
 	} else {
+		lockPath := filepath.Join(dir, "andurel.lock")
+		if _, err := os.Stat(lockPath); err == nil {
+			return readAndurelLock(stderr, lockPath)
+		}
+
 		var yamlMissing, jsonMissing, ymlMissing bool
 		yamlPath := filepath.Join(dir, "narsilc.yaml")
 		ymlPath := filepath.Join(dir, "narsilc.yml")
@@ -85,7 +90,7 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 		}
 
 		if yamlMissing && ymlMissing && jsonMissing {
-			fmt.Fprintln(stderr, "error parsing configuration files. narsilc.(yaml|yml) or narsilc.json: file does not exist")
+			fmt.Fprintln(stderr, "error parsing configuration files. andurel.lock or narsilc.(yaml|yml|json): file does not exist")
 			return "", nil, errors.New("config file missing")
 		}
 
@@ -106,6 +111,10 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 	}
 
 	base := filepath.Base(configPath)
+	if config.IsAndurelLock(base) {
+		return readAndurelLock(stderr, configPath)
+	}
+
 	file, err := os.Open(configPath)
 	if err != nil {
 		fmt.Fprintf(stderr, "error parsing %s: file does not exist\n", base)
@@ -128,6 +137,20 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 	}
 
 	return configPath, &conf, nil
+}
+
+func readAndurelLock(stderr io.Writer, path string) (string, *config.Config, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		fmt.Fprintf(stderr, "error parsing andurel.lock: file does not exist\n")
+		return "", nil, err
+	}
+	conf, err := config.FromAndurelLock(data)
+	if err != nil {
+		fmt.Fprintf(stderr, "error parsing andurel.lock: %s\n", err)
+		return "", nil, err
+	}
+	return path, &conf, nil
 }
 
 func Generate(ctx context.Context, dir, filename string, o *Options) (map[string]string, error) {

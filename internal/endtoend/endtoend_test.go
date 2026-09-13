@@ -376,7 +376,7 @@ func cmpDirectory(t *testing.T, dir string, actual map[string]string) {
 		if strings.HasSuffix(path, ".txt") && filepath.Base(path) != "hello.txt" {
 			return nil
 		}
-		if filepath.Base(path) == "narsilc.json" {
+		if filepath.Base(path) == "narsilc.json" || filepath.Base(path) == "andurel.lock" {
 			return nil
 		}
 		if filepath.Base(path) == "exec.json" {
@@ -430,7 +430,7 @@ func BenchmarkReplay(b *testing.B) {
 		if err != nil {
 			return err
 		}
-		if info.Name() == "narsilc.json" || info.Name() == "narsilc.yaml" || info.Name() == "narsilc.yml" {
+		if info.Name() == "andurel.lock" || info.Name() == "narsilc.json" || info.Name() == "narsilc.yaml" || info.Name() == "narsilc.yml" {
 			dirs = append(dirs, filepath.Dir(path))
 			return filepath.SkipDir
 		}

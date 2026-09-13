@@ -37,7 +37,7 @@ func init() {
 // Do runs the command logic.
 func Do(args []string, stdin io.Reader, stdout io.Writer, stderr io.Writer) int {
 	rootCmd := &cobra.Command{Use: "narsilc", SilenceUsage: true}
-	rootCmd.PersistentFlags().StringP("file", "f", "", "specify an alternate config file (default: narsilc.yaml)")
+	rootCmd.PersistentFlags().StringP("file", "f", "", "specify an alternate config file (default: andurel.lock or narsilc.yaml)")
 
 	rootCmd.AddCommand(checkCmd)
 	rootCmd.AddCommand(createDBCmd)
