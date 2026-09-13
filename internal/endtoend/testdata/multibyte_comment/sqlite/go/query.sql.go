@@ -47,6 +47,7 @@ ORDER BY name
 // Multi-byte UTF-8 in comments must not shift the byte offsets used to slice
 // query text out of the source file (#4523, #4235, #4372).
 // an em dash right here — must not truncate the ORDER BY below
+
 func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
 	rows, err := q.db.QueryContext(ctx, listItems)
 	if err != nil {

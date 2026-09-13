@@ -62,6 +62,7 @@ RETURNING id
 `
 
 // https://github.com/mbvlabs/narsilc/issues/1235
+
 func (q *Queries) SetDefaultName(ctx context.Context, id int64) (int64, error) {
 	row := q.db.QueryRowContext(ctx, setDefaultName, id)
 	var id_2 int64

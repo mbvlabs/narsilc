@@ -40,6 +40,7 @@ SELECT DATE_ADD('2018-05-01',INTERVAL 1 DAY)
 `
 
 // https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_date-add
+
 func (q *Queries) DateAddOneDay(ctx context.Context) (time.Time, error) {
 	row := q.db.QueryRowContext(ctx, dateAddOneDay)
 	var date_add time.Time
