@@ -5,7 +5,7 @@
 > or back them up first. The formatting it produces may change in a
 > future release.
 
-`sqlc fmt` rewrites the query files referenced by your configuration file in a
+`narsilc fmt` rewrites the query files referenced by your configuration file in a
 canonical format. Each query is parsed with the engine's parser and printed
 back from the syntax tree, so formatting never depends on how the query was
 written — only on what it means. PostgreSQL, MySQL and SQLite are supported;
@@ -48,7 +48,7 @@ SELECT id, -- the primary key
        name, bio, created_at FROM authors WHERE name LIKE ? AND bio IS NOT NULL AND id > ? AND created_at > ? AND name <> ? ORDER BY name;
 ```
 
-running `sqlc fmt` rewrites it to:
+running `narsilc fmt` rewrites it to:
 
 ```sql
 -- name: GetAuthor :one

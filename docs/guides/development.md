@@ -1,17 +1,17 @@
-# Developing sqlc
+# Developing narsilc
 
 ## Building
 
-For local development, install `sqlc` under an alias. We suggest `sqlc-dev`.
+For local development, install `narsilc` under an alias. We suggest `narsilc-dev`.
 
 ```
-go build -o ~/go/bin/sqlc-dev ./cmd/sqlc
+go build -o ~/go/bin/narsilc-dev ./cmd/narsilc
 ```
 
-Install `sqlc-gen-json` to avoid test failure.
+Install `narsilc-gen-json` to avoid test failure.
 
 ```
-go build -o ~/go/bin/sqlc-gen-json ./cmd/sqlc-gen-json
+go build -o ~/go/bin/narsilc-gen-json ./cmd/narsilc-gen-json
 ```
 
 ## Running Tests

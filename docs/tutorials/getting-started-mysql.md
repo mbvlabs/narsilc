@@ -6,7 +6,7 @@ This tutorial assumes that the latest version of sqlc is
 We'll generate Go code here, but other
 [language plugins](../reference/language-support.md) are available. You'll
 naturally need the Go toolchain if you want to build and run a program with the
-code sqlc generates, but sqlc itself has no dependencies.
+code narsilc generates, but sqlc itself has no dependencies.
 
 At the end, you'll push your SQL queries to [sqlc Cloud](https://dashboard.sqlc.dev/) for further insights and analysis.
 
@@ -20,8 +20,8 @@ Initialize a new Go module named `tutorial.sqlc.dev/app`
 go mod init tutorial.sqlc.dev/app
 ```
 
-sqlc looks for either a `sqlc.(yaml|yml)` or `sqlc.json` file in the current
-directory. In our new directory, create a file named `sqlc.yaml` with the
+sqlc looks for either a `narsilc.(yaml|yml)` or `narsilc.json` file in the current
+directory. In our new directory, create a file named `narsilc.yaml` with the
 following contents:
 
 ```yaml
@@ -79,7 +79,7 @@ You are now ready to generate code. You shouldn't see any output when you run
 the `generate` subcommand, unless something goes wrong:
 
 ```shell
-sqlc generate
+narsilc generate
 ```
 
 You should now have a `tutorial` subdirectory with three files containing Go
@@ -89,7 +89,7 @@ source code. These files comprise a Go package named `tutorial`:
 ├── go.mod
 ├── query.sql
 ├── schema.sql
-├── sqlc.yaml
+├── narsilc.yaml
 └── tutorial
     ├── db.go
     ├── models.go
@@ -172,7 +172,7 @@ go get github.com/go-sql-driver/mysql
 go build .
 ```
 
-The program should compile without errors. To make that possible, sqlc generates
+The program should compile without errors. To make that possible, narsilc generates
 readable, **idiomatic** Go code that you otherwise would've had to write
 yourself. Take a look in `tutorial/query.sql.go`.
 
@@ -189,7 +189,7 @@ and hopefully can see how you'd use sqlc in your own real-world applications.
 [sqlc Cloud](https://dashboard.sqlc.dev) provides additional verification, catching subtle bugs. To get started, create a
 [dashboard account](https://dashboard.sqlc.dev). Once you've signed in, create a
 project and generate an auth token. Add your project's ID to the `cloud` block
-to your sqlc.yaml.
+to your narsilc.yaml.
 
 
 ```yaml

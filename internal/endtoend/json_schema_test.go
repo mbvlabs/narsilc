@@ -46,7 +46,7 @@ func TestJsonSchema(t *testing.T) {
 			if err != nil {
 				return err
 			}
-			if filepath.Base(path) != "sqlc.json" {
+			if filepath.Base(path) != "narsilc.json" {
 				return nil
 			}
 			t.Run(path, func(t *testing.T) {

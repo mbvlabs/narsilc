@@ -81,7 +81,7 @@ func TestExamples(t *testing.T) {
 			}
 			output, err := cmd.Generate(ctx, path, "", opts)
 			if err != nil {
-				t.Fatalf("sqlc generate failed: %s", stderr.String())
+				t.Fatalf("narsilc generate failed: %s", stderr.String())
 			}
 			cmpDirectory(t, path, output)
 		})
@@ -344,7 +344,7 @@ func TestReplay(t *testing.T) {
 				}
 
 				if len(expected) == 0 && err != nil {
-					t.Fatalf("sqlc %s failed: %s", args.Command, stderr.String())
+					t.Fatalf("narsilc %s failed: %s", args.Command, stderr.String())
 				}
 
 				diff := cmp.Diff(
@@ -376,7 +376,7 @@ func cmpDirectory(t *testing.T, dir string, actual map[string]string) {
 		if strings.HasSuffix(path, ".txt") && filepath.Base(path) != "hello.txt" {
 			return nil
 		}
-		if filepath.Base(path) == "sqlc.json" {
+		if filepath.Base(path) == "narsilc.json" {
 			return nil
 		}
 		if filepath.Base(path) == "exec.json" {
@@ -430,7 +430,7 @@ func BenchmarkReplay(b *testing.B) {
 		if err != nil {
 			return err
 		}
-		if info.Name() == "sqlc.json" || info.Name() == "sqlc.yaml" || info.Name() == "sqlc.yml" {
+		if info.Name() == "narsilc.json" || info.Name() == "narsilc.yaml" || info.Name() == "narsilc.yml" {
 			dirs = append(dirs, filepath.Dir(path))
 			return filepath.SkipDir
 		}

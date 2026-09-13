@@ -4,7 +4,7 @@
 > `parse` is in beta. Its flags and the shape of the JSON AST it
 > prints may change in a future release.
 
-`sqlc parse` parses SQL from a file or standard input and prints the abstract
+`narsilc parse` parses SQL from a file or standard input and prints the abstract
 syntax tree (AST) as a single JSON document. It does not require a configuration
 file or a database connection.
 
@@ -15,7 +15,7 @@ alongside its AST.
 ## Usage
 
 ```sh
-sqlc parse --dialect <dialect> [file]
+narsilc parse --dialect <dialect> [file]
 ```
 
 The SQL is read from the given file, or from standard input when no file is
@@ -31,13 +31,13 @@ provided.
 Parse a query file:
 
 ```sh
-sqlc parse --dialect postgresql query.sql
+narsilc parse --dialect postgresql query.sql
 ```
 
 Parse SQL piped via standard input:
 
 ```sh
-echo "SELECT 1;" | sqlc parse --dialect mysql
+echo "SELECT 1;" | narsilc parse --dialect mysql
 ```
 
 The output is a JSON array with one object per statement:

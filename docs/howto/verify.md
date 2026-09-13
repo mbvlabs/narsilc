@@ -4,9 +4,9 @@
 
 Schema updates and poorly-written queries often bring down production databases. That’s bad.
 
-Out of the box, `sqlc generate` catches some of these issues. Running `sqlc vet` with the `sqlc/db-prepare` rule catches more subtle problems. But there is a large class of issues that sqlc can’t prevent by looking at current schema and queries alone.
+Out of the box, `narsilc generate` catches some of these issues. Running `narsilc vet` with the `sqlc/db-prepare` rule catches more subtle problems. But there is a large class of issues that sqlc can’t prevent by looking at current schema and queries alone.
 
-For instance, when a schema change is proposed, existing queries and code running in production might fail when the schema change is applied. Enter `sqlc verify`, which analyzes existing queries against new schema changes and errors if there are any issues.
+For instance, when a schema change is proposed, existing queries and code running in production might fail when the schema change is applied. Enter `narsilc verify`, which analyzes existing queries against new schema changes and errors if there are any issues.
 
 Let's look at an example. Assume you have these two tables in production.
 
@@ -38,7 +38,7 @@ So far, so good. Then assume you propose this schema change:
 ALTER TABLE users ADD COLUMN created_at TIMESTAMP;
 ```
 
-Running `sqlc generate` fails with this change, returning a `column reference "created_at" is ambiguous` error. You update your query to fix the issue.
+Running `narsilc generate` fails with this change, returning a `column reference "created_at" is ambiguous` error. You update your query to fix the issue.
 
 ```sql
 -- name: GetUserActions :many
@@ -51,7 +51,7 @@ While that change fixes the issue, there's a production outage waiting to happen
 
 It ensures migrations are safe to deploy by sending your current schema and queries to sqlc cloud. There, we run the queries for your latest push against your new schema changes. This check catches backwards incompatible schema changes for existing queries.
 
-Here `sqlc verify` alerts you to the fact that ORDER BY "created_at" is ambiguous.
+Here `narsilc verify` alerts you to the fact that ORDER BY "created_at" is ambiguous.
 
 ```sh
 $ sqlc verify
@@ -79,9 +79,9 @@ export SQLC_AUTH_TOKEN=sqlc_xxxxxxxx
 
 ## Expected workflow
 
-Using `sqlc verify` requires pushing your queries and schema to sqlc Cloud. When
+Using `narsilc verify` requires pushing your queries and schema to sqlc Cloud. When
 you release a new version of your application, you should push your schema and
-queries as well. For example, we run `sqlc push` after any change has been
+queries as well. For example, we run `narsilc push` after any change has been
 merged into our `main` branch on Github, as we deploy every commit to
 production.
 
@@ -89,7 +89,7 @@ production.
 $ sqlc push --tag main
 ```
 
-Locally or in pull requests, run `sqlc verify` to check that existing queries
+Locally or in pull requests, run `narsilc verify` to check that existing queries
 continue to work with your current database schema.
 
 ```shell

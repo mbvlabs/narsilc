@@ -68,7 +68,7 @@ sql:
 ```
 
 For a complete working example see the following files:
-- [sqlc-gen-json](https://github.com/mbvlabs/narsilc/tree/main/cmd/sqlc-gen-json)
+- [narsilc-gen-json](https://github.com/mbvlabs/narsilc/tree/main/cmd/narsilc-gen-json)
   - A process-based plugin that serializes the CodeGenRequest to JSON
 - [process_plugin_sqlc_gen_json](https://github.com/mbvlabs/narsilc/tree/main/internal/endtoend/testdata/process_plugin_sqlc_gen_json)
   - An example project showing how to use a process-based plugin

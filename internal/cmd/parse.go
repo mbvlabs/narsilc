@@ -49,25 +49,25 @@ statement carries a "-- name:" annotation) alongside the AST.
 
 Examples:
   # Parse a SQL file with PostgreSQL dialect
-  sqlc parse --dialect postgresql schema.sql
+  narsilc parse --dialect postgresql schema.sql
 
   # Parse from stdin with MySQL dialect
-  echo "SELECT * FROM users" | sqlc parse --dialect mysql
+  echo "SELECT * FROM users" | narsilc parse --dialect mysql
 
   # Parse SQLite SQL
-  sqlc parse --dialect sqlite queries.sql
+  narsilc parse --dialect sqlite queries.sql
 
   # Parse ClickHouse SQL
-  sqlc parse --dialect clickhouse queries.sql
+  narsilc parse --dialect clickhouse queries.sql
 
   # Parse GoogleSQL (BigQuery, Spanner)
-  sqlc parse --dialect googlesql queries.sql
+  narsilc parse --dialect googlesql queries.sql
 
   # Parse SQL Server (T-SQL) SQL
-  sqlc parse --dialect mssql queries.sql
+  narsilc parse --dialect mssql queries.sql
 
   # Parse DuckDB SQL
-  sqlc parse --dialect duckdb queries.sql`,
+  narsilc parse --dialect duckdb queries.sql`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			dialect, err := cmd.Flags().GetString("dialect")

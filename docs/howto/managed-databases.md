@@ -9,7 +9,7 @@ sqlc's built-in query analysis engine. PostgreSQL support is available today,
 with MySQL on the way.
 
 Once configured, `sqlc` will also use managed databases when linting queries
-with [`sqlc vet`](vet.md) in cases where your lint rules require a connection
+with [`narsilc vet`](vet.md) in cases where your lint rules require a connection
 to a running database.
 
 Managed databases are under active development, and we're interested in
@@ -55,7 +55,7 @@ Without a database connection, sqlc does its best to parse, analyze and compile 
 the schema you pass it and what it knows about the various database engines it supports. In many cases
 this works just fine, but for more advanced queries sqlc might not have enough information to produce good code.
 
-With managed databases configured, `sqlc generate` will automatically create a hosted ephemeral database with your
+With managed databases configured, `narsilc generate` will automatically create a hosted ephemeral database with your
 schema and use that database to improve its query analysis. And sqlc will cache its analysis locally
 on a per-query basis to speed up future codegen runs. Here's a minimal working configuration:
 
@@ -77,7 +77,7 @@ sql:
 
 ## Linting queries
 
-With managed databases configured, `sqlc vet` will automatically create a hosted ephemeral database with your
+With managed databases configured, `narsilc vet` will automatically create a hosted ephemeral database with your
 schema and use that database when running lint rules that require a
 database connection, e.g. any [rule relying on `EXPLAIN ...` output](vet.md#rules-using-explain--output).
 

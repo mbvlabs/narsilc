@@ -5,6 +5,7 @@ query results into caller-owned structs via generic methods and `andurel` tags.
 
 ```bash
 go install github.com/mbvlabs/narsilc/cmd/narsilc@v0.1.0
+narsilc generate
 ```
 
 Release archives are `narsilc_<version>_<os>_<arch>.tar.gz` on

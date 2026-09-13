@@ -125,7 +125,7 @@ Or this for YAML.
 
 ## Re-generate the code
 
-Run `sqlc generate`. The plugin will produce the same output, so you shouldn't
-see any changes. The first time `sqlc generate` is run, the plugin must be
+Run `narsilc generate`. The plugin will produce the same output, so you shouldn't
+see any changes. The first time `narsilc generate` is run, the plugin must be
 downloaded and compiled, resulting in a slightly longer runtime. Subsequent
 `generate` calls will be fast.

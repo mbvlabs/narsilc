@@ -24,38 +24,38 @@ func newAnalyzeCmd() *cobra.Command {
 		Long: `Analyze a query file against a schema file and output the inferred result
 columns and parameters as JSON.
 
-Unlike "sqlc generate", this command does not require a configuration file and
-does not connect to a database. It uses sqlc's native static analysis to infer
+Unlike "narsilc generate", this command does not require a configuration file and
+does not connect to a database. It uses narsilc's native static analysis to infer
 types from the provided schema.
 
 Examples:
   # Analyze a PostgreSQL query
-  sqlc analyze --dialect postgresql --schema schema.sql query.sql
+  narsilc analyze --dialect postgresql --schema schema.sql query.sql
 
   # Analyze a MySQL query
-  sqlc analyze --dialect mysql --schema schema.sql query.sql
+  narsilc analyze --dialect mysql --schema schema.sql query.sql
 
   # Analyze a SQLite query
-  sqlc analyze --dialect sqlite --schema schema.sql query.sql
+  narsilc analyze --dialect sqlite --schema schema.sql query.sql
 
   # Analyze a ClickHouse query
-  sqlc analyze --dialect clickhouse --schema schema.sql query.sql
+  narsilc analyze --dialect clickhouse --schema schema.sql query.sql
 
   # Analyze a GoogleSQL (BigQuery, Spanner) query
-  sqlc analyze --dialect googlesql --schema schema.sql query.sql
+  narsilc analyze --dialect googlesql --schema schema.sql query.sql
 
   # Analyze a SQL Server (T-SQL) query
-  sqlc analyze --dialect mssql --schema schema.sql query.sql
+  narsilc analyze --dialect mssql --schema schema.sql query.sql
 
   # Analyze a DuckDB query
-  sqlc analyze --dialect duckdb --schema schema.sql query.sql
+  narsilc analyze --dialect duckdb --schema schema.sql query.sql
 
   # Analyze a query piped via stdin
   echo "-- name: GetAuthor :one
-  SELECT * FROM authors WHERE id = $1;" | sqlc analyze --dialect postgresql --schema schema.sql
+  SELECT * FROM authors WHERE id = $1;" | narsilc analyze --dialect postgresql --schema schema.sql
 
   # Include the statement AST in the output
-  sqlc analyze --dialect postgresql --schema schema.sql --ast query.sql`,
+  narsilc analyze --dialect postgresql --schema schema.sql --ast query.sql`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			dialect, err := cmd.Flags().GetString("dialect")

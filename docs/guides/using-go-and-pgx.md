@@ -9,7 +9,7 @@ PostgreSQL package for many Gophers since lib/pq was put into maintenance mode.
 ## Getting started
 
 To start generating code that uses pgx, set the `sql_package` field in
-your `sqlc.yaml` configuration file. Valid options are `pgx/v4` or
+your `narsilc.yaml` configuration file. Valid options are `pgx/v4` or
 `pgx/v5`
 
 ```yaml
@@ -59,7 +59,7 @@ WHERE id = $1;
 Generating the code will now give you pgx-compatible database access methods.
 
 ```bash
-sqlc generate
+narsilc generate
 ```
 
 ## Generated code walkthrough

@@ -32,7 +32,7 @@ import (
 var debugDumpCatalog = sqlcdebug.New("dumpcatalog")
 
 const errMessageNoVersion = `The configuration file must have a version number.
-Set the version to 1 or 2 at the top of sqlc.json:
+Set the version to 1 or 2 at the top of narsilc.json:
 
 {
   "version": "1"
@@ -69,9 +69,9 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 		configPath = filepath.Join(dir, filename)
 	} else {
 		var yamlMissing, jsonMissing, ymlMissing bool
-		yamlPath := filepath.Join(dir, "sqlc.yaml")
-		ymlPath := filepath.Join(dir, "sqlc.yml")
-		jsonPath := filepath.Join(dir, "sqlc.json")
+		yamlPath := filepath.Join(dir, "narsilc.yaml")
+		ymlPath := filepath.Join(dir, "narsilc.yml")
+		jsonPath := filepath.Join(dir, "narsilc.json")
 
 		if _, err := os.Stat(yamlPath); os.IsNotExist(err) {
 			yamlMissing = true
@@ -85,13 +85,13 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 		}
 
 		if yamlMissing && ymlMissing && jsonMissing {
-			fmt.Fprintln(stderr, "error parsing configuration files. sqlc.(yaml|yml) or sqlc.json: file does not exist")
+			fmt.Fprintln(stderr, "error parsing configuration files. narsilc.(yaml|yml) or narsilc.json: file does not exist")
 			return "", nil, errors.New("config file missing")
 		}
 
 		if (!yamlMissing || !ymlMissing) && !jsonMissing {
-			fmt.Fprintln(stderr, "error: both sqlc.json and sqlc.(yaml|yml) files present")
-			return "", nil, errors.New("sqlc.json and sqlc.(yaml|yml) present")
+			fmt.Fprintln(stderr, "error: both narsilc.json and narsilc.(yaml|yml) files present")
+			return "", nil, errors.New("narsilc.json and narsilc.(yaml|yml) present")
 		}
 
 		if jsonMissing {

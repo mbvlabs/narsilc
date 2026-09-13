@@ -1,6 +1,6 @@
 # Modifying the database schema
 
-sqlc parses `CREATE TABLE` and `ALTER TABLE` statements in order to generate
+narsilc parses `CREATE TABLE` and `ALTER TABLE` statements in order to generate
 the necessary code.
 
 ```sql
@@ -91,7 +91,7 @@ type Foo struct {
 
 **Warning:**
 [golang-migrate interprets](https://github.com/golang-migrate/migrate/blob/master/MIGRATIONS.md#migration-filename-format)
-migration filenames numerically. However, sqlc parses migration files in
+migration filenames numerically. However, narsilc parses migration files in
 lexicographic order. If you choose to have sqlc enumerate your migration files,
 make sure their numeric ordering matches their lexicographic ordering to avoid
 unexpected behavior. This can be done by prepending enough zeroes to the
@@ -146,7 +146,7 @@ type Post struct {
 ### goose
 
 **Warning:**
-sqlc parses migration files in lexicographic order. **If you are using numeric filenames for migrations in Goose and you choose to have sqlc enumerate your migration files**,
+narsilc parses migration files in lexicographic order. **If you are using numeric filenames for migrations in Goose and you choose to have sqlc enumerate your migration files**,
 make sure their numeric ordering matches their lexicographic ordering to avoid
 unexpected behavior. This can be done by prepending enough zeroes to the
 migration filenames.

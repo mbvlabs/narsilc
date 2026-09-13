@@ -70,9 +70,9 @@ func parseStdout(t *testing.T, dir string) []byte {
 	return nil
 }
 
-// hasSQLCConfig reports whether dir contains an sqlc configuration file.
+// hasSQLCConfig reports whether dir contains a narsilc configuration file.
 func hasSQLCConfig(dir string) bool {
-	for _, name := range []string{"sqlc.json", "sqlc.yaml", "sqlc.yml"} {
+	for _, name := range []string{"narsilc.json", "narsilc.yaml", "narsilc.yml"} {
 		if _, err := os.Stat(filepath.Join(dir, name)); err == nil {
 			return true
 		}
@@ -107,7 +107,7 @@ func FindTests(t *testing.T, root, testctx string) []*Testcase {
 			return err
 		}
 		name := info.Name()
-		if name == "sqlc.json" || name == "sqlc.yaml" || name == "sqlc.yml" {
+		if name == "narsilc.json" || name == "narsilc.yaml" || name == "narsilc.yml" {
 			dir := filepath.Dir(path)
 			tcs = append(tcs, &Testcase{
 				Path:       dir,

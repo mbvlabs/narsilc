@@ -1,4 +1,4 @@
-.PHONY: build build-endtoend test test-ci test-examples test-endtoend test-goldeneye start psql mysqlsh proto narsilc-dev
+.PHONY: build build-endtoend test test-ci test-examples test-endtoend test-goldeneye start psql mysqlsh proto narsilc-dev narsilc-gen-json
 
 build:
 	go build ./...
@@ -32,8 +32,8 @@ goldeneye:
 test-goldeneye:
 	cd ./internal/goldeneye && go test ./...
 
-sqlc-gen-json:
-	go build -o ~/bin/sqlc-gen-json ./cmd/sqlc-gen-json
+narsilc-gen-json:
+	go build -o ~/bin/narsilc-gen-json ./cmd/narsilc-gen-json
 
 test-json-process-plugin:
 	go build -o ~/bin/test-json-process-plugin ./scripts/test-json-process-plugin/

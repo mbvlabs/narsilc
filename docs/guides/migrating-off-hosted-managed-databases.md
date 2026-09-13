@@ -68,4 +68,4 @@ cloud:
 
 ## Re-generate the code
 
-Run `sqlc generate`. A database with the `sqlc_managed_` prefix will be automatically created and used for query analysis. 
+Run `narsilc generate`. A database with the `sqlc_managed_` prefix will be automatically created and used for query analysis. 

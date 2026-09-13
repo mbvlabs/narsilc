@@ -53,10 +53,10 @@ jobs:
         CGO_ENABLED: "0"
 
     - name: install databases
-      run: go run ./cmd/sqlc-test-setup install
+      run: go run ./cmd/narsilc-test-setup install
 
     - name: start databases
-      run: go run ./cmd/sqlc-test-setup start
+      run: go run ./cmd/narsilc-test-setup start
 
     - name: test ./...
       run: gotestsum --junitfile junit.xml -- --tags=examples -timeout 20m -failfast ./...

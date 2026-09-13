@@ -4,10 +4,10 @@ If your project has more than a single developer, we suggest running `sqlc` as
 part of your CI/CD pipeline. The four subcommands you'll want to run are `diff`,
 `vet`, `verify` and `push`
 
-`sqlc diff` ensures that your generated code is up to date. New developers to a
-project may forget to run `sqlc generate` after adding a query or updating a
-schema. They also might edit generated code. `sqlc diff` will catch both errors
-by comparing the expected output from `sqlc generate` to what's on disk.
+`narsilc diff` ensures that your generated code is up to date. New developers to a
+project may forget to run `narsilc generate` after adding a query or updating a
+schema. They also might edit generated code. `narsilc diff` will catch both errors
+by comparing the expected output from `narsilc generate` to what's on disk.
 
 ```diff
 % sqlc diff
@@ -22,17 +22,17 @@ by comparing the expected output from `sqlc generate` to what's on disk.
  `
 ```
 
-`sqlc vet` runs a set of lint rules against your SQL queries. These rules are
+`narsilc vet` runs a set of lint rules against your SQL queries. These rules are
 helpful in catching anti-patterns before they make it into production. Please
 see the [vet](vet.md) documentation for a complete guide to adding lint rules
 for your project.
 
-`sqlc verify` ensures that schema changes do not break production. Existing
+`narsilc verify` ensures that schema changes do not break production. Existing
 queries are checked against new schema changes for correctness. Please see the
 [verify](verify.md) documentation for a complete guide.
 
 
-`sqlc push` pushes your database schema, queries and configuration to sqlc
+`narsilc push` pushes your database schema, queries and configuration to sqlc
 Cloud. These archives are used by `verify` to catch breaking changes to your
 database schema.  Learn more about uploading projects [here](push.md)
 
@@ -40,8 +40,8 @@ database schema.  Learn more about uploading projects [here](push.md)
 
 Install `sqlc` using the [suggested instructions](../overview/install.md).
 
-Create three steps in your pipeline for `sqlc diff`, `sqlc vet`, and `sqlc
-verify`. Run `sqlc push` after merge on your `main` branch.
+Create three steps in your pipeline for `narsilc diff`, `narsilc vet`, and `sqlc
+verify`. Run `narsilc push` after merge on your `main` branch.
 
 ## GitHub Actions
 
@@ -52,7 +52,7 @@ to speed up the installation process.
 
 ### diff
 
-The following GitHub Workflow configuration runs `sqlc diff` on every push.
+The following GitHub Workflow configuration runs `narsilc diff` on every push.
 
 ```yaml
 name: sqlc
@@ -70,8 +70,8 @@ jobs:
 
 ### vet
 
-The following GitHub Workflow configuration runs [sqlc vet](vet.md) on every push.
-You can use `sqlc vet` without a database connection, but you'll need one if your
+The following GitHub Workflow configuration runs [narsilc vet](vet.md) on every push.
+You can use `narsilc vet` without a database connection, but you'll need one if your
 `sqlc` configuration references the built-in `sqlc/db-prepare` lint rule.
 
 ```yaml
@@ -90,7 +90,7 @@ jobs:
       with:
         postgres-version: "16"
       id: postgres
-    - run: sqlc vet
+    - run: narsilc vet
       env:
         POSTGRESQL_SERVER_URI: ${{ steps.postgres.outputs.connection-uri }}?sslmode=disable
 

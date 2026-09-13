@@ -210,7 +210,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 			scanner := bufio.NewScanner(strings.NewReader(query.Text))
 			for scanner.Scan() {
 				line := scanner.Text()
-				comments = append(comments, "  "+line)
+				comments = append(comments, "\t"+line)
 			}
 			if err := scanner.Err(); err != nil {
 				return nil, err

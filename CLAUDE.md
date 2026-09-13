@@ -10,14 +10,14 @@ This document provides essential information for working with the sqlc codebase,
 - **Docker & Docker Compose** - Required for integration tests with databases (local development)
 - **Git** - For version control
 
-## Database Setup with sqlc-test-setup
+## Database Setup with narsilc-test-setup
 
-The `sqlc-test-setup` tool (`cmd/sqlc-test-setup/`) automates installing and starting PostgreSQL and MySQL for tests. Both commands are idempotent and safe to re-run.
+The `narsilc-test-setup` tool (`cmd/narsilc-test-setup/`) automates installing and starting PostgreSQL and MySQL for tests. Both commands are idempotent and safe to re-run.
 
 ### Install databases
 
 ```bash
-go run ./cmd/sqlc-test-setup install
+go run ./cmd/narsilc-test-setup install
 ```
 
 This will:
@@ -30,7 +30,7 @@ This will:
 ### Start databases
 
 ```bash
-go run ./cmd/sqlc-test-setup start
+go run ./cmd/narsilc-test-setup start
 ```
 
 This will:
@@ -68,8 +68,8 @@ go test --tags=examples -timeout 20m ./...
 ### Full Test Suite without Docker (Remote / CI)
 
 ```bash
-go run ./cmd/sqlc-test-setup install
-go run ./cmd/sqlc-test-setup start
+go run ./cmd/narsilc-test-setup install
+go run ./cmd/narsilc-test-setup start
 go test --tags=examples -timeout 20m ./...
 ```
 
@@ -203,7 +203,7 @@ make start             # Start database containers
 
 - **File:** `.github/workflows/ci.yml`
 - **Go Version:** 1.26.4
-- **Database Setup:** Uses `sqlc-test-setup` (not Docker) to install and start PostgreSQL and MySQL directly on the runner
+- **Database Setup:** Uses `narsilc-test-setup` (not Docker) to install and start PostgreSQL and MySQL directly on the runner
 - **Test Command:** `gotestsum --junitfile junit.xml -- --tags=examples -timeout 20m ./...`
 - **Additional Checks:** `govulncheck` for vulnerability scanning
 
@@ -212,11 +212,11 @@ make start             # Start database containers
 ### Building Development Versions
 
 ```bash
-# Build main sqlc binary for development
-go build -o ~/go/bin/sqlc-dev ./cmd/sqlc
+# Build main narsilc binary for development
+go build -o ~/go/bin/narsilc-dev ./cmd/narsilc
 
 # Build JSON plugin (required for some tests)
-go build -o ~/go/bin/sqlc-gen-json ./cmd/sqlc-gen-json
+go build -o ~/go/bin/narsilc-gen-json ./cmd/narsilc-gen-json
 ```
 
 ### Environment Variables for Tests
@@ -232,7 +232,7 @@ MYSQL_SERVER_URI="root:mysecretpassword@tcp(127.0.0.1:3306)/mysql?multiStatement
 
 ### Key Directories
 
-- `/cmd/` - Main binaries (sqlc, sqlc-gen-json, sqlc-test-setup)
+- `/cmd/` - Main binaries (narsilc, narsilc-gen-json, narsilc-test-setup)
 - `/internal/cmd/` - Command implementations (vet, generate, etc.)
 - `/internal/engine/` - Database engine implementations
   - `/postgresql/` - PostgreSQL parser and converter
@@ -290,9 +290,9 @@ docker compose ps
 docker compose up -d
 ```
 
-If using sqlc-test-setup:
+If using narsilc-test-setup:
 ```bash
-go run ./cmd/sqlc-test-setup start
+go run ./cmd/narsilc-test-setup start
 ```
 
 ## Tips for Contributors

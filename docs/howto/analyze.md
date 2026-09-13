@@ -5,7 +5,7 @@
 > future release, and the types it reports can differ from the ones
 > `generate` produces.
 
-`sqlc analyze` analyzes a query against a schema and prints the inferred result
+`narsilc analyze` analyzes a query against a schema and prints the inferred result
 columns and parameters as a single JSON document.
 
 Unlike [`generate`](generate.md), this command does not require a configuration
@@ -22,7 +22,7 @@ case.
 ## Usage
 
 ```sh
-sqlc analyze --dialect <dialect> --schema <schema-file> [query-file]
+narsilc analyze --dialect <dialect> --schema <schema-file> [query-file]
 ```
 
 The query is read from the given file, or from standard input when no file is
@@ -57,7 +57,7 @@ SELECT * FROM authors WHERE id = $1;
 Running:
 
 ```sh
-sqlc analyze --dialect postgresql --schema schema.sql query.sql
+narsilc analyze --dialect postgresql --schema schema.sql query.sql
 ```
 
 reports the result columns and parameters:

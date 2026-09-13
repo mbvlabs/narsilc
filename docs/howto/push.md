@@ -31,7 +31,7 @@ You can see what's included when uploading your project by using using the
 
 ```shell
 $ sqlc push --dry-run
-2023/11/21 10:39:51 INFO config file=sqlc.yaml bytes=912
+2023/11/21 10:39:51 INFO config file=narsilc.yaml bytes=912
 2023/11/21 10:39:51 INFO codegen_request queryset=app file=codegen_request.pb
 2023/11/21 10:39:51 INFO schema queryset=app file=migrations/00001_initial.sql bytes=3033
 2023/11/21 10:39:51 INFO query queryset=app file=queries/app.sql bytes=1150
@@ -49,7 +49,7 @@ $ sqlc push
 
 ### Tags
 
-You can provide tags to associate with a push, primarily as a convenient reference when using `sqlc verify` with the `against` argument.
+You can provide tags to associate with a push, primarily as a convenient reference when using `narsilc verify` with the `against` argument.
 
 Tags only refer to a single push, so if you pass an existing tag to `push` it will overwrite the previous reference.
 

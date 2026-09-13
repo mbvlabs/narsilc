@@ -18,8 +18,8 @@ The following experiments are defined:
 
 ### coreanalyzer
 
-Routes `sqlc generate` through the core catalog and analyzer instead of each
-engine's own analysis path. This is the same analysis used by `sqlc analyze`,
+Routes `narsilc generate` through the core catalog and analyzer instead of each
+engine's own analysis path. This is the same analysis used by `narsilc analyze`,
 and the only analysis path for the ClickHouse and GoogleSQL engines.
 
 ```
@@ -170,7 +170,7 @@ return an error.
 
 ### dumpvetenv
 
-The `dumpvetenv` command prints the variables available to a `sqlc vet` rule
+The `dumpvetenv` command prints the variables available to a `narsilc vet` rule
 during evaluation.
 
 `SQLCDEBUG=dumpvetenv=1`
@@ -178,7 +178,7 @@ during evaluation.
 ### dumpexplain
 
 The `dumpexplain` command prints the JSON-formatted result from running
-`EXPLAIN ...` on a query when a `sqlc vet` rule evaluation requires its output.
+`EXPLAIN ...` on a query when a `narsilc vet` rule evaluation requires its output.
 
 `SQLCDEBUG=dumpexplain=1`
 

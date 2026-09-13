@@ -1,7 +1,7 @@
 # Configuration
 
-The `sqlc` tool is configured via a `sqlc.(yaml|yml)` or `sqlc.json` file. This
-file must be in the directory where the `sqlc` command is run.
+The `narsilc` tool is configured via a `narsilc.(yaml|yml)` or `narsilc.json` file. This
+file must be in the directory where the `narsilc` command is run.
 
 ## Version 2
 
@@ -49,7 +49,7 @@ Each mapping in the `sql` collection has the following keys:
 - `database`:
   - A mapping to configure database connections. See [database](#database) for the supported keys.
 - `rules`:
-  - A collection of rule names to run via `sqlc vet`. See [rules](#rules) for configuration options.
+  - A collection of rule names to run via `narsilc vet`. See [rules](#rules) for configuration options.
 - `analyzer`:
   - A mapping to configure query analysis. See [analyzer](#analyzer) for the supported keys.
 - `strict_function_checks`

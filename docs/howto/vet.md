@@ -2,13 +2,13 @@
 
 *Added in v1.19.0*
 
-`sqlc vet` runs queries through a set of lint rules.
+`narsilc vet` runs queries through a set of lint rules.
 
 Rules are defined in the `sqlc` [configuration](../reference/config.md) file. They
 consist of a name, message, and a [Common Expression Language
 (CEL)](https://github.com/google/cel-spec) expression. Expressions are evaluated
 using [cel-go](https://github.com/cel-expr/cel-go).  If an expression evaluates to
-`true`, `sqlc vet` will report an error using the given message.
+`true`, `narsilc vet` will report an error using the given message.
 
 ## Defining lint rules
 
@@ -166,7 +166,7 @@ rules:
 Please note that databases configured with a `uri` must have an up-to-date
 schema for `vet` to work correctly, and `sqlc` does not apply schema migrations
 to your database. Use your migration tool of choice to create the necessary
-tables and objects before running `sqlc vet` with rules that depend on
+tables and objects before running `narsilc vet` with rules that depend on
 `EXPLAIN ...` output.
 
 Alternatively, configure [managed databases](managed-databases.md) to have
@@ -199,7 +199,7 @@ sql:
 Please note that databases configured with a `uri` must have an up-to-date
 schema for `vet` to work correctly, and `sqlc` does not apply schema migrations
 to your database. Use your migration tool of choice to create the necessary
-tables and objects before running `sqlc vet` with the `sqlc/db-prepare` rule.
+tables and objects before running `narsilc vet` with the `sqlc/db-prepare` rule.
 
 Alternatively, configure [managed databases](managed-databases.md) to have
 `sqlc` create hosted ephemeral databases with the correct schema automatically.
@@ -223,13 +223,13 @@ sql:
 ```
 
 To see this in action, check out the [authors
-example](https://github.com/mbvlabs/narsilc/blob/main/examples/authors/sqlc.yaml).
+example](https://github.com/mbvlabs/narsilc/blob/main/examples/authors/narsilc.yaml).
 
 ## Running lint rules
 
 When you add the name of a defined rule to the rules list
 for a [sql package](../reference/config.md#sql),
-`sqlc vet` will evaluate that rule against every query in the package.
+`narsilc vet` will evaluate that rule against every query in the package.
 
 In the example below, two rules are defined but only one is enabled.
 
@@ -258,7 +258,7 @@ rules:
 
 ### Opting-out of lint rules
 
-For any query, you can tell `sqlc vet` not to evaluate lint rules using the
+For any query, you can tell `narsilc vet` not to evaluate lint rules using the
 `@sqlc-vet-disable` query annotation. The annotation accepts a list of rules to ignore.
 
 ```sql

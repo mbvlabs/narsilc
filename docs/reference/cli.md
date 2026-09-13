@@ -2,7 +2,7 @@
 
 ```sh
 Usage:
-  sqlc [command]
+  narsilc [command]
 
 Available Commands:
   analyze     Analyze a query against a schema and output the result columns and parameters
@@ -13,17 +13,17 @@ Available Commands:
   fmt         Format SQL queries
   generate    Generate source code from SQL
   help        Help about any command
-  init        Create an empty sqlc.yaml settings file
+  init        Create an empty narsilc.yaml settings file
   parse       Parse SQL and output the AST as JSON
   push        Push the schema, queries, and configuration for this project
   verify      Verify schema, queries, and configuration for this project
-  version     Print the sqlc version number
+  version     Print the narsilc version number
   vet         Vet examines queries
 
 Flags:
-  -f, --file string    specify an alternate config file (default: sqlc.yaml)
-  -h, --help           help for sqlc
+  -f, --file string    specify an alternate config file (default: narsilc.yaml)
+  -h, --help           help for narsilc
       --no-database    disable database connections (default: false)
 
-Use "sqlc [command] --help" for more information about a command.
+Use "narsilc [command] --help" for more information about a command.
 ```

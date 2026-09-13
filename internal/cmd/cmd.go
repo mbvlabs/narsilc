@@ -37,7 +37,7 @@ func init() {
 // Do runs the command logic.
 func Do(args []string, stdin io.Reader, stdout io.Writer, stderr io.Writer) int {
 	rootCmd := &cobra.Command{Use: "narsilc", SilenceUsage: true}
-	rootCmd.PersistentFlags().StringP("file", "f", "", "specify an alternate config file (default: sqlc.yaml)")
+	rootCmd.PersistentFlags().StringP("file", "f", "", "specify an alternate config file (default: narsilc.yaml)")
 
 	rootCmd.AddCommand(checkCmd)
 	rootCmd.AddCommand(createDBCmd)
@@ -95,7 +95,7 @@ var versionCmd = &cobra.Command{
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "Create an empty sqlc.yaml settings file",
+	Short: "Create an empty narsilc.yaml settings file",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		useV1, err := cmd.Flags().GetBool("v1")
 		if err != nil {
@@ -109,7 +109,7 @@ var initCmd = &cobra.Command{
 		}
 
 		defer trace.StartRegion(cmd.Context(), "init").End()
-		file := "sqlc.yaml"
+		file := "narsilc.yaml"
 		if f := cmd.Flag("file"); f != nil && f.Changed {
 			file = f.Value.String()
 			if file == "" {
@@ -178,7 +178,7 @@ func getConfigPath(stderr io.Writer, f *pflag.Flag) (string, string) {
 	} else {
 		wd, err := os.Getwd()
 		if err != nil {
-			fmt.Fprintln(stderr, "error parsing sqlc.json: file does not exist")
+			fmt.Fprintln(stderr, "error parsing narsilc.json: file does not exist")
 			os.Exit(1)
 		}
 		return wd, ""

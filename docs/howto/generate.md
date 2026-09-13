@@ -1,6 +1,6 @@
 # `generate` - Generating code
 
-`sqlc generate` parses SQL, analyzes the results, and outputs code. Your schema and queries are stored in separate SQL files. The paths to these files live in a `sqlc.yaml` configuration file.
+`narsilc generate` parses SQL, analyzes the results, and outputs code. Your schema and queries are stored in separate SQL files. The paths to these files live in a `narsilc.yaml` configuration file.
 
 ```yaml
 version: "2"
@@ -73,4 +73,4 @@ sql:
 ```
 
 Databases configured with a `uri` must have an up-to-date schema for query analysis to work correctly, and `sqlc` does not apply schema migrations your database. Use your migration tool of choice to create the necessary
-tables and objects before running `sqlc generate`.
+tables and objects before running `narsilc generate`.
