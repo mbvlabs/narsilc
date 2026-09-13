@@ -1,3 +1,15 @@
+# narsilc
+
+narsilc is a fork of [sqlc](https://github.com/sqlc-dev/sqlc) that can scan
+query results into caller-owned structs via generic methods and `andurel` tags.
+
+```bash
+go install github.com/mbvlabs/narsilc/cmd/narsilc@v0.1.0
+```
+
+Release archives are `narsilc_<version>_<os>_<arch>.tar.gz` on
+[GitHub Releases](https://github.com/mbvlabs/narsilc/releases).
+
 # sqlc: A SQL Compiler
 
 ![go](https://github.com/mbvlabs/narsilc/workflows/go/badge.svg)

@@ -1,4 +1,4 @@
-.PHONY: build build-endtoend test test-ci test-examples test-endtoend test-goldeneye start psql mysqlsh proto
+.PHONY: build build-endtoend test test-ci test-examples test-endtoend test-goldeneye start psql mysqlsh proto narsilc-dev
 
 build:
 	go build ./...
@@ -23,8 +23,8 @@ build-endtoend:
 
 test-ci: test-examples build-endtoend vet
 
-sqlc-dev:
-	go build -o ~/bin/sqlc-dev ./cmd/sqlc/
+narsilc-dev:
+	go build -o ~/bin/narsilc ./cmd/narsilc/
 
 goldeneye:
 	cd ./internal/goldeneye && go build -o ~/bin/goldeneye ./cmd/goldeneye

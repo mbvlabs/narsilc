@@ -12,7 +12,7 @@ import (
 	_ "github.com/ncruces/go-sqlite3/driver"
 )
 
-//go:generate go run github.com/mbvlabs/narsilc/cmd/sqlc generate
+//go:generate go run github.com/mbvlabs/narsilc/cmd/narsilc generate
 
 type Catalog struct {
 	db    *sql.DB
