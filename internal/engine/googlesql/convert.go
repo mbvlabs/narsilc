@@ -6,7 +6,7 @@ import (
 
 	zjast "github.com/sqlc-dev/zetajones/ast"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 type cc struct {

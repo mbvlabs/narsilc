@@ -1,1 +1,1 @@
-https://github.com/sqlc-dev/sqlc/issues/2386
+https://github.com/mbvlabs/narsilc/issues/2386

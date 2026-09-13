@@ -1,9 +1,9 @@
 package ast
 
 import (
-	"github.com/sqlc-dev/sqlc/internal/debug"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast/printer"
-	"github.com/sqlc-dev/sqlc/internal/sql/format"
+	"github.com/mbvlabs/narsilc/internal/debug"
+	"github.com/mbvlabs/narsilc/internal/sql/ast/printer"
+	"github.com/mbvlabs/narsilc/internal/sql/format"
 )
 
 type nodeFormatter interface {

@@ -3,8 +3,8 @@ package googlesql
 import (
 	"embed"
 
-	"github.com/sqlc-dev/sqlc/internal/core"
-	"github.com/sqlc-dev/sqlc/internal/core/seed"
+	"github.com/mbvlabs/narsilc/internal/core"
+	"github.com/mbvlabs/narsilc/internal/core/seed"
 )
 
 //go:embed dialect

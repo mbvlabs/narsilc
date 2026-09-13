@@ -7,7 +7,7 @@ import (
 
 	dw "github.com/sqlc-dev/darkwing/ast"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 type cc struct{}

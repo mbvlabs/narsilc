@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/core"
-	coreanalyzer "github.com/sqlc-dev/sqlc/internal/core/analyzer"
-	"github.com/sqlc-dev/sqlc/internal/metadata"
-	"github.com/sqlc-dev/sqlc/internal/source"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
-	"github.com/sqlc-dev/sqlc/internal/sql/named"
-	"github.com/sqlc-dev/sqlc/internal/sql/preprocess"
-	"github.com/sqlc-dev/sqlc/internal/sql/validate"
+	"github.com/mbvlabs/narsilc/internal/core"
+	coreanalyzer "github.com/mbvlabs/narsilc/internal/core/analyzer"
+	"github.com/mbvlabs/narsilc/internal/metadata"
+	"github.com/mbvlabs/narsilc/internal/source"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/named"
+	"github.com/mbvlabs/narsilc/internal/sql/preprocess"
+	"github.com/mbvlabs/narsilc/internal/sql/validate"
 )
 
 func (c *Compiler) parseQueryCore(raw *ast.RawStmt, src string, pre *preprocess.Statement) (*Query, error) {

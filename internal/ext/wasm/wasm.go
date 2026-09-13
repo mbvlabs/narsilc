@@ -23,9 +23,9 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
-	"github.com/sqlc-dev/sqlc/internal/cache"
-	"github.com/sqlc-dev/sqlc/internal/info"
-	"github.com/sqlc-dev/sqlc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/cache"
+	"github.com/mbvlabs/narsilc/internal/info"
+	"github.com/mbvlabs/narsilc/internal/plugin"
 )
 
 var flight singleflight.Group
@@ -190,7 +190,7 @@ func (r *Runner) loadAndCompileWASM(ctx context.Context, store *cache.Cache, exp
 // removePGCatalog removes the pg_catalog schema from the request. There is a
 // mysterious (reason unknown) bug with wasm plugins when a large amount of
 // tables (like there are in the catalog) are sent.
-// @see https://github.com/sqlc-dev/sqlc/pull/1748
+// @see https://github.com/mbvlabs/narsilc/pull/1748
 func removePGCatalog(req *plugin.GenerateRequest) {
 	if req.Catalog == nil || req.Catalog.Schemas == nil {
 		return

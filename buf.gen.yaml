@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: "github.com/sqlc-dev/sqlc/internal"
+    default: "github.com/mbvlabs/narsilc/internal"
 plugins:
   - plugin: buf.build/protocolbuffers/go:v1.30.0
     out: internal

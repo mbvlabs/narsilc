@@ -3,7 +3,7 @@ package opts
 import (
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/plugin"
 )
 
 // The ShimOverride struct exists to bridge the gap between the Override struct

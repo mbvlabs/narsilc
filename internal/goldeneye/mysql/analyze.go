@@ -6,14 +6,14 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/analysis"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/endtoend"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/analysis"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/endtoend"
 )
 
 // The analyze cases are checked against a live server, which is asked

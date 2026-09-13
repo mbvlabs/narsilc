@@ -6,7 +6,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 
-	"github.com/sqlc-dev/sqlc/internal/sqlcdebug"
+	"github.com/mbvlabs/narsilc/internal/sqlcdebug"
 )
 
 // Active reports whether SQLCDEBUG had any value set at startup. It

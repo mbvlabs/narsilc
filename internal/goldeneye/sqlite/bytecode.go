@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/analysis"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/analysis"
 )
 
 // SQLite has nothing to say about a parameter's type: a bound value is

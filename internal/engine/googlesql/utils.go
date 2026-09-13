@@ -6,8 +6,8 @@ import (
 
 	zjast "github.com/sqlc-dev/zetajones/ast"
 
-	"github.com/sqlc-dev/sqlc/internal/debug"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/debug"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 func todo(n zjast.Node) *ast.TODO {

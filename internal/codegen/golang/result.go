@@ -6,11 +6,11 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/codegen/golang/opts"
-	"github.com/sqlc-dev/sqlc/internal/codegen/sdk"
-	"github.com/sqlc-dev/sqlc/internal/inflection"
-	"github.com/sqlc-dev/sqlc/internal/metadata"
-	"github.com/sqlc-dev/sqlc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/codegen/golang/opts"
+	"github.com/mbvlabs/narsilc/internal/codegen/sdk"
+	"github.com/mbvlabs/narsilc/internal/inflection"
+	"github.com/mbvlabs/narsilc/internal/metadata"
+	"github.com/mbvlabs/narsilc/internal/plugin"
 )
 
 func buildEnums(req *plugin.GenerateRequest, options *opts.Options) []Enum {
@@ -302,23 +302,25 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 			var gs *Struct
 			var emit bool
 
-			for _, s := range structs {
-				if len(s.Fields) != len(query.Columns) {
-					continue
-				}
-				same := true
-				for i, f := range s.Fields {
-					c := query.Columns[i]
-					sameName := f.Name == StructName(columnName(c, i), options)
-					sameType := f.Type == goType(req, options, c)
-					sameTable := sdk.SameTableName(c.Table, s.Table, req.Catalog.DefaultSchema)
-					if !sameName || !sameType || !sameTable {
-						same = false
+			if !options.AndurelRowMapping() {
+				for _, s := range structs {
+					if len(s.Fields) != len(query.Columns) {
+						continue
 					}
-				}
-				if same {
-					gs = &s
-					break
+					same := true
+					for i, f := range s.Fields {
+						c := query.Columns[i]
+						sameName := f.Name == StructName(columnName(c, i), options)
+						sameType := f.Type == goType(req, options, c)
+						sameTable := sdk.SameTableName(c.Table, s.Table, req.Catalog.DefaultSchema)
+						if !sameName || !sameType || !sameTable {
+							same = false
+						}
+					}
+					if same {
+						gs = &s
+						break
+					}
 				}
 			}
 
@@ -336,7 +338,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 				if err != nil {
 					return nil, err
 				}
-				emit = true
+				emit = !options.AndurelRowMapping()
 			}
 			gq.Ret = QueryValue{
 				Emit:           emit,

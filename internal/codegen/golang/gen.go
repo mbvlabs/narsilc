@@ -11,10 +11,10 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/sqlc-dev/sqlc/internal/codegen/golang/opts"
-	"github.com/sqlc-dev/sqlc/internal/codegen/sdk"
-	"github.com/sqlc-dev/sqlc/internal/metadata"
-	"github.com/sqlc-dev/sqlc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/codegen/golang/opts"
+	"github.com/mbvlabs/narsilc/internal/codegen/sdk"
+	"github.com/mbvlabs/narsilc/internal/metadata"
+	"github.com/mbvlabs/narsilc/internal/plugin"
 )
 
 type tmplCtx struct {
@@ -44,6 +44,7 @@ type tmplCtx struct {
 	OmitSqlcVersion           bool
 	BuildTags                 string
 	WrapErrors                bool
+	AndurelRowMapping         bool
 }
 
 func (t *tmplCtx) OutputQuery(sourceName string) bool {
@@ -127,11 +128,15 @@ func Generate(ctx context.Context, req *plugin.GenerateRequest) (*plugin.Generat
 		return nil, err
 	}
 
-	if options.OmitUnusedStructs {
-		enums, structs = filterUnusedStructs(enums, structs, queries, options.ModelsTypeQualifier())
+	if options.OmitUnusedStructs || options.AndurelRowMapping() {
+		enums, structs = filterUnusedStructs(enums, structs, queries, options.ModelsTypeQualifier(), options.AndurelRowMapping())
 	}
 
 	if err := validate(options, enums, structs, queries); err != nil {
+		return nil, err
+	}
+
+	if err := validateAndurelQueries(options, queries); err != nil {
 		return nil, err
 	}
 
@@ -195,6 +200,7 @@ func generate(req *plugin.GenerateRequest, options *opts.Options, enums []Enum, 
 		BuildTags:                 options.BuildTags,
 		OmitSqlcVersion:           options.OmitSqlcVersion,
 		WrapErrors:                options.WrapErrors,
+		AndurelRowMapping:         options.AndurelRowMapping(),
 	}
 
 	if tctx.UsesCopyFrom && !tctx.SQLDriver.IsPGX() && options.SqlDriver != opts.SQLDriverGoSQLDriverMySQL {
@@ -295,7 +301,7 @@ func generate(req *plugin.GenerateRequest, options *opts.Options, enums []Enum, 
 	if err := execute(dbFileName, "dbFile"); err != nil {
 		return nil, err
 	}
-	if options.ModelsEmitEnabled() {
+	if options.ModelsEmitEnabled() && (!options.AndurelRowMapping() || len(enums) > 0 || len(structs) > 0) {
 		if err := execute(modelsFileName, "modelsFile"); err != nil {
 			return nil, err
 		}
@@ -370,7 +376,7 @@ func checkNoTimesForMySQLCopyFrom(queries []Query) error {
 	return nil
 }
 
-func filterUnusedStructs(enums []Enum, structs []Struct, queries []Query, qualifier string) ([]Enum, []Struct) {
+func filterUnusedStructs(enums []Enum, structs []Struct, queries []Query, qualifier string, skipStructResults bool) ([]Enum, []Struct) {
 	keepTypes := make(map[string]struct{})
 
 	keep := func(t string) {
@@ -392,7 +398,7 @@ func filterUnusedStructs(enums []Enum, structs []Struct, queries []Query, qualif
 				}
 			}
 		}
-		if query.hasRetType() {
+		if query.hasRetType() && !(skipStructResults && query.Ret.IsStruct()) {
 			keep(query.Ret.Type())
 			if query.Ret.IsStruct() {
 				for _, field := range query.Ret.Struct.Fields {
@@ -423,4 +429,24 @@ func filterUnusedStructs(enums []Enum, structs []Struct, queries []Query, qualif
 	}
 
 	return keepEnums, keepStructs
+}
+
+func validateAndurelQueries(options *opts.Options, queries []Query) error {
+	if !options.AndurelRowMapping() {
+		return nil
+	}
+	for _, q := range queries {
+		switch q.Cmd {
+		case metadata.CmdCopyFrom, metadata.CmdBatchExec, metadata.CmdBatchMany, metadata.CmdBatchOne:
+			return fmt.Errorf("row_mapping %q does not support %s", opts.RowMappingAndurel, q.Cmd)
+		}
+		if q.Ret.IsStruct() {
+			for _, f := range q.Ret.Struct.Fields {
+				if len(f.EmbedFields) > 0 {
+					return fmt.Errorf("row_mapping %q does not support sqlc.embed (query %s)", opts.RowMappingAndurel, q.MethodName)
+				}
+			}
+		}
+	}
+	return nil
 }

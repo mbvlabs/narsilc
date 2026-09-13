@@ -1,0 +1,11 @@
+version: "2"
+sql:
+  - schema: "schema.sql"
+    queries: "query.sql"
+    engine: "postgresql"
+    gen:
+      go:
+        package: "queries"
+        out: "db"
+        omit_sqlc_version: true
+        row_mapping: andurel

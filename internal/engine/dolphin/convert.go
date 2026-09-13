@@ -11,8 +11,8 @@ import (
 	"github.com/sqlc-dev/marino/opcode"
 	"github.com/sqlc-dev/marino/types"
 
-	"github.com/sqlc-dev/sqlc/internal/debug"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/debug"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 type cc struct {

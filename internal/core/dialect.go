@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/core/catalogdb"
+	"github.com/mbvlabs/narsilc/internal/core/catalogdb"
 )
 
 func (c *Catalog) CreateDialect(name string) (int64, error) {

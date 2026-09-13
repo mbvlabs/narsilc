@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 
-	"github.com/sqlc-dev/sqlc/internal/sqltest/local"
+	"github.com/mbvlabs/narsilc/internal/sqltest/local"
 )
 
 func TestAuthors(t *testing.T) {

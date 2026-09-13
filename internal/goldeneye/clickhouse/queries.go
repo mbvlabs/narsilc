@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/endtoend"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/endtoend"
 )
 
 // placeholder is one parameter reference in a query, in order of appearance.

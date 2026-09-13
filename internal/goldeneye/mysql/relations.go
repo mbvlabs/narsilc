@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
 )
 
 // systemSchemas are the schemas whose relations are generated: the data

@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/sqlc-dev/sqlc/internal/config"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
-	"github.com/sqlc-dev/sqlc/internal/sql/astutils"
-	"github.com/sqlc-dev/sqlc/internal/sql/catalog"
-	"github.com/sqlc-dev/sqlc/internal/sql/lang"
-	"github.com/sqlc-dev/sqlc/internal/sql/sqlerr"
+	"github.com/mbvlabs/narsilc/internal/config"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/astutils"
+	"github.com/mbvlabs/narsilc/internal/sql/catalog"
+	"github.com/mbvlabs/narsilc/internal/sql/lang"
+	"github.com/mbvlabs/narsilc/internal/sql/sqlerr"
 )
 
 // OutputColumns determines which columns a statement will output

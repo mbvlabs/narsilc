@@ -1,7 +1,7 @@
 package dolphin
 
 import (
-	"github.com/sqlc-dev/sqlc/internal/sql/catalog"
+	"github.com/mbvlabs/narsilc/internal/sql/catalog"
 )
 
 // defaultSchema is MySQL's standard library, read from the dialect directory's

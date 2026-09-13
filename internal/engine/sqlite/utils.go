@@ -5,7 +5,7 @@ import (
 
 	meyer "github.com/sqlc-dev/meyer/ast"
 
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 // identifier folds a name the way SQLite resolves one: an unquoted name is

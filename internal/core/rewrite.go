@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/sqlc-dev/sqlc/internal/core/catalogdb"
+	"github.com/mbvlabs/narsilc/internal/core/catalogdb"
 )
 
 // A dialect describes, as data, what it does to a type before storing it.

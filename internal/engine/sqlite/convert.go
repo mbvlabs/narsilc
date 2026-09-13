@@ -8,8 +8,8 @@ import (
 
 	meyer "github.com/sqlc-dev/meyer/ast"
 
-	"github.com/sqlc-dev/sqlc/internal/debug"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/debug"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 // cc converts a meyer syntax tree into sqlc's engine-independent AST. One

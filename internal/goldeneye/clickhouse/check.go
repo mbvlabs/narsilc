@@ -4,8 +4,8 @@ import (
 	"context"
 	"os"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/analysis"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/endtoend"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/analysis"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/endtoend"
 )
 
 // Analyze runs a case's queries through the clickhouse binary and returns

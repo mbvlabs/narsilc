@@ -15,7 +15,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
-	"github.com/sqlc-dev/sqlc/internal/info"
+	"github.com/mbvlabs/narsilc/internal/info"
 )
 
 type Runner struct {

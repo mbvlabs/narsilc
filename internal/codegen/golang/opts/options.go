@@ -6,7 +6,7 @@ import (
 	"maps"
 	"path/filepath"
 
-	"github.com/sqlc-dev/sqlc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/plugin"
 )
 
 type Options struct {
@@ -51,9 +51,15 @@ type Options struct {
 	OmitUnusedStructs            bool              `json:"omit_unused_structs,omitempty" yaml:"omit_unused_structs"`
 	BuildTags                    string            `json:"build_tags,omitempty" yaml:"build_tags"`
 	Initialisms                  *[]string         `json:"initialisms,omitempty" yaml:"initialisms"`
+	// RowMapping selects how :one/:many results are scanned. Empty keeps
+	// sqlc's generated structs. "andurel" emits generic methods that scan
+	// into a caller-provided struct via `andurel:"column"` tags.
+	RowMapping string `json:"row_mapping,omitempty" yaml:"row_mapping"`
 
 	InitialismsMap map[string]struct{} `json:"-" yaml:"-"`
 }
+
+const RowMappingAndurel = "andurel"
 
 type GlobalOptions struct {
 	Overrides []Override        `json:"overrides,omitempty" yaml:"overrides"`
@@ -173,6 +179,32 @@ func ValidateOpts(opts *Options) error {
 		return err
 	}
 
+	if err := validateRowMapping(opts); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// AndurelRowMapping reports whether results should be scanned into a
+// caller-chosen struct via andurel tags instead of generated row types.
+func (o *Options) AndurelRowMapping() bool {
+	return o != nil && o.RowMapping == RowMappingAndurel
+}
+
+func validateRowMapping(opts *Options) error {
+	if opts.RowMapping == "" {
+		return nil
+	}
+	if opts.RowMapping != RowMappingAndurel {
+		return fmt.Errorf("invalid options: unknown row_mapping %q", opts.RowMapping)
+	}
+	if opts.EmitInterface {
+		return fmt.Errorf("invalid options: row_mapping %q is incompatible with emit_interface (generic methods cannot satisfy interfaces)", RowMappingAndurel)
+	}
+	if opts.SqlPackage != "" && opts.SqlPackage != SQLPackageStandard {
+		return fmt.Errorf("invalid options: row_mapping %q requires sql_package %q", RowMappingAndurel, SQLPackageStandard)
+	}
 	return nil
 }
 

@@ -17,11 +17,11 @@ import (
 	"github.com/spf13/pflag"
 	"gopkg.in/yaml.v3"
 
-	"github.com/sqlc-dev/sqlc/internal/config"
-	"github.com/sqlc-dev/sqlc/internal/info"
-	"github.com/sqlc-dev/sqlc/internal/opts"
-	"github.com/sqlc-dev/sqlc/internal/sqlcdebug"
-	"github.com/sqlc-dev/sqlc/internal/tracer"
+	"github.com/mbvlabs/narsilc/internal/config"
+	"github.com/mbvlabs/narsilc/internal/info"
+	"github.com/mbvlabs/narsilc/internal/opts"
+	"github.com/mbvlabs/narsilc/internal/sqlcdebug"
+	"github.com/mbvlabs/narsilc/internal/tracer"
 )
 
 var debugProcessPlugins = sqlcdebug.New("processplugins")

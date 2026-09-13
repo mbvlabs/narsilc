@@ -14,19 +14,19 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/sqlc-dev/sqlc/internal/codegen/golang"
-	genjson "github.com/sqlc-dev/sqlc/internal/codegen/json"
-	"github.com/sqlc-dev/sqlc/internal/compiler"
-	"github.com/sqlc-dev/sqlc/internal/config"
-	"github.com/sqlc-dev/sqlc/internal/config/convert"
-	"github.com/sqlc-dev/sqlc/internal/debug"
-	"github.com/sqlc-dev/sqlc/internal/ext"
-	"github.com/sqlc-dev/sqlc/internal/ext/process"
-	"github.com/sqlc-dev/sqlc/internal/ext/wasm"
-	"github.com/sqlc-dev/sqlc/internal/multierr"
-	"github.com/sqlc-dev/sqlc/internal/opts"
-	"github.com/sqlc-dev/sqlc/internal/plugin"
-	"github.com/sqlc-dev/sqlc/internal/sqlcdebug"
+	"github.com/mbvlabs/narsilc/internal/codegen/golang"
+	genjson "github.com/mbvlabs/narsilc/internal/codegen/json"
+	"github.com/mbvlabs/narsilc/internal/compiler"
+	"github.com/mbvlabs/narsilc/internal/config"
+	"github.com/mbvlabs/narsilc/internal/config/convert"
+	"github.com/mbvlabs/narsilc/internal/debug"
+	"github.com/mbvlabs/narsilc/internal/ext"
+	"github.com/mbvlabs/narsilc/internal/ext/process"
+	"github.com/mbvlabs/narsilc/internal/ext/wasm"
+	"github.com/mbvlabs/narsilc/internal/multierr"
+	"github.com/mbvlabs/narsilc/internal/opts"
+	"github.com/mbvlabs/narsilc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/sqlcdebug"
 )
 
 var debugDumpCatalog = sqlcdebug.New("dumpcatalog")

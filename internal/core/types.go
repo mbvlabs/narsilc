@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/sqlc-dev/sqlc/internal/core/catalogdb"
+	"github.com/mbvlabs/narsilc/internal/core/catalogdb"
 )
 
 // TypeSpec describes a type row. Name is the family's name; Expr is the

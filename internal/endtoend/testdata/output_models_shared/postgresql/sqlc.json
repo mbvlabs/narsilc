@@ -10,7 +10,7 @@
           "out": "primary",
           "package": "primary",
           "output_models_path": "model",
-          "output_models_import": "github.com/sqlc-dev/sqlc/endtoend/output_models_shared/postgresql/model"
+          "output_models_import": "github.com/mbvlabs/narsilc/endtoend/output_models_shared/postgresql/model"
         }
       }
     },
@@ -22,7 +22,7 @@
         "go": {
           "out": "replica",
           "package": "replica",
-          "output_models_import": "github.com/sqlc-dev/sqlc/endtoend/output_models_shared/postgresql/model",
+          "output_models_import": "github.com/mbvlabs/narsilc/endtoend/output_models_shared/postgresql/model",
           "output_models_emit": false
         }
       }

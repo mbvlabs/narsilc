@@ -13,13 +13,13 @@ import (
 	"github.com/cubicdaiya/gonp"
 	"github.com/spf13/cobra"
 
-	"github.com/sqlc-dev/sqlc/internal/config"
-	"github.com/sqlc-dev/sqlc/internal/engine/dolphin"
-	"github.com/sqlc-dev/sqlc/internal/engine/postgresql"
-	"github.com/sqlc-dev/sqlc/internal/engine/sqlite"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
-	"github.com/sqlc-dev/sqlc/internal/sql/format"
-	"github.com/sqlc-dev/sqlc/internal/sql/sqlpath"
+	"github.com/mbvlabs/narsilc/internal/config"
+	"github.com/mbvlabs/narsilc/internal/engine/dolphin"
+	"github.com/mbvlabs/narsilc/internal/engine/postgresql"
+	"github.com/mbvlabs/narsilc/internal/engine/sqlite"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/sql/format"
+	"github.com/mbvlabs/narsilc/internal/sql/sqlpath"
 )
 
 // noLineLimit renders without a maximum line width: like gofmt, fmt never

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/codegen/golang/opts"
-	"github.com/sqlc-dev/sqlc/internal/metadata"
-	"github.com/sqlc-dev/sqlc/internal/plugin"
+	"github.com/mbvlabs/narsilc/internal/codegen/golang/opts"
+	"github.com/mbvlabs/narsilc/internal/metadata"
+	"github.com/mbvlabs/narsilc/internal/plugin"
 )
 
 type QueryValue struct {
@@ -285,6 +285,17 @@ func (q Query) hasRetType() bool {
 	scanned := q.Cmd == metadata.CmdOne || q.Cmd == metadata.CmdMany ||
 		q.Cmd == metadata.CmdBatchMany || q.Cmd == metadata.CmdBatchOne
 	return scanned && !q.Ret.isEmpty()
+}
+
+// AndurelGeneric reports whether this query should emit a generic method that
+// scans into a caller-chosen struct via andurel tags.
+func (q Query) AndurelGeneric() bool {
+	switch q.Cmd {
+	case metadata.CmdOne, metadata.CmdMany:
+		return q.Ret.IsStruct()
+	default:
+		return false
+	}
 }
 
 func (q Query) TableIdentifierAsGoSlice() string {

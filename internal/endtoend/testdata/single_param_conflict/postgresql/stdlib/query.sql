@@ -16,7 +16,7 @@ FROM    users
 WHERE   sub = $1
 LIMIT   1;
 
--- https://github.com/sqlc-dev/sqlc/issues/1235
+-- https://github.com/mbvlabs/narsilc/issues/1235
 
 -- name: SetDefaultName :one
 UPDATE  authors

@@ -9,16 +9,16 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/sqlc-dev/sqlc/internal/engine/clickhouse"
-	"github.com/sqlc-dev/sqlc/internal/engine/dolphin"
-	"github.com/sqlc-dev/sqlc/internal/engine/duckdb"
-	"github.com/sqlc-dev/sqlc/internal/engine/googlesql"
-	"github.com/sqlc-dev/sqlc/internal/engine/mssql"
-	"github.com/sqlc-dev/sqlc/internal/engine/postgresql"
-	"github.com/sqlc-dev/sqlc/internal/engine/sqlite"
-	"github.com/sqlc-dev/sqlc/internal/metadata"
-	"github.com/sqlc-dev/sqlc/internal/source"
-	"github.com/sqlc-dev/sqlc/internal/sql/ast"
+	"github.com/mbvlabs/narsilc/internal/engine/clickhouse"
+	"github.com/mbvlabs/narsilc/internal/engine/dolphin"
+	"github.com/mbvlabs/narsilc/internal/engine/duckdb"
+	"github.com/mbvlabs/narsilc/internal/engine/googlesql"
+	"github.com/mbvlabs/narsilc/internal/engine/mssql"
+	"github.com/mbvlabs/narsilc/internal/engine/postgresql"
+	"github.com/mbvlabs/narsilc/internal/engine/sqlite"
+	"github.com/mbvlabs/narsilc/internal/metadata"
+	"github.com/mbvlabs/narsilc/internal/source"
+	"github.com/mbvlabs/narsilc/internal/sql/ast"
 )
 
 // dialectParser is the subset of the engine parsers that the parse command

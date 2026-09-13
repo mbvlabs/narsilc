@@ -1,4 +1,4 @@
-module github.com/sqlc-dev/sqlc/endtoend
+module github.com/mbvlabs/narsilc/endtoend
 
 go 1.24.0
 

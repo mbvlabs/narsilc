@@ -4,8 +4,8 @@ import (
 	"io/fs"
 	"path"
 
-	"github.com/sqlc-dev/sqlc/internal/core/seed"
-	"github.com/sqlc-dev/sqlc/internal/sql/catalog"
+	"github.com/mbvlabs/narsilc/internal/core/seed"
+	"github.com/mbvlabs/narsilc/internal/sql/catalog"
 )
 
 // loadExtension reads the named extension's function list from the dialect

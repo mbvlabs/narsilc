@@ -9,7 +9,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/sqlc-dev/sqlc/internal/sqltest/local"
+	"github.com/mbvlabs/narsilc/internal/sqltest/local"
 )
 
 func TestAuthors(t *testing.T) {

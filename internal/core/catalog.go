@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/sqlc-dev/sqlc/internal/core/catalogdb"
-	"github.com/sqlc-dev/sqlc/internal/core/catalogdef"
+	"github.com/mbvlabs/narsilc/internal/core/catalogdb"
+	"github.com/mbvlabs/narsilc/internal/core/catalogdef"
 
 	_ "github.com/ncruces/go-sqlite3/driver"
 )
 
-//go:generate go run github.com/sqlc-dev/sqlc/cmd/sqlc generate
+//go:generate go run github.com/mbvlabs/narsilc/cmd/sqlc generate
 
 type Catalog struct {
 	db    *sql.DB

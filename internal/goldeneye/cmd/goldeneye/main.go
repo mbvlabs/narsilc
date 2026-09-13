@@ -25,13 +25,13 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/clickhouse"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/duckdb"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/endtoend"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/mysql"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/postgresql"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/sqlite"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/clickhouse"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/duckdb"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/endtoend"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/mysql"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/postgresql"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/sqlite"
 )
 
 func main() {

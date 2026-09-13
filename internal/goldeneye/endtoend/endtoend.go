@@ -14,7 +14,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/dialect"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/dialect"
 )
 
 // Case is one analyze case: the files sqlc analyze ran with, the fixture

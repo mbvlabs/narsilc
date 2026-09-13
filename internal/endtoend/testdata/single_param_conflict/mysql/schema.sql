@@ -5,7 +5,7 @@ CREATE TABLE authors (
   bio  text
 );
 
--- https://github.com/sqlc-dev/sqlc/issues/1290
+-- https://github.com/mbvlabs/narsilc/issues/1290
 CREATE TABLE users (
   sub VARCHAR(10) PRIMARY KEY
 );

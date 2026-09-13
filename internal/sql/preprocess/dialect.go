@@ -1,7 +1,7 @@
 package preprocess
 
 import (
-	"github.com/sqlc-dev/sqlc/internal/config"
+	"github.com/mbvlabs/narsilc/internal/config"
 )
 
 // Style is the native placeholder syntax a dialect uses for bind parameters.

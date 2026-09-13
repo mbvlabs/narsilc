@@ -6,7 +6,7 @@ import (
 	"os"
 	"runtime/trace"
 
-	"github.com/sqlc-dev/sqlc/internal/sqlcdebug"
+	"github.com/mbvlabs/narsilc/internal/sqlcdebug"
 )
 
 var debugTrace = sqlcdebug.New("trace")

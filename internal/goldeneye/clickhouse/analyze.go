@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/analysis"
-	"github.com/sqlc-dev/sqlc/internal/goldeneye/endtoend"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/analysis"
+	"github.com/mbvlabs/narsilc/internal/goldeneye/endtoend"
 )
 
 // analyze runs every query against the schema and fixture and records what
