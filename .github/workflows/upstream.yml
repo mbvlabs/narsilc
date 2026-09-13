@@ -1,0 +1,102 @@
+name: upstream
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Open or update an issue when sqlc main moves
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPSTREAM: sqlc-dev/sqlc
+          LABEL: upstream-sqlc
+        run: |
+          set -euo pipefail
+
+          gh label create "$LABEL" \
+            --repo "${{ github.repository }}" \
+            --description "New commits on sqlc-dev/sqlc" \
+            --color "0E8A16" \
+            --force >/dev/null
+
+          current="$(gh api "repos/${UPSTREAM}/commits/main" --jq .sha)"
+          issue_number="$(
+            gh issue list \
+              --repo "${{ github.repository }}" \
+              --label "$LABEL" \
+              --state open \
+              --json number,title \
+              --jq 'map(select(.title == "Upstream sqlc updates")) | .[0].number // empty'
+          )"
+
+          last=""
+          if [ -n "$issue_number" ]; then
+            body="$(gh issue view "$issue_number" --repo "${{ github.repository }}" --json body --jq .body)"
+            last="$(printf '%s\n' "$body" | sed -n 's/^<!-- last-sha: \([0-9a-f]\{40\}\) -->$/\1/p' | head -n1)"
+          fi
+
+          if [ -n "$last" ] && [ "$last" = "$current" ]; then
+            echo "sqlc main is unchanged ($current)"
+            exit 0
+          fi
+
+          if [ -n "$last" ]; then
+            compare="https://github.com/${UPSTREAM}/compare/${last}...${current}"
+            if ! commits="$(
+              gh api "repos/${UPSTREAM}/compare/${last}...${current}" \
+                --jq '.commits | reverse | .[:50][] | "- [\(.sha[0:7])](\(.html_url)) \(.commit.message | split("\n")[0])"'
+            )"; then
+              commits="- Compare failed; see ${compare}"
+            fi
+            heading="sqlc \`main\` moved since the last check."
+          else
+            compare="https://github.com/${UPSTREAM}/commits/main"
+            commits="$(
+              gh api "repos/${UPSTREAM}/commits?sha=main&per_page=20" \
+                --jq '.[] | "- [\(.sha[0:7])](\(.html_url)) \(.commit.message | split("\n")[0])"'
+            )"
+            heading="First check of sqlc \`main\`. Recent commits:"
+          fi
+
+          body="$(cat <<EOF
+          <!-- last-sha: ${current} -->
+
+          ${heading}
+
+          **Current:** [\`${current:0:7}\`](https://github.com/${UPSTREAM}/commit/${current})
+          ${last:+**Previous:** [\`${last:0:7}\`](https://github.com/${UPSTREAM}/commit/${last})}
+
+          ${compare}
+
+          ## Commits
+
+          ${commits}
+
+          Cherry-pick what narsilc needs; do not merge sqlc/main wholesale.
+          EOF
+          )"
+
+          if [ -n "$issue_number" ]; then
+            gh issue comment "$issue_number" \
+              --repo "${{ github.repository }}" \
+              --body "sqlc \`main\` is now [\`${current:0:7}\`](https://github.com/${UPSTREAM}/commit/${current})."
+            gh issue edit "$issue_number" \
+              --repo "${{ github.repository }}" \
+              --body "$body"
+            echo "updated issue #${issue_number}"
+          else
+            gh issue create \
+              --repo "${{ github.repository }}" \
+              --title "Upstream sqlc updates" \
+              --label "$LABEL" \
+              --body "$body"
+          fi
