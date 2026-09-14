@@ -54,7 +54,6 @@ sections:
       - reference/config.md
       - reference/datatypes.md
       - reference/environment-variables.md
-      - reference/language-support.md
       - reference/macros.md
       - reference/query-annotations.md
 
@@ -62,11 +61,8 @@ sections:
     pages:
       - howto/ci-cd.md
       - guides/using-go-and-pgx.md
-      - guides/plugins.md
       - guides/development.md
       - guides/privacy.md
 
 unlisted:
   - guides/migrating-off-hosted-managed-databases.md
-  - guides/migrating-to-sqlc-gen-kotlin.md
-  - guides/migrating-to-sqlc-gen-python.md

@@ -3,10 +3,9 @@
 This tutorial assumes that the latest version of sqlc is
 [installed](../overview/install.md) and ready to use.
 
-We'll generate Go code here, but other
-[language plugins](../reference/language-support.md) are available. You'll
-naturally need the Go toolchain if you want to build and run a program with the
-code narsilc generates, but sqlc itself has no dependencies.
+We'll generate Go code. You'll naturally need the Go toolchain if you want to
+build and run a program with the code narsilc generates, but narsilc itself has no
+dependencies.
 
 At the end, you'll push your SQL queries to [sqlc
 Cloud](https://dashboard.sqlc.dev/) for further insights and analysis.

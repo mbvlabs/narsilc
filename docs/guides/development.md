@@ -8,12 +8,6 @@ For local development, install `narsilc` under an alias. We suggest `narsilc-dev
 go build -o ~/go/bin/narsilc-dev ./cmd/narsilc
 ```
 
-Install `narsilc-gen-json` to avoid test failure.
-
-```
-go build -o ~/go/bin/narsilc-gen-json ./cmd/narsilc-gen-json
-```
-
 ## Running Tests
 
 ```

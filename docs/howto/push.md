@@ -5,7 +5,7 @@
 
 *Added in v1.24.0*
 
-We've renamed the `upload` sub-command to `push`. We've also changed the data sent along in a push request. Upload used to include the configuration file, migrations, queries, and all generated code. Push drops the generated code in favor of including the [plugin.GenerateRequest](https://buf.build/sqlc/sqlc/docs/main:plugin#plugin.GenerateRequest), which is the protocol buffer message we pass to codegen plugins.
+We've renamed the `upload` sub-command to `push`. We've also changed the data sent along in a push request. Upload used to include the configuration file, migrations, queries, and all generated code. Push drops the generated code in favor of including the [plugin.GenerateRequest](https://buf.build/sqlc/sqlc/docs/main:plugin#plugin.GenerateRequest), which is the protocol buffer message used for code generation.
 
 ## Add configuration
 

@@ -26,35 +26,6 @@ func v2ParseConfig(rd io.Reader) (Config, error) {
 	if err := conf.validateGlobalOverrides(); err != nil {
 		return conf, err
 	}
-	// TODO: Store built-in plugins somewhere else
-	builtins := map[string]struct{}{
-		"go":   {},
-		"json": {},
-	}
-	plugins := map[string]struct{}{}
-	for i := range conf.Plugins {
-		if conf.Plugins[i].Name == "" {
-			return conf, ErrPluginNoName
-		}
-		if _, ok := builtins[conf.Plugins[i].Name]; ok {
-			return conf, ErrPluginBuiltin
-		}
-		if _, ok := plugins[conf.Plugins[i].Name]; ok {
-			return conf, ErrPluginExists
-		}
-		if conf.Plugins[i].Process == nil && conf.Plugins[i].WASM == nil {
-			return conf, ErrPluginNoType
-		}
-		if conf.Plugins[i].Process != nil && conf.Plugins[i].WASM != nil {
-			return conf, ErrPluginBothTypes
-		}
-		if conf.Plugins[i].Process != nil {
-			if conf.Plugins[i].Process.Cmd == "" {
-				return conf, ErrPluginProcessNoCmd
-			}
-		}
-		plugins[conf.Plugins[i].Name] = struct{}{}
-	}
 	for j := range conf.SQL {
 		if conf.SQL[j].Engine == "" {
 			return conf, ErrMissingEngine
@@ -62,23 +33,6 @@ func v2ParseConfig(rd io.Reader) (Config, error) {
 		if conf.SQL[j].Gen.Go != nil {
 			if conf.SQL[j].Gen.Go.Out == "" {
 				return conf, ErrNoPackagePath
-			}
-		}
-		if conf.SQL[j].Gen.JSON != nil {
-			if conf.SQL[j].Gen.JSON.Out == "" {
-				return conf, ErrNoOutPath
-			}
-		}
-		for _, cg := range conf.SQL[j].Codegen {
-			if cg.Plugin == "" {
-				return conf, ErrPluginNoName
-			}
-			if cg.Out == "" {
-				return conf, ErrNoOutPath
-			}
-			// TODO: Allow the use of built-in codegen from here
-			if _, ok := plugins[cg.Plugin]; !ok {
-				return conf, ErrPluginNotFound
 			}
 		}
 		if conf.SQL[j].StrictOrderBy == nil {

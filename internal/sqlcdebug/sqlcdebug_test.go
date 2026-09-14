@@ -22,7 +22,7 @@ func TestParse(t *testing.T) {
 		{"", map[string]string{}},
 		{"dumpast=1", map[string]string{"dumpast": "1"}},
 		{"dumpast=1,trace=trace.out", map[string]string{"dumpast": "1", "trace": "trace.out"}},
-		{"  dumpast=1 , processplugins=0 ", map[string]string{"dumpast": "1", "processplugins": "0"}},
+		{"  dumpast=1 , databases=managed ", map[string]string{"dumpast": "1", "databases": "managed"}},
 		{"trace=", map[string]string{"trace": ""}},
 		{"bare", map[string]string{}},
 	}
@@ -54,12 +54,12 @@ func TestSettingValue(t *testing.T) {
 		t.Errorf("IsSet(dumpast) = false, want true")
 	}
 
-	// Unset key returns its registered default.
-	if v := New("processplugins").Value(); v != "1" {
-		t.Errorf("processplugins default = %q, want %q", v, "1")
+	// Unset key returns its registered default (empty when none is registered).
+	if v := New("dumpvetenv").Value(); v != "" {
+		t.Errorf("dumpvetenv default = %q, want %q", v, "")
 	}
-	if New("processplugins").IsSet() {
-		t.Errorf("IsSet(processplugins) = true, want false")
+	if New("dumpvetenv").IsSet() {
+		t.Errorf("IsSet(dumpvetenv) = true, want false")
 	}
 }
 

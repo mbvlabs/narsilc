@@ -284,37 +284,6 @@
                                         "andurel"
                                     ]
                                 }
-                            },
-                            "json": {
-                                "type": "object",
-                                "properties": {
-                                    "out": {
-                                        "type": "string"
-                                    },
-                                    "indent": {
-                                        "type": "string"
-                                    },
-                                    "filename": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "codegen": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "out": {
-                                    "type": "string"
-                                },
-                                "plugin": {
-                                    "type": "string"
-                                },
-                                "options": {
-                                    "type": "object"
-                                }
                             }
                         }
                     },
@@ -402,46 +371,6 @@
                                 ".*": {
                                     "type": "string"
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "plugins": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": [
-                    "name"
-                ],
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "minLength": 1
-                    },
-                    "env": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "process": {
-                        "type": "object",
-                        "properties": {
-                            "cmd": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "wasm": {
-                        "type": "object",
-                        "properties": {
-                            "url": {
-                                "type": "string"
-                            },
-                            "sha256": {
-                                "type": "string"
                             }
                         }
                     }
