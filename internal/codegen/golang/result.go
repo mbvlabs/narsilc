@@ -234,9 +234,6 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 			return nil, err
 		}
 		if builder != nil {
-			if sqlpkg.IsPGX() {
-				return nil, fmt.Errorf("%s: @filter/@order builders are not supported with pgx yet", query.Name)
-			}
 			gq.Builder = builder
 		}
 
