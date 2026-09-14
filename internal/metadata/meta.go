@@ -24,6 +24,10 @@ type Metadata struct {
 	RuleSkiplist map[string]struct{}
 
 	Filename string
+
+	// Filters and Orders come from @filter / @order comments on :many queries.
+	Filters []Filter
+	Orders  []Order
 }
 
 const (

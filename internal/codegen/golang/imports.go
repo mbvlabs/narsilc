@@ -350,6 +350,11 @@ func (i *importer) queryImports(filename string) fileImports {
 					return true
 				}
 			}
+			for _, typ := range q.builderFilterTypes() {
+				if hasPrefixIgnoringSliceAndPointerPrefix(typ, name) {
+					return true
+				}
+			}
 		}
 		return false
 	})
@@ -407,6 +412,10 @@ func (i *importer) queryImports(filename string) fileImports {
 
 	sqlpkg := parseDriver(i.Options.SqlPackage)
 	if sqlcSliceScan() && !sqlpkg.IsPGX() {
+		std["strings"] = struct{}{}
+	}
+	if usesBuilder(gq) {
+		std["fmt"] = struct{}{}
 		std["strings"] = struct{}{}
 	}
 	if sliceScan() && !sqlpkg.IsPGX() {

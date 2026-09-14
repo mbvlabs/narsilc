@@ -23,6 +23,10 @@ func TestValidSchema(t *testing.T) {
 		if replay.ConfigName == "" {
 			continue
 		}
+		// andurel.lock is JSON, not narsilc.yaml; generate replay covers it.
+		if replay.ConfigName == "andurel.lock" {
+			continue
+		}
 
 		file := filepath.Join(replay.Path, replay.ConfigName)
 		rd, err := os.Open(file)

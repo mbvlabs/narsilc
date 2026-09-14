@@ -277,6 +277,8 @@ type Query struct {
 	SourceName   string
 	Ret          QueryValue
 	Arg          QueryValue
+	Builder      *QueryBuilder
+	andurel      bool
 	// Used for :copyfrom
 	Table *plugin.Identifier
 }

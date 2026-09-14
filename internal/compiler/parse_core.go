@@ -89,14 +89,18 @@ func (c *Compiler) parseQueryCore(raw *ast.RawStmt, src string, pre *preprocess.
 		insertTable, _ = ParseTableName(ins.Relation)
 	}
 
-	return &Query{
+	q := &Query{
 		RawStmt:         raw,
 		Metadata:        md,
 		Params:          params,
 		Columns:         cols,
 		SQL:             trimmed,
 		InsertIntoTable: insertTable,
-	}, nil
+	}
+	if err := c.applyBuilder(q); err != nil {
+		return nil, err
+	}
+	return q, nil
 }
 
 func coreColumn(c core.Column) *Column {

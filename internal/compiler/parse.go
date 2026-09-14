@@ -135,14 +135,18 @@ func (c *Compiler) parseQuery(stmt ast.Node, pp *preprocess.Result, o opts.Parse
 
 	md.Comments = comments
 
-	return &Query{
+	q := &Query{
 		RawStmt:         raw,
 		Metadata:        md,
 		Params:          anlys.Parameters,
 		Columns:         anlys.Columns,
 		SQL:             trimmed,
 		InsertIntoTable: anlys.Table,
-	}, nil
+	}
+	if err := c.applyBuilder(q); err != nil {
+		return nil, err
+	}
+	return q, nil
 }
 
 // renumberParams applies the parameter numbers the preprocessor assigned,
