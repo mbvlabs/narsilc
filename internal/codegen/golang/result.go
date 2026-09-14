@@ -224,10 +224,21 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 			MethodName:   query.Name,
 			SourceName:   query.Filename,
 			SQL:          query.Text,
-			Comments:     comments,
+			Comments:     filterBuilderComments(comments),
 			Table:        query.InsertIntoTable,
+			andurel:      options.AndurelRowMapping(),
 		}
 		sqlpkg := parseDriver(options.SqlPackage)
+		builder, err := buildQueryBuilder(req, options, query)
+		if err != nil {
+			return nil, err
+		}
+		if builder != nil {
+			if sqlpkg.IsPGX() {
+				return nil, fmt.Errorf("%s: @filter/@order builders are not supported with pgx yet", query.Name)
+			}
+			gq.Builder = builder
+		}
 
 		qpl := int(*options.QueryParameterLimit)
 

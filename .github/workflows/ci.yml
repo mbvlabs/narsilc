@@ -46,7 +46,7 @@ jobs:
 
     - name: build internal/endtoend
       run: |
-        pkgs="$(go list -e -f '{{if not .Error}}{{.ImportPath}}{{end}}' ./... | grep -v '/andurel_row_mapping/' | grep -v '/andurel_lock/' | grep .)"
+        pkgs="$(go list -e -f '{{if not .Error}}{{.ImportPath}}{{end}}' ./... | grep -v '/andurel_row_mapping/' | grep -v '/andurel_lock/' | grep -v '/query_builder/postgresql/stdlib_andurel/' | grep .)"
         go build $pkgs
       working-directory: internal/endtoend/testdata
       env:

@@ -53,6 +53,179 @@ func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}
 {{end}}
 
 {{if eq .Cmd ":many"}}
+{{if .HasBuilder}}
+{{$q := .}}
+{{range .Comments}}//{{.}}
+{{end -}}
+{{if and $.AndurelRowMapping .AndurelGeneric}}
+func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{.Arg.Pair}}) {{.BuilderTypeRef}} {
+	return &{{.BuilderType}}[T]{
+		q:        q,
+		ctx:      ctx,
+		args:     []any{ {{.Arg.Params}} },
+		hasWhere: {{if .Builder.HasWhere}}true{{else}}false{{end}},
+		dollar:   {{if .Builder.Dollar}}true{{else}}false{{end}},
+	}
+}
+
+type {{.BuilderType}}[T any] struct {
+	q        *Queries
+	ctx      context.Context
+	args     []any
+	conds    []string
+	order    string
+	limit    *int32
+	offset   *int32
+	hasWhere bool
+	dollar   bool
+}
+{{else}}
+func (q *Queries) {{.MethodName}}(ctx context.Context, {{.Arg.Pair}}) {{.BuilderTypeRef}} {
+	return &{{.BuilderType}}{
+		q:        q,
+		ctx:      ctx,
+		args:     []any{ {{.Arg.Params}} },
+		hasWhere: {{if .Builder.HasWhere}}true{{else}}false{{end}},
+		dollar:   {{if .Builder.Dollar}}true{{else}}false{{end}},
+	}
+}
+
+type {{.BuilderType}} struct {
+	q        *Queries
+	ctx      context.Context
+	args     []any
+	conds    []string
+	order    string
+	limit    *int32
+	offset   *int32
+	hasWhere bool
+	dollar   bool
+}
+{{end}}
+
+{{range $q.Builder.Filters}}
+func (b {{$q.BuilderTypeRef}}) {{.Method}}(v {{.GoType}}) {{$q.BuilderTypeRef}} {
+	b.args = append(b.args, v)
+	{{- if $q.Builder.Dollar}}
+	b.conds = append(b.conds, fmt.Sprintf({{$.Q}}{{.Operator}}{{$.Q}}, len(b.args)))
+	{{- else}}
+	b.conds = append(b.conds, {{$.Q}}{{.Operator}}{{$.Q}})
+	{{- end}}
+	return b
+}
+{{end}}
+
+{{range $q.Builder.Orders}}
+func (b {{$q.BuilderTypeRef}}) OrderBy{{.Method}}Asc() {{$q.BuilderTypeRef}} {
+	b.order = {{$.Q}}{{.SQL}} ASC{{$.Q}}
+	return b
+}
+
+func (b {{$q.BuilderTypeRef}}) OrderBy{{.Method}}Desc() {{$q.BuilderTypeRef}} {
+	b.order = {{$.Q}}{{.SQL}} DESC{{$.Q}}
+	return b
+}
+{{end}}
+
+func (b {{.BuilderTypeRef}}) Limit(n int32) {{.BuilderTypeRef}} {
+	b.limit = &n
+	return b
+}
+
+func (b {{.BuilderTypeRef}}) Offset(n int32) {{.BuilderTypeRef}} {
+	b.offset = &n
+	return b
+}
+
+func (b {{.BuilderTypeRef}}) build() string {
+	query := {{.ConstantName}}
+	if len(b.conds) > 0 {
+		if b.hasWhere {
+			query += " AND " + strings.Join(b.conds, " AND ")
+		} else {
+			query += " WHERE " + strings.Join(b.conds, " AND ")
+		}
+	}
+	if b.order != "" {
+		query += " ORDER BY " + b.order
+	}
+	if b.limit != nil {
+		b.args = append(b.args, *b.limit)
+		if b.dollar {
+			query += fmt.Sprintf(" LIMIT $%d", len(b.args))
+		} else {
+			query += " LIMIT ?"
+		}
+	}
+	if b.offset != nil {
+		b.args = append(b.args, *b.offset)
+		if b.dollar {
+			query += fmt.Sprintf(" OFFSET $%d", len(b.args))
+		} else {
+			query += " OFFSET ?"
+		}
+	}
+	return query
+}
+
+{{if and $.AndurelRowMapping .AndurelGeneric}}
+func (b {{.BuilderTypeRef}}) All() ([]T, error) {
+	query := b.build()
+	rows, err := b.q.db.QueryContext(b.ctx, query, b.args...)
+	if err != nil {
+		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+	}
+	defer rows.Close()
+	{{- if $.EmitEmptySlices}}
+	items := []T{}
+	{{else}}
+	var items []T
+	{{end -}}
+	for rows.Next() {
+		item, err := narsilc.Scan[T](rows, {{.Ret.ColumnNamesAsGoSlice}})
+		if err != nil {
+			return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+		}
+		items = append(items, item)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+	}
+	if err := rows.Err(); err != nil {
+		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+	}
+	return items, nil
+}
+{{else}}
+func (b {{.BuilderTypeRef}}) All() ([]{{.Ret.DefineType}}, error) {
+	query := b.build()
+	rows, err := b.q.db.QueryContext(b.ctx, query, b.args...)
+	if err != nil {
+		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+	}
+	defer rows.Close()
+	{{- if $.EmitEmptySlices}}
+	items := []{{.Ret.DefineType}}{}
+	{{else}}
+	var items []{{.Ret.DefineType}}
+	{{end -}}
+	for rows.Next() {
+		var {{.Ret.Name}} {{.Ret.Type}}
+		if err := rows.Scan({{.Ret.Scan}}); err != nil {
+			return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+		}
+		items = append(items, {{.Ret.ReturnName}})
+	}
+	if err := rows.Close(); err != nil {
+		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+	}
+	if err := rows.Err(); err != nil {
+		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
+	}
+	return items, nil
+}
+{{end}}
+{{else}}
 {{range .Comments}}//{{.}}
 {{end -}}
 {{if and $.AndurelRowMapping .AndurelGeneric}}
@@ -109,6 +282,7 @@ func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}
     }
     return items, nil
 }
+{{end}}
 {{end}}
 {{end}}
 
