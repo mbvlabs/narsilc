@@ -17,8 +17,7 @@ import (
 )
 
 type OutputPair struct {
-	Gen    config.SQLGen
-	Plugin *config.Codegen
+	Gen config.SQLGen
 
 	config.SQL
 }
@@ -68,9 +67,6 @@ func processQuerySets(ctx context.Context, rp ResultProcessor, conf *config.Conf
 
 		grp.Go(func() error {
 			combo := config.Combine(*conf, sql.SQL)
-			if sql.Plugin != nil {
-				combo.Codegen = *sql.Plugin
-			}
 
 			// TODO: This feels like a hack that will bite us later
 			joined := make([]string, 0, len(sql.Schema))
@@ -85,23 +81,13 @@ func processQuerySets(ctx context.Context, rp ResultProcessor, conf *config.Conf
 			}
 			sql.Queries = joined
 
-			var name, lang string
 			parseOpts := opts.Parser{
 				Experiment: o.Env.Experiment,
 			}
 
-			switch {
-			case sql.Gen.Go != nil:
-				name = combo.Go.Package
-				lang = "golang"
-
-			case sql.Plugin != nil:
-				lang = fmt.Sprintf("process:%s", sql.Plugin.Plugin)
-				name = sql.Plugin.Plugin
-			}
-
+			name := combo.Go.Package
 			packageRegion := trace.StartRegion(gctx, "package")
-			trace.Logf(gctx, "", "name=%s dir=%s plugin=%s", name, dir, lang)
+			trace.Logf(gctx, "", "name=%s dir=%s plugin=golang", name, dir)
 
 			result, failed := parse(gctx, name, dir, sql.SQL, combo, parseOpts, errout)
 			if failed {

@@ -1,4 +1,0 @@
-{
-  "contexts": ["base"],
-  "process": "sqlc-gen-json"
-}

@@ -42,10 +42,8 @@ Each mapping in the `sql` collection has the following keys:
   - Directory of SQL migrations or path to single SQL file; or a list of paths.
 - `queries`:
   - Directory of SQL queries or path to single SQL file; or a list of paths.
-- `codegen`:
-  - A collection of mappings to configure code generators. See [codegen](#codegen) for the supported keys.
 - `gen`:
-  - A mapping to configure built-in code generators. See [gen](#gen) for the supported keys.
+  - A mapping to configure Go code generation. See [gen](#gen) for the supported keys.
 - `database`:
   - A mapping to configure database connections. See [database](#database) for the supported keys.
 - `rules`:
@@ -56,38 +54,6 @@ Each mapping in the `sql` collection has the following keys:
   - If true, return an error if a called SQL function does not exist. Defaults to `false`.
 - `strict_order_by`
   - If true, return an error if a order by column is ambiguous. Defaults to `true`.
-
-### codegen
-
-The `codegen` mapping supports the following keys:
-
-- `out`:
-  - Output directory for generated code.
-- `plugin`:
-  - The name of the plugin. Must be defined in the `plugins` collection.
-- `options`:
-  - A mapping of plugin-specific options.
-
-```yaml
-version: '2'
-plugins:
-- name: py
-  wasm:
-    url: https://github.com/sqlc-dev/sqlc-gen-python/releases/download/v0.16.0-alpha/sqlc-gen-python.wasm
-    sha256: 428476c7408fd4c032da4ec74e8a7344f4fa75e0f98a5a3302f238283b9b95f2
-sql:
-- schema: "schema.sql"
-  queries: "query.sql"
-  engine: postgresql
-  codegen:
-  - out: src/authors
-    plugin: py
-    options:
-      package: authors
-      emit_sync_querier: true
-      emit_async_querier: true
-      query_parameter_limit: 5
-```
 
 ### database
 
@@ -201,76 +167,6 @@ The `gen` mapping supports the following keys:
 ##### overrides
 
 See [Overriding types](../howto/overrides.md) for an in-depth guide to using type overrides.
-
-#### kotlin
-
-> Removed in v1.17.0 and replaced by the [sqlc-gen-kotlin](https://github.com/sqlc-dev/sqlc-gen-kotlin) plugin. Follow the [migration guide](../guides/migrating-to-sqlc-gen-kotlin.md) to switch.
-
-- `package`:
-  - The package name to use for the generated code.
-- `out`:
-  - Output directory for generated code.
-- `emit_exact_table_names`:
-  - If true, use the exact table name for generated models. Otherwise, guess a singular form. Defaults to `false`.
-
-#### python
-
-> Removed in v1.17.0 and replaced by the [sqlc-gen-python](https://github.com/sqlc-dev/sqlc-gen-python) plugin. Follow the [migration guide](../guides/migrating-to-sqlc-gen-python.md) to switch.
-
-- `package`:
-  - The package name to use for the generated code.
-- `out`:
-  - Output directory for generated code.
-- `emit_exact_table_names`:
-  - If true, use the exact table name for generated models. Otherwise, guess a singular form. Defaults to `false`.
-- `emit_sync_querier`:
-  - If true, generate a class with synchronous methods. Defaults to `false`.
-- `emit_async_querier`:
-  - If true, generate a class with asynchronous methods. Defaults to `false`.
-- `emit_pydantic_models`:
-  - If true, generate classes that inherit from `pydantic.BaseModel`. Otherwise, define classes using the `dataclass` decorator. Defaults to `false`.
-
-#### json
-
-- `out`:
-  - Output directory for the generated JSON.
-- `filename`:
-  - Filename for the generated JSON document. Defaults to `codegen_request.json`.
-- `indent`:
-  - Indent string to use in the JSON document. Defaults to `  `.
-
-### plugins
-
-Each mapping in the `plugins` collection has the following keys:
-
-- `name`:
-  - The name of this plugin. Required
-- `env`
-  - A list of environment variables to pass to the plugin. By default, no environment variables are passed.
-- `process`: A mapping with a single `cmd` key
-  - `cmd`:
-    - The executable to call when using this plugin
-  - `format`:
-    - The format expected. Supports `json` and `protobuf` formats. Defaults to `protobuf`.
-- `wasm`: A mapping with a two keys `url` and `sha256`
-  - `url`:
-    - The URL to fetch the WASM file. Supports the `https://` or `file://` schemes.
-  - `sha256`
-    - The SHA256 checksum for the downloaded file.
-   
-```yaml
-version: "2"
-plugins:
-- name: "py"
-  wasm: 
-    url: "https://github.com/sqlc-dev/sqlc-gen-python/releases/download/v0.16.0-alpha/sqlc-gen-python.wasm"
-    sha256: "428476c7408fd4c032da4ec74e8a7344f4fa75e0f98a5a3302f238283b9b95f2"
-- name: "js"
-  env:
-  - PATH
-  process: 
-    cmd: "sqlc-gen-json"
-```
 
 ### rules
 

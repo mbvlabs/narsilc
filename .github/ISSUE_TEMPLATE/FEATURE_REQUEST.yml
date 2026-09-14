@@ -26,5 +26,3 @@ body:
       multiple: true
       options:
         - Go
-        - Python
-        - Kotlin

@@ -35,16 +35,12 @@ Specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-
 The cache is designed after Bazel's local disk cache and has three parts:
 
 - `cas/` — a content-addressable store holding blobs (query analysis
-  results, WASM plugin binaries, compiled WASM machine code) keyed by the
-  SHA-256 hash of their contents. A remotely fetched plugin's address is
-  exactly the checksum declared in the configuration file, so it is loaded
-  directly by that address.
+  results) keyed by the SHA-256 hash of their contents.
 - `ac/` — an action cache mapping the digest of a unit of cacheable work and
-  its inputs (analyzing a query against a schema, compiling a WASM module to
-  machine code) to the CAS digests of its outputs.
+  its inputs (analyzing a query against a schema) to the CAS digests of its
+  outputs.
 - `exec/` — per-action directories where cached output trees are
-  materialized for tools that read them from disk, such as the
-  [wazero](https://wazero.io) runtime's compilation cache.
+  materialized for tools that read them from disk.
 
 The entire directory is safe to delete at any time; sqlc will rebuild it as
 needed.
@@ -160,14 +156,6 @@ log showing the execution time for each package.
 0.047767781 	 .  1725002 	1 	task end
 ```
 
-### processplugins
-
-Setting this value to `0` disables process-based plugins. If a process-based
-plugin is declared in the configuration file, running any `sqlc` command will
-return an error.
-
-`SQLCDEBUG=processplugins=0`
-
 ### dumpvetenv
 
 The `dumpvetenv` command prints the variables available to a `narsilc vet` rule
@@ -181,10 +169,3 @@ The `dumpexplain` command prints the JSON-formatted result from running
 `EXPLAIN ...` on a query when a `narsilc vet` rule evaluation requires its output.
 
 `SQLCDEBUG=dumpexplain=1`
-
-## SQLCTMPDIR
-
-If specified, use the given directory as the base for temporary folders. Only
-applies when using WASM-based codegen plugins. When not specified, this
-defaults to passing an empty string to
-[`os.MkdirTemp`](https://pkg.go.dev/os#MkdirTemp).

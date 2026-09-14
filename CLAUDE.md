@@ -214,9 +214,6 @@ make start             # Start database containers
 ```bash
 # Build main narsilc binary for development
 go build -o ~/go/bin/narsilc-dev ./cmd/narsilc
-
-# Build JSON plugin (required for some tests)
-go build -o ~/go/bin/narsilc-gen-json ./cmd/narsilc-gen-json
 ```
 
 ### Environment Variables for Tests
@@ -232,7 +229,7 @@ MYSQL_SERVER_URI="root:mysecretpassword@tcp(127.0.0.1:3306)/mysql?multiStatement
 
 ### Key Directories
 
-- `/cmd/` - Main binaries (narsilc, narsilc-gen-json, narsilc-test-setup)
+- `/cmd/` - Main binaries (narsilc, narsilc-test-setup)
 - `/internal/cmd/` - Command implementations (vet, generate, etc.)
 - `/internal/engine/` - Database engine implementations
   - `/postgresql/` - PostgreSQL parser and converter
@@ -250,7 +247,7 @@ MYSQL_SERVER_URI="root:mysecretpassword@tcp(127.0.0.1:3306)/mysql?multiStatement
   package per engine; see its README
 - `/internal/core/` - The analysis core: catalog, analyzer and dialect seeds
 - `/internal/compiler/` - Query compilation logic
-- `/internal/codegen/` - Code generation for different languages
+- `/internal/codegen/` - Go code generation
 - `/internal/config/` - Configuration file parsing
 - `/internal/endtoend/` - End-to-end tests
 - `/internal/sqltest/` - Test database setup (Docker, native, local detection)

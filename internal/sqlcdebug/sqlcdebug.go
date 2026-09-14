@@ -47,7 +47,6 @@ var Settings = []Info{
 	{Name: "dumpast", Description: "print the AST of every SQL statement"},
 	{Name: "dumpcatalog", Description: "print the parsed database schema"},
 	{Name: "trace", Description: "write a runtime trace to the named file (1 means trace.out)"},
-	{Name: "processplugins", Description: "set to 0 to disable process-based plugins", Default: "1"},
 	{Name: "databases", Description: "set to 'managed' to disable database connections via URI"},
 	{Name: "dumpvetenv", Description: "print the variables available to a vet rule during evaluation"},
 	{Name: "dumpexplain", Description: "print the JSON-formatted output from EXPLAIN during vet evaluation"},

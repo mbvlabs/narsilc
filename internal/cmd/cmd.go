@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -20,11 +19,8 @@ import (
 	"github.com/mbvlabs/narsilc/internal/config"
 	"github.com/mbvlabs/narsilc/internal/info"
 	"github.com/mbvlabs/narsilc/internal/opts"
-	"github.com/mbvlabs/narsilc/internal/sqlcdebug"
 	"github.com/mbvlabs/narsilc/internal/tracer"
 )
-
-var debugProcessPlugins = sqlcdebug.New("processplugins")
 
 func init() {
 	createDBCmd.Flags().StringP("queryset", "", "", "name of the queryset to use")
@@ -151,14 +147,7 @@ func ParseEnv(c *cobra.Command) Env {
 	}
 }
 
-var ErrPluginProcessDisabled = errors.New("plugin: process-based plugins disabled via SQLCDEBUG=processplugins=0")
-
 func (e *Env) Validate(cfg *config.Config) error {
-	for _, plugin := range cfg.Plugins {
-		if plugin.Process != nil && debugProcessPlugins.Value() == "0" {
-			return ErrPluginProcessDisabled
-		}
-	}
 	return nil
 }
 

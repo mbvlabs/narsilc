@@ -833,7 +833,7 @@ full list.
 
 #### Plugin access to environment variables
 
-If you're authoring a [sqlc plugin](../guides/plugins.md), you can now configure
+If you're authoring a sqlc plugin, you can now configure
 sqlc to pass your plugin the values of specific environment variables.
 
 For example, if your plugin

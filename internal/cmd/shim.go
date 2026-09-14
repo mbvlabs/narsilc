@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/mbvlabs/narsilc/internal/compiler"
 	"github.com/mbvlabs/narsilc/internal/config"
-	"github.com/mbvlabs/narsilc/internal/config/convert"
 	"github.com/mbvlabs/narsilc/internal/info"
 	"github.com/mbvlabs/narsilc/internal/plugin"
 	"github.com/mbvlabs/narsilc/internal/sql/catalog"
@@ -15,48 +14,7 @@ func pluginSettings(r *compiler.Result, cs config.CombinedSettings) *plugin.Sett
 		Engine:  string(cs.Package.Engine),
 		Schema:  []string(cs.Package.Schema),
 		Queries: []string(cs.Package.Queries),
-		Codegen: pluginCodegen(cs, cs.Codegen),
 	}
-}
-
-func pluginCodegen(cs config.CombinedSettings, s config.Codegen) *plugin.Codegen {
-	opts, err := convert.YAMLtoJSON(s.Options)
-	if err != nil {
-		panic(err)
-	}
-	cg := &plugin.Codegen{
-		Out:     s.Out,
-		Plugin:  s.Plugin,
-		Options: opts,
-	}
-	for _, p := range cs.Global.Plugins {
-		if p.Name == s.Plugin {
-			cg.Env = p.Env
-			cg.Process = pluginProcess(p)
-			cg.Wasm = pluginWASM(p)
-			return cg
-		}
-	}
-	return cg
-}
-
-func pluginProcess(p config.Plugin) *plugin.Codegen_Process {
-	if p.Process != nil {
-		return &plugin.Codegen_Process{
-			Cmd: p.Process.Cmd,
-		}
-	}
-	return nil
-}
-
-func pluginWASM(p config.Plugin) *plugin.Codegen_WASM {
-	if p.WASM != nil {
-		return &plugin.Codegen_WASM{
-			Url:    p.WASM.URL,
-			Sha256: p.WASM.SHA256,
-		}
-	}
-	return nil
 }
 
 func pluginCatalog(c *catalog.Catalog) *plugin.Catalog {

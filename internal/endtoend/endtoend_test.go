@@ -369,7 +369,7 @@ func cmpDirectory(t *testing.T, dir string, actual map[string]string) {
 		if file.IsDir() {
 			return nil
 		}
-		if !strings.HasSuffix(path, ".go") && !strings.HasSuffix(path, ".kt") && !strings.HasSuffix(path, ".py") && !strings.HasSuffix(path, ".json") && !strings.HasSuffix(path, ".txt") {
+		if !strings.HasSuffix(path, ".go") && !strings.HasSuffix(path, ".json") && !strings.HasSuffix(path, ".txt") {
 			return nil
 		}
 		// TODO: Figure out a better way to ignore certain files
@@ -382,15 +382,7 @@ func cmpDirectory(t *testing.T, dir string, actual map[string]string) {
 		if filepath.Base(path) == "exec.json" {
 			return nil
 		}
-		if strings.Contains(path, "/kotlin/build") {
-			return nil
-		}
 		if strings.HasSuffix(path, "_test.go") || strings.Contains(path, "src/test/") {
-			return nil
-		}
-		if strings.Contains(path, "/python/.venv") || strings.Contains(path, "/python/src/tests/") ||
-			strings.HasSuffix(path, "__init__.py") || strings.Contains(path, "/python/src/dbtest/") ||
-			strings.Contains(path, "/python/.mypy_cache") {
 			return nil
 		}
 		blob, err := os.ReadFile(path)
