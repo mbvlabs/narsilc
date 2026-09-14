@@ -7,5 +7,6 @@ sql:
       go:
         package: "queries"
         out: "db"
+        sql_package: "pgx/v5"
         omit_sqlc_version: true
         row_mapping: andurel

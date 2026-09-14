@@ -202,8 +202,8 @@ func validateRowMapping(opts *Options) error {
 	if opts.EmitInterface {
 		return fmt.Errorf("invalid options: row_mapping %q is incompatible with emit_interface (generic methods cannot satisfy interfaces)", RowMappingAndurel)
 	}
-	if opts.SqlPackage != "" && opts.SqlPackage != SQLPackageStandard {
-		return fmt.Errorf("invalid options: row_mapping %q requires sql_package %q", RowMappingAndurel, SQLPackageStandard)
+	if opts.SqlPackage != SQLPackagePGXV5 {
+		return fmt.Errorf("invalid options: row_mapping %q requires sql_package %q (got %q)", RowMappingAndurel, SQLPackagePGXV5, opts.SqlPackage)
 	}
 	return nil
 }

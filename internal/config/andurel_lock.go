@@ -97,6 +97,7 @@ func FromAndurelLock(data []byte) (Config, error) {
 				Go: &golang.Options{
 					Package:                  andurelPackageName,
 					Out:                      andurelOutDir,
+					SqlPackage:               golang.SQLPackagePGXV5,
 					RowMapping:               golang.RowMappingAndurel,
 					OmitSqlcVersion:          true,
 					OmitUnusedStructs:        true,

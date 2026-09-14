@@ -5,8 +5,8 @@ package queries
 
 import (
 	"context"
-	"database/sql"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/mbvlabs/narsilc"
 )
 
@@ -18,7 +18,7 @@ GROUP BY a.id, a.name
 `
 
 func (q *Queries) AuthorPostCounts[T any](ctx context.Context) ([]T, error) {
-	rows, err := q.db.QueryContext(ctx, authorPostCounts)
+	rows, err := q.db.Query(ctx, authorPostCounts)
 	if err != nil {
 		return nil, err
 	}
@@ -31,9 +31,6 @@ func (q *Queries) AuthorPostCounts[T any](ctx context.Context) ([]T, error) {
 		}
 		items = append(items, item)
 	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -45,7 +42,7 @@ SELECT count(*) FROM authors
 `
 
 func (q *Queries) CountAuthors(ctx context.Context) (int64, error) {
-	row := q.db.QueryRowContext(ctx, countAuthors)
+	row := q.db.QueryRow(ctx, countAuthors)
 	var count int64
 	err := row.Scan(&count)
 	return count, err
@@ -62,11 +59,11 @@ RETURNING id, name, bio
 
 type CreateAuthorParams struct {
 	Name string
-	Bio  sql.NullString
+	Bio  pgtype.Text
 }
 
 func (q *Queries) CreateAuthor[T any](ctx context.Context, arg CreateAuthorParams) (T, error) {
-	row := q.db.QueryRowContext(ctx, createAuthor, arg.Name, arg.Bio)
+	row := q.db.QueryRow(ctx, createAuthor, arg.Name, arg.Bio)
 	return narsilc.Scan[T](row, []string{"id", "name", "bio"})
 }
 
@@ -76,7 +73,7 @@ WHERE id = $1
 `
 
 func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteAuthor, id)
+	_, err := q.db.Exec(ctx, deleteAuthor, id)
 	return err
 }
 
@@ -86,7 +83,7 @@ WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetAuthor[T any](ctx context.Context, id int64) (T, error) {
-	row := q.db.QueryRowContext(ctx, getAuthor, id)
+	row := q.db.QueryRow(ctx, getAuthor, id)
 	return narsilc.Scan[T](row, []string{"id", "name", "bio"})
 }
 
@@ -96,7 +93,7 @@ ORDER BY name
 `
 
 func (q *Queries) ListAuthors[T any](ctx context.Context) ([]T, error) {
-	rows, err := q.db.QueryContext(ctx, listAuthors)
+	rows, err := q.db.Query(ctx, listAuthors)
 	if err != nil {
 		return nil, err
 	}
@@ -108,9 +105,6 @@ func (q *Queries) ListAuthors[T any](ctx context.Context) ([]T, error) {
 			return nil, err
 		}
 		items = append(items, item)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
