@@ -35,6 +35,10 @@ func TestFormat(t *testing.T) {
 		if tc.ConfigName == "" {
 			continue
 		}
+		// andurel.lock is JSON, not narsilc.yaml; generate replay covers it.
+		if tc.ConfigName == "andurel.lock" {
+			continue
+		}
 		t.Run(tc.Name, func(t *testing.T) {
 			// Parse the config file to determine the engine
 			configPath := filepath.Join(tc.Path, tc.ConfigName)
