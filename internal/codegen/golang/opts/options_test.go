@@ -16,11 +16,11 @@ func TestValidateRowMapping(t *testing.T) {
 		}
 	})
 
-	t.Run("andurel", func(t *testing.T) {
+	t.Run("andurel requires pgx/v5", func(t *testing.T) {
 		opts := base()
 		opts.RowMapping = RowMappingAndurel
-		if err := ValidateOpts(opts); err != nil {
-			t.Fatal(err)
+		if err := ValidateOpts(opts); err == nil {
+			t.Fatal("expected error")
 		}
 	})
 
@@ -41,10 +41,28 @@ func TestValidateRowMapping(t *testing.T) {
 		}
 	})
 
-	t.Run("pgx", func(t *testing.T) {
+	t.Run("pgx/v5", func(t *testing.T) {
 		opts := base()
 		opts.RowMapping = RowMappingAndurel
 		opts.SqlPackage = SQLPackagePGXV5
+		if err := ValidateOpts(opts); err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("pgx/v4", func(t *testing.T) {
+		opts := base()
+		opts.RowMapping = RowMappingAndurel
+		opts.SqlPackage = SQLPackagePGXV4
+		if err := ValidateOpts(opts); err == nil {
+			t.Fatal("expected error")
+		}
+	})
+
+	t.Run("database/sql", func(t *testing.T) {
+		opts := base()
+		opts.RowMapping = RowMappingAndurel
+		opts.SqlPackage = SQLPackageStandard
 		if err := ValidateOpts(opts); err == nil {
 			t.Fatal("expected error")
 		}

@@ -21,21 +21,7 @@ type {{.Ret.Type}} struct { {{- range .Ret.Struct.Fields}}
 
 {{if eq .Cmd ":one"}}
 {{range .Comments}}//{{.}}
-{{end -}}
-{{if and $.AndurelRowMapping .AndurelGeneric}}
-func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) (T, error) {
-    {{- template "queryCodeStdExec" . }}
-	{{- if $.WrapErrors}}
-	item, err := narsilc.Scan[T](row, {{.Ret.ColumnNamesAsGoSlice}})
-	if err != nil {
-		err = fmt.Errorf("query {{.MethodName}}: %w", err)
-	}
-	return item, err
-	{{- else}}
-	return narsilc.Scan[T](row, {{.Ret.ColumnNamesAsGoSlice}})
-	{{- end}}
-}
-{{else}}
+{{end}}
 func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) ({{.Ret.DefineType}}, error) {
     {{- template "queryCodeStdExec" . }}
 	{{- if or (ne .Arg.Pair .Ret.Pair) (ne .Arg.DefineType .Ret.DefineType) }}
@@ -50,36 +36,12 @@ func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}
 	return {{.Ret.ReturnName}}, err
 }
 {{end}}
-{{end}}
 
 {{if eq .Cmd ":many"}}
 {{if .HasBuilder}}
 {{$q := .}}
 {{range .Comments}}//{{.}}
-{{end -}}
-{{if and $.AndurelRowMapping .AndurelGeneric}}
-func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{.Arg.Pair}}) {{.BuilderTypeRef}} {
-	return &{{.BuilderType}}[T]{
-		q:        q,
-		ctx:      ctx,
-		args:     []any{ {{.Arg.Params}} },
-		hasWhere: {{if .Builder.HasWhere}}true{{else}}false{{end}},
-		dollar:   {{if .Builder.Dollar}}true{{else}}false{{end}},
-	}
-}
-
-type {{.BuilderType}}[T any] struct {
-	q        *Queries
-	ctx      context.Context
-	args     []any
-	conds    []string
-	order    string
-	limit    *int32
-	offset   *int32
-	hasWhere bool
-	dollar   bool
-}
-{{else}}
+{{end}}
 func (q *Queries) {{.MethodName}}(ctx context.Context, {{.Arg.Pair}}) {{.BuilderTypeRef}} {
 	return &{{.BuilderType}}{
 		q:        q,
@@ -101,7 +63,6 @@ type {{.BuilderType}} struct {
 	hasWhere bool
 	dollar   bool
 }
-{{end}}
 
 {{range $q.Builder.Filters}}
 func (b {{$q.BuilderTypeRef}}) {{.Method}}(v {{.GoType}}) {{$q.BuilderTypeRef}} {
@@ -168,35 +129,6 @@ func (b {{.BuilderTypeRef}}) build() string {
 	return query
 }
 
-{{if and $.AndurelRowMapping .AndurelGeneric}}
-func (b {{.BuilderTypeRef}}) All() ([]T, error) {
-	query := b.build()
-	rows, err := b.q.db.QueryContext(b.ctx, query, b.args...)
-	if err != nil {
-		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
-	}
-	defer rows.Close()
-	{{- if $.EmitEmptySlices}}
-	items := []T{}
-	{{else}}
-	var items []T
-	{{end -}}
-	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, {{.Ret.ColumnNamesAsGoSlice}})
-		if err != nil {
-			return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
-		}
-		items = append(items, item)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
-	}
-	if err := rows.Err(); err != nil {
-		return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
-	}
-	return items, nil
-}
-{{else}}
 func (b {{.BuilderTypeRef}}) All() ([]{{.Ret.DefineType}}, error) {
 	query := b.build()
 	rows, err := b.q.db.QueryContext(b.ctx, query, b.args...)
@@ -224,38 +156,9 @@ func (b {{.BuilderTypeRef}}) All() ([]{{.Ret.DefineType}}, error) {
 	}
 	return items, nil
 }
-{{end}}
 {{else}}
 {{range .Comments}}//{{.}}
-{{end -}}
-{{if and $.AndurelRowMapping .AndurelGeneric}}
-func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) ([]T, error) {
-    {{- template "queryCodeStdExec" . }}
-    if err != nil {
-        return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
-    }
-    defer rows.Close()
-    {{- if $.EmitEmptySlices}}
-    items := []T{}
-    {{else}}
-    var items []T
-    {{end -}}
-    for rows.Next() {
-        item, err := narsilc.Scan[T](rows, {{.Ret.ColumnNamesAsGoSlice}})
-        if err != nil {
-            return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
-        }
-        items = append(items, item)
-    }
-    if err := rows.Close(); err != nil {
-        return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
-    }
-    if err := rows.Err(); err != nil {
-        return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
-    }
-    return items, nil
-}
-{{else}}
+{{end}}
 func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}) ([]{{.Ret.DefineType}}, error) {
     {{- template "queryCodeStdExec" . }}
     if err != nil {
@@ -282,7 +185,6 @@ func (q *Queries) {{.MethodName}}(ctx context.Context, {{ dbarg }} {{.Arg.Pair}}
     }
     return items, nil
 }
-{{end}}
 {{end}}
 {{end}}
 
