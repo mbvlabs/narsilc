@@ -1,12 +1,8 @@
 {
   "schemaVersion": 1,
   "version": "v0.1.0",
-  "tools": {},
-  "scaffoldConfig": {
-    "projectName": "andurel_lock",
-    "database": "postgresql"
-  },
   "databaseConfig": {
-    "nullType": "sql.Null"
+    "engine": "postgresql",
+    "nullType": "pgtype.Null"
   }
 }

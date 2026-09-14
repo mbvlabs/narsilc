@@ -18,18 +18,13 @@ const (
 
 // andurelLock is the subset of andurel.lock that narsilc reads.
 type andurelLock struct {
-	SchemaVersion  int                        `json:"schemaVersion"`
-	Version        string                     `json:"version"`
-	Tools          map[string]json.RawMessage `json:"tools"`
-	ScaffoldConfig *andurelScaffoldConfig     `json:"scaffoldConfig"`
-	DatabaseConfig *andurelDatabaseConfig     `json:"databaseConfig"`
-}
-
-type andurelScaffoldConfig struct {
-	Database string `json:"database"`
+	SchemaVersion  int                    `json:"schemaVersion"`
+	Version        string                 `json:"version"`
+	DatabaseConfig *andurelDatabaseConfig `json:"databaseConfig"`
 }
 
 type andurelDatabaseConfig struct {
+	Engine   string `json:"engine"`
 	NullType string `json:"nullType"`
 }
 
@@ -38,8 +33,8 @@ type andurelSchemaHeader struct {
 }
 
 // FromAndurelLock builds a narsilc Config from an andurel.lock document.
-// Paths, engine, package, and Andurel row mapping are fixed. The only
-// user choice is databaseConfig.nullType.
+// Paths, package, sql_package (pgx/v5), and Andurel row mapping are fixed.
+// User choices are databaseConfig.engine and databaseConfig.nullType.
 func FromAndurelLock(data []byte) (Config, error) {
 	var header andurelSchemaHeader
 	if err := json.Unmarshal(data, &header); err != nil {
@@ -59,29 +54,28 @@ func FromAndurelLock(data []byte) (Config, error) {
 	if lock.Version == "" {
 		return Config{}, fmt.Errorf("andurel.lock version is required")
 	}
-	if lock.Tools == nil {
-		return Config{}, fmt.Errorf("andurel.lock tools is required")
-	}
 
 	engine := EnginePostgreSQL
-	if lock.ScaffoldConfig != nil && lock.ScaffoldConfig.Database != "" {
-		switch lock.ScaffoldConfig.Database {
-		case "postgresql", "postgres":
-			engine = EnginePostgreSQL
-		default:
-			return Config{}, fmt.Errorf("andurel.lock scaffoldConfig.database %q is not supported", lock.ScaffoldConfig.Database)
+	nullType := "pgtype.Null"
+	if lock.DatabaseConfig != nil {
+		if lock.DatabaseConfig.Engine != "" {
+			switch lock.DatabaseConfig.Engine {
+			case "postgresql", "postgres":
+				engine = EnginePostgreSQL
+			default:
+				return Config{}, fmt.Errorf("andurel.lock databaseConfig.engine %q is not supported", lock.DatabaseConfig.Engine)
+			}
+		}
+		if lock.DatabaseConfig.NullType != "" {
+			nullType = lock.DatabaseConfig.NullType
 		}
 	}
 
-	nullType := "sql.Null"
-	if lock.DatabaseConfig != nil && lock.DatabaseConfig.NullType != "" {
-		nullType = lock.DatabaseConfig.NullType
-	}
 	var emitPointers bool
 	switch nullType {
 	case "pointer":
 		emitPointers = true
-	case "sql.Null", "bun.Null":
+	case "pgtype.Null":
 		emitPointers = false
 	default:
 		return Config{}, fmt.Errorf("andurel.lock databaseConfig.nullType %q is not supported", nullType)
