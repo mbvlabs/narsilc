@@ -2,15 +2,19 @@
 SELECT * FROM authors
 WHERE id = $1 LIMIT 1;
 
+-- name: GetAuthorByPublicID :one
+SELECT * FROM authors
+WHERE public_id = $1 LIMIT 1;
+
 -- name: ListAuthors :many
 SELECT * FROM authors
 ORDER BY name;
 
 -- name: CreateAuthor :one
 INSERT INTO authors (
-  name, bio
+  public_id, external_id, name, bio
 ) VALUES (
-  $1, $2
+  $1, $2, $3, $4
 )
 RETURNING *;
 

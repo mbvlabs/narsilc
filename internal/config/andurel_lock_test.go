@@ -31,6 +31,16 @@ func TestFromAndurelLock(t *testing.T) {
 		if opts.EmitPointersForNullTypes {
 			t.Fatal("default nullType should not emit pointers")
 		}
+		if len(opts.Overrides) != 2 {
+			t.Fatalf("overrides = %d, want 2", len(opts.Overrides))
+		}
+		if opts.Overrides[0].DBType != "uuid" || opts.Overrides[0].Nullable || opts.Overrides[0].GoType.Spec != "uuid.UUID" {
+			t.Fatalf("non-null uuid override = %+v", opts.Overrides[0])
+		}
+		nullUUID := opts.Overrides[1]
+		if nullUUID.DBType != "uuid" || !nullUUID.Nullable || nullUUID.GoType.Path != "uuid" || nullUUID.GoType.Name != "UUID" || !nullUUID.GoType.Pointer {
+			t.Fatalf("nullable uuid override = %+v", nullUUID)
+		}
 	})
 
 	t.Run("pointer nullType", func(t *testing.T) {
@@ -73,15 +83,18 @@ func TestFromAndurelLock(t *testing.T) {
 		}
 	})
 
-	t.Run("rejects sql.Null", func(t *testing.T) {
+	t.Run("sql.Null nullType", func(t *testing.T) {
 		t.Parallel()
-		_, err := FromAndurelLock([]byte(`{
+		conf, err := FromAndurelLock([]byte(`{
 			"schemaVersion": 1,
 			"version": "v0.1.0",
 			"databaseConfig": {"nullType": "sql.Null"}
 		}`))
-		if err == nil {
-			t.Fatal("expected error")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if conf.SQL[0].Gen.Go.EmitPointersForNullTypes {
+			t.Fatal("sql.Null nullType should not emit pointers")
 		}
 	})
 
