@@ -1,7 +1,9 @@
 CREATE TABLE authors (
-  id   BIGSERIAL PRIMARY KEY,
-  name text NOT NULL,
-  bio  text
+  id          BIGSERIAL PRIMARY KEY,
+  public_id   uuid NOT NULL,
+  external_id uuid,
+  name        text NOT NULL,
+  bio         text
 );
 
 CREATE TABLE posts (

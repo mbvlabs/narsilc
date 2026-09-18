@@ -33,8 +33,9 @@ type andurelSchemaHeader struct {
 }
 
 // FromAndurelLock builds a narsilc Config from an andurel.lock document.
-// Paths, package, sql_package (pgx/v5), and Andurel row mapping are fixed.
-// User choices are databaseConfig.engine and databaseConfig.nullType.
+// Paths, package, sql_package (pgx/v5), Andurel row mapping, and stdlib UUID
+// overrides are fixed. The user choice is databaseConfig.nullType
+// (pgtype.Null, pointer, or sql.Null).
 func FromAndurelLock(data []byte) (Config, error) {
 	var header andurelSchemaHeader
 	if err := json.Unmarshal(data, &header); err != nil {
@@ -75,7 +76,7 @@ func FromAndurelLock(data []byte) (Config, error) {
 	switch nullType {
 	case "pointer":
 		emitPointers = true
-	case "pgtype.Null":
+	case "pgtype.Null", "sql.Null":
 		emitPointers = false
 	default:
 		return Config{}, fmt.Errorf("andurel.lock databaseConfig.nullType %q is not supported", nullType)
@@ -96,6 +97,21 @@ func FromAndurelLock(data []byte) (Config, error) {
 					OmitSqlcVersion:          true,
 					OmitUnusedStructs:        true,
 					EmitPointersForNullTypes: emitPointers,
+					Overrides: []golang.Override{
+						{
+							DBType: "uuid",
+							GoType: golang.GoType{Spec: "uuid.UUID"},
+						},
+						{
+							DBType:   "uuid",
+							Nullable: true,
+							GoType: golang.GoType{
+								Path:    "uuid",
+								Name:    "UUID",
+								Pointer: true,
+							},
+						},
+					},
 				},
 			},
 		}},

@@ -8,6 +8,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/mbvlabs/narsilc"
+	"uuid"
 )
 
 const authorPostCounts = `-- name: AuthorPostCounts :many
@@ -50,21 +51,28 @@ func (q *Queries) CountAuthors(ctx context.Context) (int64, error) {
 
 const createAuthor = `-- name: CreateAuthor :one
 INSERT INTO authors (
-  name, bio
+  public_id, external_id, name, bio
 ) VALUES (
-  $1, $2
+  $1, $2, $3, $4
 )
-RETURNING id, name, bio
+RETURNING id, public_id, external_id, name, bio
 `
 
 type CreateAuthorParams struct {
-	Name string
-	Bio  pgtype.Text
+	PublicID   uuid.UUID
+	ExternalID *uuid.UUID
+	Name       string
+	Bio        pgtype.Text
 }
 
 func (q *Queries) CreateAuthor[T any](ctx context.Context, arg CreateAuthorParams) (T, error) {
-	row := q.db.QueryRow(ctx, createAuthor, arg.Name, arg.Bio)
-	return narsilc.Scan[T](row, []string{"id", "name", "bio"})
+	row := q.db.QueryRow(ctx, createAuthor,
+		arg.PublicID,
+		arg.ExternalID,
+		arg.Name,
+		arg.Bio,
+	)
+	return narsilc.Scan[T](row, []string{"id", "public_id", "external_id", "name", "bio"})
 }
 
 const deleteAuthor = `-- name: DeleteAuthor :exec
@@ -78,17 +86,27 @@ func (q *Queries) DeleteAuthor(ctx context.Context, id int64) error {
 }
 
 const getAuthor = `-- name: GetAuthor :one
-SELECT id, name, bio FROM authors
+SELECT id, public_id, external_id, name, bio FROM authors
 WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetAuthor[T any](ctx context.Context, id int64) (T, error) {
 	row := q.db.QueryRow(ctx, getAuthor, id)
-	return narsilc.Scan[T](row, []string{"id", "name", "bio"})
+	return narsilc.Scan[T](row, []string{"id", "public_id", "external_id", "name", "bio"})
+}
+
+const getAuthorByPublicID = `-- name: GetAuthorByPublicID :one
+SELECT id, public_id, external_id, name, bio FROM authors
+WHERE public_id = $1 LIMIT 1
+`
+
+func (q *Queries) GetAuthorByPublicID[T any](ctx context.Context, publicID uuid.UUID) (T, error) {
+	row := q.db.QueryRow(ctx, getAuthorByPublicID, publicID)
+	return narsilc.Scan[T](row, []string{"id", "public_id", "external_id", "name", "bio"})
 }
 
 const listAuthors = `-- name: ListAuthors :many
-SELECT id, name, bio FROM authors
+SELECT id, public_id, external_id, name, bio FROM authors
 ORDER BY name
 `
 
@@ -100,7 +118,7 @@ func (q *Queries) ListAuthors[T any](ctx context.Context) ([]T, error) {
 	defer rows.Close()
 	var items []T
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, []string{"id", "name", "bio"})
+		item, err := narsilc.Scan[T](rows, []string{"id", "public_id", "external_id", "name", "bio"})
 		if err != nil {
 			return nil, err
 		}
