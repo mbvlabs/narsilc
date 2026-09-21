@@ -1,13 +1,17 @@
 package config
 
 import (
-	"encoding/json"
+	"bytes"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	golang "github.com/mbvlabs/narsilc/internal/codegen/golang/opts"
+	toml "github.com/pelletier/go-toml/v2"
 )
 
 const (
+	andurelTomlName = "andurel.toml"
 	andurelLockName = "andurel.lock"
 
 	andurelQueriesDir  = "models/queries"
@@ -16,62 +20,57 @@ const (
 	andurelPackageName = "queries"
 )
 
-// andurelLock is the subset of andurel.lock that narsilc reads.
-type andurelLock struct {
-	SchemaVersion  int                    `json:"schemaVersion"`
-	Version        string                 `json:"version"`
-	DatabaseConfig *andurelDatabaseConfig `json:"databaseConfig"`
+// andurelToml is the subset of andurel.toml that narsilc reads.
+type andurelToml struct {
+	SchemaVersion int                    `toml:"schemaVersion"`
+	Version       string                 `toml:"version"`
+	Database      *andurelDatabaseConfig `toml:"database"`
 }
 
 type andurelDatabaseConfig struct {
-	Engine   string `json:"engine"`
-	NullType string `json:"nullType"`
+	Engine   string `toml:"engine" json:"engine"`
+	NullType string `toml:"nullType" json:"nullType"`
 }
 
-type andurelSchemaHeader struct {
-	SchemaVersion int `json:"schemaVersion"`
-}
-
-// FromAndurelLock builds a narsilc Config from an andurel.lock document.
+// FromAndurelToml builds a narsilc Config from an andurel.toml document.
 // Paths, package, sql_package (pgx/v5), Andurel row mapping, and stdlib UUID
-// overrides are fixed. The user choice is databaseConfig.nullType
+// overrides are fixed. The user choice is database.nullType
 // (pgtype.Null, pointer, or sql.Null).
-func FromAndurelLock(data []byte) (Config, error) {
-	var header andurelSchemaHeader
-	if err := json.Unmarshal(data, &header); err != nil {
-		return Config{}, fmt.Errorf("andurel.lock: %w", err)
+func FromAndurelToml(data []byte) (Config, error) {
+	var doc andurelToml
+	if err := toml.Unmarshal(data, &doc); err != nil {
+		return Config{}, fmt.Errorf("andurel.toml: %w", err)
 	}
-	if header.SchemaVersion == 0 {
-		return Config{}, fmt.Errorf("andurel.lock schemaVersion is required")
+	if doc.SchemaVersion == 0 {
+		return Config{}, fmt.Errorf("andurel.toml schemaVersion is required")
 	}
-	if header.SchemaVersion != 1 {
-		return Config{}, fmt.Errorf("andurel.lock schemaVersion %d is newer than this narsilc supports; upgrade narsilc to read it", header.SchemaVersion)
+	if doc.SchemaVersion != 1 {
+		return Config{}, fmt.Errorf("andurel.toml schemaVersion %d is newer than this narsilc supports; upgrade narsilc to read it", doc.SchemaVersion)
 	}
-
-	var lock andurelLock
-	if err := json.Unmarshal(data, &lock); err != nil {
-		return Config{}, fmt.Errorf("andurel.lock: %w", err)
-	}
-	if lock.Version == "" {
-		return Config{}, fmt.Errorf("andurel.lock version is required")
+	if doc.Version == "" {
+		return Config{}, fmt.Errorf("andurel.toml version is required")
 	}
 
 	engine := EnginePostgreSQL
 	nullType := "pgtype.Null"
-	if lock.DatabaseConfig != nil {
-		if lock.DatabaseConfig.Engine != "" {
-			switch lock.DatabaseConfig.Engine {
+	if doc.Database != nil {
+		if doc.Database.Engine != "" {
+			switch doc.Database.Engine {
 			case "postgresql", "postgres":
 				engine = EnginePostgreSQL
 			default:
-				return Config{}, fmt.Errorf("andurel.lock databaseConfig.engine %q is not supported", lock.DatabaseConfig.Engine)
+				return Config{}, fmt.Errorf("andurel.toml database.engine %q is not supported", doc.Database.Engine)
 			}
 		}
-		if lock.DatabaseConfig.NullType != "" {
-			nullType = lock.DatabaseConfig.NullType
+		if doc.Database.NullType != "" {
+			nullType = doc.Database.NullType
 		}
 	}
 
+	return andurelConfigFromEngineNull(engine, nullType, "andurel.toml")
+}
+
+func andurelConfigFromEngineNull(engine Engine, nullType, source string) (Config, error) {
 	var emitPointers bool
 	switch nullType {
 	case "pointer":
@@ -79,7 +78,7 @@ func FromAndurelLock(data []byte) (Config, error) {
 	case "pgtype.Null", "sql.Null":
 		emitPointers = false
 	default:
-		return Config{}, fmt.Errorf("andurel.lock databaseConfig.nullType %q is not supported", nullType)
+		return Config{}, fmt.Errorf("%s database.nullType %q is not supported", source, nullType)
 	}
 
 	return Config{
@@ -118,7 +117,36 @@ func FromAndurelLock(data []byte) (Config, error) {
 	}, nil
 }
 
-// IsAndurelLock reports whether name is the Andurel project lock file.
+// IsAndurelToml reports whether name is the Andurel project manifest.
+func IsAndurelToml(name string) bool {
+	return name == andurelTomlName
+}
+
+// IsAndurelLock reports whether name is the Andurel digest lock file.
+// Kept for path discovery compatibility; digests are not read by narsilc.
 func IsAndurelLock(name string) bool {
 	return name == andurelLockName
+}
+
+// ReadAndurelProjectConfig loads Andurel generation settings from dir.
+// Prefers andurel.toml; rejects legacy JSON andurel.lock documents.
+func ReadAndurelProjectConfig(dir string) (Config, error) {
+	tomlPath := filepath.Join(dir, andurelTomlName)
+	data, err := os.ReadFile(tomlPath)
+	if err == nil {
+		return FromAndurelToml(data)
+	}
+	if !os.IsNotExist(err) {
+		return Config{}, err
+	}
+
+	lockPath := filepath.Join(dir, andurelLockName)
+	lockData, lockErr := os.ReadFile(lockPath)
+	if lockErr == nil {
+		trimmed := bytes.TrimSpace(lockData)
+		if len(trimmed) > 0 && trimmed[0] == '{' {
+			return Config{}, fmt.Errorf("V2 projects require %s; found legacy JSON %s", andurelTomlName, andurelLockName)
+		}
+	}
+	return Config{}, fmt.Errorf("%s not found", andurelTomlName)
 }

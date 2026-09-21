@@ -53,9 +53,14 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 	if filename != "" {
 		configPath = filepath.Join(dir, filename)
 	} else {
+		tomlPath := filepath.Join(dir, "andurel.toml")
+		if _, err := os.Stat(tomlPath); err == nil {
+			return readAndurelToml(stderr, tomlPath)
+		}
+
 		lockPath := filepath.Join(dir, "andurel.lock")
 		if _, err := os.Stat(lockPath); err == nil {
-			return readAndurelLock(stderr, lockPath)
+			return "", nil, fmt.Errorf("V2 projects require andurel.toml; found andurel.lock without a manifest")
 		}
 
 		var yamlMissing, jsonMissing, ymlMissing bool
@@ -75,7 +80,7 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 		}
 
 		if yamlMissing && ymlMissing && jsonMissing {
-			fmt.Fprintln(stderr, "error parsing configuration files. andurel.lock or narsilc.(yaml|yml|json): file does not exist")
+			fmt.Fprintln(stderr, "error parsing configuration files. andurel.toml or narsilc.(yaml|yml|json): file does not exist")
 			return "", nil, errors.New("config file missing")
 		}
 
@@ -96,8 +101,11 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 	}
 
 	base := filepath.Base(configPath)
+	if config.IsAndurelToml(base) {
+		return readAndurelToml(stderr, configPath)
+	}
 	if config.IsAndurelLock(base) {
-		return readAndurelLock(stderr, configPath)
+		return "", nil, fmt.Errorf("pass andurel.toml; andurel.lock is digests-only")
 	}
 
 	file, err := os.Open(configPath)
@@ -124,15 +132,15 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 	return configPath, &conf, nil
 }
 
-func readAndurelLock(stderr io.Writer, path string) (string, *config.Config, error) {
+func readAndurelToml(stderr io.Writer, path string) (string, *config.Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		fmt.Fprintf(stderr, "error parsing andurel.lock: file does not exist\n")
+		fmt.Fprintf(stderr, "error parsing andurel.toml: file does not exist\n")
 		return "", nil, err
 	}
-	conf, err := config.FromAndurelLock(data)
+	conf, err := config.FromAndurelToml(data)
 	if err != nil {
-		fmt.Fprintf(stderr, "error parsing andurel.lock: %s\n", err)
+		fmt.Fprintf(stderr, "error parsing andurel.toml: %s\n", err)
 		return "", nil, err
 	}
 	return path, &conf, nil
