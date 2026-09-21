@@ -152,7 +152,7 @@ then, use it today with type overrides
 
 Two overrides are required: one for non-nullable columns and one for nullable
 columns. The standard library does not include a `NullUUID` type, so nullable
-columns map to `*uuid.UUID` instead. Andurel managed config (`andurel.lock`)
+columns map to `*uuid.UUID` instead. Andurel managed config (`andurel.toml`)
 already applies these overrides.
 
 ```yaml

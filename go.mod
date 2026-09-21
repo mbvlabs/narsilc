@@ -15,6 +15,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0
 	github.com/lib/pq v1.12.3
 	github.com/ncruces/go-sqlite3 v0.35.4
+	github.com/pelletier/go-toml/v2 v2.2.4
 	github.com/riza-io/grpc-go v0.2.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10

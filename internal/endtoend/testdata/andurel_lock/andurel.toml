@@ -1,0 +1,12 @@
+schemaVersion = 1
+version = "v0.1.0"
+
+[project]
+  name = "testapp"
+
+[database]
+  engine = "postgresql"
+  nullType = "pgtype.Null"
+
+[tools]
+  narsilc = "v0.1.0"
