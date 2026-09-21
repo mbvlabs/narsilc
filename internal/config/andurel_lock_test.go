@@ -68,20 +68,44 @@ nullType = "bun.Null"
 		}
 	})
 
-	t.Run("sql.Null nullType", func(t *testing.T) {
+	t.Run("rejects sql.Null", func(t *testing.T) {
 		t.Parallel()
-		conf, err := FromAndurelToml([]byte(`
+		_, err := FromAndurelToml([]byte(`
 schemaVersion = 1
 version = "v0.1.0"
 
 [database]
 nullType = "sql.Null"
 `))
+		if err == nil {
+			t.Fatal("expected error")
+		}
+	})
+
+	t.Run("ignores project and tools tables", func(t *testing.T) {
+		t.Parallel()
+		conf, err := FromAndurelToml([]byte(`
+schemaVersion = 1
+version = "v0.1.0"
+
+[project]
+name = "testapp"
+
+[database]
+engine = "postgresql"
+nullType = "pgtype.Null"
+
+[tools]
+narsilc = "v0.1.0"
+`))
 		if err != nil {
 			t.Fatal(err)
 		}
+		if conf.SQL[0].Engine != EnginePostgreSQL {
+			t.Fatalf("engine = %q, want %q", conf.SQL[0].Engine, EnginePostgreSQL)
+		}
 		if conf.SQL[0].Gen.Go.EmitPointersForNullTypes {
-			t.Fatal("sql.Null nullType should not emit pointers")
+			t.Fatal("pgtype.Null should not emit pointers")
 		}
 	})
 

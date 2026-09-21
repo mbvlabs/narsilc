@@ -35,7 +35,8 @@ type andurelDatabaseConfig struct {
 // FromAndurelToml builds a narsilc Config from an andurel.toml document.
 // Paths, package, sql_package (pgx/v5), Andurel row mapping, and stdlib UUID
 // overrides are fixed. The user choice is database.nullType
-// (pgtype.Null, pointer, or sql.Null).
+// (pgtype.Null or pointer). Extra Andurel tables such as [project] and
+// [tools] are ignored.
 func FromAndurelToml(data []byte) (Config, error) {
 	var doc andurelToml
 	if err := toml.Unmarshal(data, &doc); err != nil {
@@ -75,7 +76,7 @@ func andurelConfigFromEngineNull(engine Engine, nullType, source string) (Config
 	switch nullType {
 	case "pointer":
 		emitPointers = true
-	case "pgtype.Null", "sql.Null":
+	case "pgtype.Null":
 		emitPointers = false
 	default:
 		return Config{}, fmt.Errorf("%s database.nullType %q is not supported", source, nullType)
@@ -129,7 +130,7 @@ func IsAndurelLock(name string) bool {
 }
 
 // ReadAndurelProjectConfig loads Andurel generation settings from dir.
-// Prefers andurel.toml; rejects legacy JSON andurel.lock documents.
+// Prefers andurel.toml; rejects a lock file that is present without a manifest.
 func ReadAndurelProjectConfig(dir string) (Config, error) {
 	tomlPath := filepath.Join(dir, andurelTomlName)
 	data, err := os.ReadFile(tomlPath)
@@ -143,10 +144,22 @@ func ReadAndurelProjectConfig(dir string) (Config, error) {
 	lockPath := filepath.Join(dir, andurelLockName)
 	lockData, lockErr := os.ReadFile(lockPath)
 	if lockErr == nil {
-		trimmed := bytes.TrimSpace(lockData)
-		if len(trimmed) > 0 && trimmed[0] == '{' {
-			return Config{}, fmt.Errorf("V2 projects require %s; found legacy JSON %s", andurelTomlName, andurelLockName)
-		}
+		return Config{}, MissingAndurelManifestError(lockData)
 	}
 	return Config{}, fmt.Errorf("%s not found", andurelTomlName)
+}
+
+func looksLikeJSONLock(data []byte) bool {
+	trimmed := bytes.TrimSpace(data)
+	return len(trimmed) > 0 && trimmed[0] == '{'
+}
+
+// MissingAndurelManifestError explains a digest or legacy lock file found
+// without andurel.toml. Matches Andurel's V2 split: toml is the manifest,
+// lock is hashes-only.
+func MissingAndurelManifestError(lockData []byte) error {
+	if looksLikeJSONLock(lockData) {
+		return fmt.Errorf("V2 projects require %s; found legacy JSON %s", andurelTomlName, andurelLockName)
+	}
+	return fmt.Errorf("V2 projects require %s; found %s without a manifest", andurelTomlName, andurelLockName)
 }

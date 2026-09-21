@@ -107,6 +107,13 @@ func FindTests(t *testing.T, root, testctx string) []*Testcase {
 			return err
 		}
 		name := info.Name()
+		if name == "andurel.lock" {
+			// Digest lock sits next to andurel.toml in V2 projects; the
+			// manifest is the config narsilc reads.
+			if _, err := os.Stat(filepath.Join(filepath.Dir(path), "andurel.toml")); err == nil {
+				return nil
+			}
+		}
 		if name == "andurel.toml" || name == "andurel.lock" || name == "narsilc.json" || name == "narsilc.yaml" || name == "narsilc.yml" {
 			dir := filepath.Dir(path)
 			tcs = append(tcs, &Testcase{

@@ -59,8 +59,12 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 		}
 
 		lockPath := filepath.Join(dir, "andurel.lock")
-		if _, err := os.Stat(lockPath); err == nil {
-			return "", nil, fmt.Errorf("V2 projects require andurel.toml; found andurel.lock without a manifest")
+		if lockData, err := os.ReadFile(lockPath); err == nil {
+			err := config.MissingAndurelManifestError(lockData)
+			fmt.Fprintln(stderr, err)
+			return "", nil, err
+		} else if !os.IsNotExist(err) {
+			return "", nil, err
 		}
 
 		var yamlMissing, jsonMissing, ymlMissing bool
@@ -105,7 +109,9 @@ func readConfig(stderr io.Writer, dir, filename string) (string, *config.Config,
 		return readAndurelToml(stderr, configPath)
 	}
 	if config.IsAndurelLock(base) {
-		return "", nil, fmt.Errorf("pass andurel.toml; andurel.lock is digests-only")
+		err := fmt.Errorf("pass andurel.toml; andurel.lock is digests-only")
+		fmt.Fprintln(stderr, err)
+		return "", nil, err
 	}
 
 	file, err := os.Open(configPath)

@@ -422,6 +422,11 @@ func BenchmarkReplay(b *testing.B) {
 		if err != nil {
 			return err
 		}
+		if info.Name() == "andurel.lock" {
+			if _, err := os.Stat(filepath.Join(filepath.Dir(path), "andurel.toml")); err == nil {
+				return nil
+			}
+		}
 		if info.Name() == "andurel.toml" || info.Name() == "andurel.lock" || info.Name() == "narsilc.json" || info.Name() == "narsilc.yaml" || info.Name() == "narsilc.yml" {
 			dirs = append(dirs, filepath.Dir(path))
 			return filepath.SkipDir

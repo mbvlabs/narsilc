@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "version": "v0.1.0",
+  "databaseConfig": {
+    "engine": "postgresql",
+    "nullType": "pgtype.Null"
+  }
+}
