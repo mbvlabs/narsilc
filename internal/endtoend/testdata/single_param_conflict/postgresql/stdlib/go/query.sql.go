@@ -54,14 +54,11 @@ func (q *Queries) GetUser(ctx context.Context, sub uuid.UUID) (uuid.UUID, error)
 }
 
 const setDefaultName = `-- name: SetDefaultName :one
-
 UPDATE  authors
 SET     name = 'Default Name'
 WHERE   id = $1
 RETURNING id
 `
-
-// https://github.com/mbvlabs/narsilc/issues/1235
 
 func (q *Queries) SetDefaultName(ctx context.Context, id int64) (int64, error) {
 	row := q.db.QueryRowContext(ctx, setDefaultName, id)

@@ -96,18 +96,53 @@ func Mutate(raw string, a []Edit) (string, error) {
 	return s, nil
 }
 
+func isQueryNameLine(t string) bool {
+	switch {
+	case strings.HasPrefix(t, "-- name:"):
+		return true
+	case strings.HasPrefix(t, "/* name:") && strings.HasSuffix(t, "*/"):
+		return true
+	case strings.HasPrefix(t, "# name:"):
+		return true
+	default:
+		return false
+	}
+}
+
+// ClipToQueryName drops everything before the query name annotation.
+//
+// Parsers start each statement at the previous terminator (or byte 0) so
+// `-- name:` is inside the plucked text. File headers and section comments
+// sit in that same gap and would otherwise become part of the query SQL.
+func ClipToQueryName(sql string) string {
+	s := bufio.NewScanner(strings.NewReader(sql))
+	var b strings.Builder
+	seen := false
+	for s.Scan() {
+		t := s.Text()
+		if !seen {
+			if !isQueryNameLine(t) {
+				continue
+			}
+			seen = true
+		}
+		if b.Len() > 0 {
+			b.WriteByte('\n')
+		}
+		b.WriteString(t)
+	}
+	if !seen {
+		return sql
+	}
+	return b.String()
+}
+
 func StripComments(sql string) (string, []string, error) {
 	s := bufio.NewScanner(strings.NewReader(strings.TrimSpace(sql)))
 	var lines, comments []string
 	for s.Scan() {
 		t := s.Text()
-		if strings.HasPrefix(t, "-- name:") {
-			continue
-		}
-		if strings.HasPrefix(t, "/* name:") && strings.HasSuffix(t, "*/") {
-			continue
-		}
-		if strings.HasPrefix(t, "# name:") {
+		if isQueryNameLine(t) {
 			continue
 		}
 		if after, ok := strings.CutPrefix(t, "--"); ok {

@@ -37,15 +37,12 @@ func (q *Queries) DeleteItem(ctx context.Context, id int64) (Item, error) {
 }
 
 const listItems = `-- name: ListItems :many
-
 SELECT id, name, cap_read
 FROM items
 WHERE cap_read = 'anonymous'
 ORDER BY name
 `
 
-// Multi-byte UTF-8 in comments must not shift the byte offsets used to slice
-// query text out of the source file (#4523, #4235, #4372).
 // an em dash right here — must not truncate the ORDER BY below
 
 func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
@@ -72,7 +69,6 @@ func (q *Queries) ListItems(ctx context.Context) ([]Item, error) {
 }
 
 const updateItem = `-- name: UpdateItem :exec
-
 UPDATE items SET name = ? WHERE id = ?
 `
 
@@ -81,7 +77,6 @@ type UpdateItemParams struct {
 	ID   int64
 }
 
-// section — divider between queries
 func (q *Queries) UpdateItem(ctx context.Context, arg UpdateItemParams) error {
 	_, err := q.db.ExecContext(ctx, updateItem, arg.Name, arg.ID)
 	return err

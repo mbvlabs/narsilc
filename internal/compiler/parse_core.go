@@ -36,7 +36,7 @@ func (c *Compiler) parseQueryCore(raw *ast.RawStmt, src string, pre *preprocess.
 	}
 
 	md := metadata.Metadata{Name: name, Cmd: cmd}
-	cleanedComments, err := source.CleanedComments(rawSQL, c.parser.CommentSyntax())
+	cleanedComments, err := source.CleanedComments(source.ClipToQueryName(rawSQL), c.parser.CommentSyntax())
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (c *Compiler) parseQueryCore(raw *ast.RawStmt, src string, pre *preprocess.
 		}
 	}
 
-	trimmed, comments, err := source.StripComments(expanded)
+	trimmed, comments, err := source.StripComments(source.ClipToQueryName(expanded))
 	if err != nil {
 		return nil, err
 	}
