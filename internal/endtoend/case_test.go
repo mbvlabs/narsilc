@@ -72,7 +72,7 @@ func parseStdout(t *testing.T, dir string) []byte {
 
 // hasSQLCConfig reports whether dir contains a narsilc configuration file.
 func hasSQLCConfig(dir string) bool {
-	for _, name := range []string{"andurel.lock", "narsilc.json", "narsilc.yaml", "narsilc.yml"} {
+	for _, name := range []string{"andurel.toml", "andurel.lock", "narsilc.json", "narsilc.yaml", "narsilc.yml"} {
 		if _, err := os.Stat(filepath.Join(dir, name)); err == nil {
 			return true
 		}
@@ -107,7 +107,14 @@ func FindTests(t *testing.T, root, testctx string) []*Testcase {
 			return err
 		}
 		name := info.Name()
-		if name == "andurel.lock" || name == "narsilc.json" || name == "narsilc.yaml" || name == "narsilc.yml" {
+		if name == "andurel.lock" {
+			// Digest lock sits next to andurel.toml in V2 projects; the
+			// manifest is the config narsilc reads.
+			if _, err := os.Stat(filepath.Join(filepath.Dir(path), "andurel.toml")); err == nil {
+				return nil
+			}
+		}
+		if name == "andurel.toml" || name == "andurel.lock" || name == "narsilc.json" || name == "narsilc.yaml" || name == "narsilc.yml" {
 			dir := filepath.Dir(path)
 			tcs = append(tcs, &Testcase{
 				Path:       dir,

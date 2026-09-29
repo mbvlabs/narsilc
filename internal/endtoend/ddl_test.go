@@ -23,8 +23,8 @@ func TestValidSchema(t *testing.T) {
 		if replay.ConfigName == "" {
 			continue
 		}
-		// andurel.lock is JSON, not narsilc.yaml; generate replay covers it.
-		if replay.ConfigName == "andurel.lock" {
+		// Andurel manifests are not narsilc.yaml; generate replay covers them.
+		if replay.ConfigName == "andurel.toml" || replay.ConfigName == "andurel.lock" {
 			continue
 		}
 

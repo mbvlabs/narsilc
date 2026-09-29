@@ -33,7 +33,7 @@ func init() {
 // Do runs the command logic.
 func Do(args []string, stdin io.Reader, stdout io.Writer, stderr io.Writer) int {
 	rootCmd := &cobra.Command{Use: "narsilc", SilenceUsage: true}
-	rootCmd.PersistentFlags().StringP("file", "f", "", "specify an alternate config file (default: andurel.lock or narsilc.yaml)")
+	rootCmd.PersistentFlags().StringP("file", "f", "", "specify an alternate config file (default: andurel.toml or narsilc.yaml)")
 
 	rootCmd.AddCommand(checkCmd)
 	rootCmd.AddCommand(createDBCmd)
@@ -77,7 +77,7 @@ var version string
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-		Short: "Print the narsilc version number",
+	Short: "Print the narsilc version number",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		defer trace.StartRegion(cmd.Context(), "version").End()
 		if version == "" {
