@@ -73,7 +73,7 @@ func (c *Compiler) parseQuery(stmt ast.Node, pp *preprocess.Result, o opts.Parse
 	}
 
 	// TODO eventually can use this for name and type/cmd parsing too
-	cleanedComments, err := source.CleanedComments(source.ClipToQueryName(rawSQL), c.parser.CommentSyntax())
+	cleanedComments, err := source.CleanedComments(rawSQL, c.parser.CommentSyntax())
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (c *Compiler) parseQuery(stmt ast.Node, pp *preprocess.Result, o opts.Parse
 		}
 	}
 
-	trimmed, comments, err := source.StripComments(source.ClipToQueryName(expanded))
+	trimmed, comments, err := source.StripComments(expanded)
 	if err != nil {
 		return nil, err
 	}

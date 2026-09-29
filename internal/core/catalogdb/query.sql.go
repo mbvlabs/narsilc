@@ -83,6 +83,7 @@ func (q *Queries) ClassOIDByName(ctx context.Context, name string) (int64, error
 }
 
 const createAttribute = `-- name: CreateAttribute :exec
+
 INSERT INTO sql_attribute (
     class_oid, name, type_oid, not_null, has_default, num,
     decl_type, auto_increment, is_primary_key, is_unique, hidden
@@ -103,6 +104,7 @@ type CreateAttributeParams struct {
 	Hidden        int64
 }
 
+// ============================= sql_attribute ===========================
 func (q *Queries) CreateAttribute(ctx context.Context, arg CreateAttributeParams) error {
 	_, err := q.db.ExecContext(ctx, createAttribute,
 		arg.ClassOid,
@@ -121,6 +123,7 @@ func (q *Queries) CreateAttribute(ctx context.Context, arg CreateAttributeParams
 }
 
 const createCast = `-- name: CreateCast :exec
+
 INSERT INTO sql_cast (source_type_oid, target_type_oid, proc_oid, context, dialect_oid)
 VALUES (?, ?, ?, ?, ?)
 `
@@ -133,6 +136,7 @@ type CreateCastParams struct {
 	DialectOid    sql.NullInt64
 }
 
+// =============================== sql_cast ==============================
 func (q *Queries) CreateCast(ctx context.Context, arg CreateCastParams) error {
 	_, err := q.db.ExecContext(ctx, createCast,
 		arg.SourceTypeOid,
@@ -145,6 +149,7 @@ func (q *Queries) CreateCast(ctx context.Context, arg CreateCastParams) error {
 }
 
 const createClass = `-- name: CreateClass :execlastid
+
 INSERT INTO sql_class (namespace_oid, name, kind) VALUES (?, ?, ?)
 `
 
@@ -154,6 +159,7 @@ type CreateClassParams struct {
 	Kind         string
 }
 
+// =============================== sql_class =============================
 func (q *Queries) CreateClass(ctx context.Context, arg CreateClassParams) (int64, error) {
 	result, err := q.db.ExecContext(ctx, createClass, arg.NamespaceOid, arg.Name, arg.Kind)
 	if err != nil {
@@ -163,6 +169,7 @@ func (q *Queries) CreateClass(ctx context.Context, arg CreateClassParams) (int64
 }
 
 const createConstraint = `-- name: CreateConstraint :exec
+
 INSERT INTO sql_constraint (class_oid, name, kind, columns) VALUES (?, ?, ?, ?)
 `
 
@@ -173,6 +180,7 @@ type CreateConstraintParams struct {
 	Columns  string
 }
 
+// ============================ sql_constraint ===========================
 func (q *Queries) CreateConstraint(ctx context.Context, arg CreateConstraintParams) error {
 	_, err := q.db.ExecContext(ctx, createConstraint,
 		arg.ClassOid,
@@ -184,9 +192,11 @@ func (q *Queries) CreateConstraint(ctx context.Context, arg CreateConstraintPara
 }
 
 const createDialect = `-- name: CreateDialect :execlastid
+
 INSERT INTO sql_dialect (name) VALUES (?)
 `
 
+// ============================== sql_dialect ============================
 func (q *Queries) CreateDialect(ctx context.Context, name string) (int64, error) {
 	result, err := q.db.ExecContext(ctx, createDialect, name)
 	if err != nil {
@@ -196,9 +206,14 @@ func (q *Queries) CreateDialect(ctx context.Context, name string) (int64, error)
 }
 
 const createNamespace = `-- name: CreateNamespace :execlastid
+
+
 INSERT INTO sql_namespace (name) VALUES (?)
 `
 
+// Queries against sqlc's own sql_* catalog tables, compiled by sqlc's
+// SQLite engine. Regenerate with `go generate ./internal/core/...`.
+// ============================ sql_namespace ============================
 func (q *Queries) CreateNamespace(ctx context.Context, name string) (int64, error) {
 	result, err := q.db.ExecContext(ctx, createNamespace, name)
 	if err != nil {
@@ -208,6 +223,7 @@ func (q *Queries) CreateNamespace(ctx context.Context, name string) (int64, erro
 }
 
 const createOperator = `-- name: CreateOperator :execlastid
+
 INSERT INTO sql_operator
     (namespace_oid, dialect_oid, name,
      left_type_oid, right_type_oid, result_type_oid, proc_oid)
@@ -224,6 +240,7 @@ type CreateOperatorParams struct {
 	ProcOid       sql.NullInt64
 }
 
+// ============================= sql_operator ============================
 func (q *Queries) CreateOperator(ctx context.Context, arg CreateOperatorParams) (int64, error) {
 	result, err := q.db.ExecContext(ctx, createOperator,
 		arg.NamespaceOid,
@@ -241,6 +258,7 @@ func (q *Queries) CreateOperator(ctx context.Context, arg CreateOperatorParams) 
 }
 
 const createProc = `-- name: CreateProc :execlastid
+
 INSERT INTO sql_proc
     (namespace_oid, dialect_oid, name, kind,
      return_type_oid, return_set, return_nullable, return_template, strict, variadic_kind)
@@ -260,6 +278,7 @@ type CreateProcParams struct {
 	VariadicKind   string
 }
 
+// =============================== sql_proc ==============================
 func (q *Queries) CreateProc(ctx context.Context, arg CreateProcParams) (int64, error) {
 	result, err := q.db.ExecContext(ctx, createProc,
 		arg.NamespaceOid,
@@ -306,6 +325,7 @@ func (q *Queries) CreateProcArg(ctx context.Context, arg CreateProcArgParams) er
 }
 
 const createType = `-- name: CreateType :execlastid
+
 INSERT INTO sql_type
     (name, expr, typtype, category, preferred, namespace_oid, dialect_oid,
      family_oid, element_oid, base_oid, canonical_oid, not_null)
@@ -327,6 +347,7 @@ type CreateTypeParams struct {
 	NotNull      int64
 }
 
+// =============================== sql_type ==============================
 func (q *Queries) CreateType(ctx context.Context, arg CreateTypeParams) (int64, error) {
 	result, err := q.db.ExecContext(ctx, createType,
 		arg.Name,
