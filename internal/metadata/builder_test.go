@@ -32,6 +32,31 @@ func TestParseBuilderAnnotations(t *testing.T) {
 	}
 }
 
+func TestParseColumnRef(t *testing.T) {
+	cases := []struct {
+		in   string
+		want ColumnRef
+	}{
+		{"id", ColumnRef{Name: "id"}},
+		{"u.id", ColumnRef{Rel: "u", Name: "id"}},
+		{"public.users.id", ColumnRef{Schema: "public", Rel: "users", Name: "id"}},
+	}
+	for _, tc := range cases {
+		got, err := ParseColumnRef(tc.in)
+		if err != nil {
+			t.Fatalf("%s: %v", tc.in, err)
+		}
+		if got != tc.want {
+			t.Errorf("%s: got %+v want %+v", tc.in, got, tc.want)
+		}
+	}
+	for _, in := range []string{"", "u.", ".id", "a.b.c.d"} {
+		if _, err := ParseColumnRef(in); err == nil {
+			t.Errorf("expected error for %q", in)
+		}
+	}
+}
+
 func TestParseBuilderAnnotationsErrors(t *testing.T) {
 	cases := [][]string{
 		{"@filter name"},
