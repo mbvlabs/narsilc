@@ -1,0 +1,2 @@
+# package querytest
+query.sql:1:1: query ListUserTokens: column "id" is ambiguous for @filter/@order; qualify as u.id or t.id

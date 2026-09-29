@@ -1,0 +1,2 @@
+# package querytest
+query.sql:1:1: query ListUserTokens: unknown alias "nope" for @filter/@order

@@ -163,6 +163,8 @@ func pluginQueryColumn(c *compiler.Column) *plugin.Column {
 		}
 	}
 
+	out.TableAlias = c.TableAlias
+
 	if c.EmbedTable != nil {
 		out.EmbedTable = &plugin.Identifier{
 			Catalog: c.EmbedTable.Catalog,
