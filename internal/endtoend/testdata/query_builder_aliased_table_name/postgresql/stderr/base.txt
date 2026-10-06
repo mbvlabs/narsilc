@@ -1,0 +1,2 @@
+# package querytest
+query.sql:1:1: query ListUsers: unknown relation "public.users" for @filter/@order

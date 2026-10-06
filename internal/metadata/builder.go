@@ -60,6 +60,47 @@ type Order struct {
 	Column string
 }
 
+// ColumnRef is a 1–3 part column reference from an @filter / @order annotation.
+type ColumnRef struct {
+	Schema string
+	Rel    string // alias or table name, as written
+	Name   string
+}
+
+// ParseColumnRef splits a builder column token into schema, relation, and name.
+func ParseColumnRef(name string) (ColumnRef, error) {
+	if name == "" {
+		return ColumnRef{}, fmt.Errorf("empty column reference")
+	}
+	parts := strings.Split(name, ".")
+	for _, p := range parts {
+		if p == "" {
+			return ColumnRef{}, fmt.Errorf("invalid column reference %q (want column, alias.column, or schema.table.column)", name)
+		}
+	}
+	switch len(parts) {
+	case 1:
+		return ColumnRef{Name: parts[0]}, nil
+	case 2:
+		return ColumnRef{Rel: parts[0], Name: parts[1]}, nil
+	case 3:
+		return ColumnRef{Schema: parts[0], Rel: parts[1], Name: parts[2]}, nil
+	default:
+		return ColumnRef{}, fmt.Errorf("invalid column reference %q (want column, alias.column, or schema.table.column)", name)
+	}
+}
+
+func (r ColumnRef) String() string {
+	switch {
+	case r.Schema != "":
+		return r.Schema + "." + r.Rel + "." + r.Name
+	case r.Rel != "":
+		return r.Rel + "." + r.Name
+	default:
+		return r.Name
+	}
+}
+
 // ParseBuilderAnnotations reads @filter / @order comments. Other comments are ignored.
 func ParseBuilderAnnotations(comments []string) ([]Filter, []Order, error) {
 	var filters []Filter

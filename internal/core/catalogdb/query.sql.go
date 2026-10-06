@@ -1068,6 +1068,7 @@ SELECT oid, name FROM sql_dialect ORDER BY oid LIMIT 1
 
 // The dialect a catalog was seeded with. A catalog is built for exactly one,
 // so a restored catalog finds it without being told its name.
+
 func (q *Queries) SeededDialect(ctx context.Context) (SqlDialect, error) {
 	row := q.db.QueryRowContext(ctx, seededDialect)
 	var i SqlDialect
@@ -1333,6 +1334,7 @@ LIMIT 1
 
 // The family spelled name: an instance carries its family's name too, and
 // is found by its expression instead.
+
 func (q *Queries) TypeOIDByName(ctx context.Context, name string) (int64, error) {
 	row := q.db.QueryRowContext(ctx, typeOIDByName, name)
 	var oid int64
@@ -1421,6 +1423,7 @@ type TypeOIDsInCategoryParams struct {
 
 // The families of a category: an instance inherits its family's category
 // and an alias stands for the row it points at, so neither is listed.
+
 func (q *Queries) TypeOIDsInCategory(ctx context.Context, arg TypeOIDsInCategoryParams) ([]int64, error) {
 	rows, err := q.db.QueryContext(ctx, typeOIDsInCategory, arg.DialectOid, arg.Category)
 	if err != nil {
