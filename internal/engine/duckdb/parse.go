@@ -25,8 +25,7 @@ type Parser struct{}
 func (p *Parser) Parse(r io.Reader) ([]ast.Statement, error) {
 	stmts, err := parser.Parse(context.Background(), r)
 	if err != nil {
-		var perr *parser.Error
-		if errors.As(err, &perr) {
+		if perr, ok := errors.AsType[*parser.Error](err); ok {
 			serr := &sqlerr.Error{
 				Message: err.Error(),
 				Line:    perr.Line,

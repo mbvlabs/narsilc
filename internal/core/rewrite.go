@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -89,17 +90,17 @@ func (c *Catalog) loadRules() (*rules, error) {
 		r.rewrites = append(r.rewrites, rw)
 	}
 	if idents, _ := c.DialectFlag(c.dialectOID, FlagIdents); idents != "" {
-		for _, w := range strings.Split(idents, ",") {
+		for w := range strings.SplitSeq(idents, ",") {
 			r.idents[strings.ToLower(strings.TrimSpace(w))] = true
 		}
 	}
 	if identArgs, _ := c.DialectFlag(c.dialectOID, FlagIdentArgs); identArgs != "" {
-		for _, entry := range strings.Split(identArgs, ";") {
+		for entry := range strings.SplitSeq(identArgs, ";") {
 			family, positions, ok := strings.Cut(entry, ":")
 			if !ok {
 				continue
 			}
-			for _, p := range strings.Split(positions, ",") {
+			for p := range strings.SplitSeq(positions, ",") {
 				if n, err := strconv.Atoi(strings.TrimSpace(p)); err == nil {
 					family = strings.ToLower(strings.TrimSpace(family))
 					r.identArgs[family] = append(r.identArgs[family], n)
@@ -202,7 +203,7 @@ func (c *Catalog) userTypeBase(name string) (int64, error) {
 		if row.Words == "" {
 			return row.TypeOid, nil
 		}
-		for _, w := range strings.Split(row.Words, ",") {
+		for w := range strings.SplitSeq(row.Words, ",") {
 			if w != "" && strings.Contains(upper, w) {
 				return row.TypeOid, nil
 			}
@@ -301,12 +302,7 @@ func (r *rules) identify(t *TypeExpr) *TypeExpr {
 }
 
 func containsInt(list []int, n int) bool {
-	for _, v := range list {
-		if v == n {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(list, n)
 }
 
 // matchArgs matches a pattern's arguments against an expression's, binding

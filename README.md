@@ -3,6 +3,13 @@
 narsilc is a fork of [sqlc](https://github.com/sqlc-dev/sqlc) that can scan
 query results into caller-owned structs via generic methods and `andurel` tags.
 
+With `row_mapping: andurel`, generated `:one`/`:many` methods scan into `T`
+unless `*T` implements `narsilc.Transformer[Row]`. Then they scan a generated
+row (`UserRow`, or `AuthorPostCountsRow` for a join) once and call `Transform`.
+`database.nullType` is unrelated: it is how SQL NULL is represented on the row
+and on 1:1 entities. Custom domain types do not need `sql.Scanner` if they
+use Transform.
+
 ```bash
 go install github.com/mbvlabs/narsilc/cmd/narsilc@v0.1.0
 narsilc generate

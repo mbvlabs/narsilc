@@ -35,13 +35,13 @@ func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{.Arg.Pair}}) (T,
 	row := q.db.QueryRow(ctx, {{.ConstantName}}, {{.Arg.Params}})
 {{- end}}
 	{{- if $.WrapErrors}}
-	item, err := narsilc.Scan[T](row, {{.Ret.ColumnNamesAsGoSlice}})
+	item, err := narsilc.Read[T, {{.Ret.Type}}](row, {{.Ret.ColumnNamesAsGoSlice}})
 	if err != nil {
 		err = fmt.Errorf("query {{.MethodName}}: %w", err)
 	}
 	return item, err
 	{{- else}}
-	return narsilc.Scan[T](row, {{.Ret.ColumnNamesAsGoSlice}})
+	return narsilc.Read[T, {{.Ret.Type}}](row, {{.Ret.ColumnNamesAsGoSlice}})
 	{{- end}}
 }
 {{else}}
@@ -195,8 +195,21 @@ func (b {{.BuilderTypeRef}}) All() ([]T, error) {
 	{{else}}
 	var items []T
 	{{end -}}
+	var probe T
+	_, mapRow := any(&probe).(narsilc.Transformer[{{.Ret.Type}}])
+	cols := {{.Ret.ColumnNamesAsGoSlice}}
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, {{.Ret.ColumnNamesAsGoSlice}})
+		var item T
+		var err error
+		if mapRow {
+			var scanned {{.Ret.Type}}
+			scanned, err = narsilc.Scan[{{.Ret.Type}}](rows, cols)
+			if err == nil {
+				item, err = narsilc.FromRow[T, {{.Ret.Type}}](scanned)
+			}
+		} else {
+			item, err = narsilc.Scan[T](rows, cols)
+		}
 		if err != nil {
 			return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
 		}
@@ -253,8 +266,21 @@ func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{.Arg.Pair}}) ([]
 	{{else}}
 	var items []T
 	{{end -}}
+	var probe T
+	_, mapRow := any(&probe).(narsilc.Transformer[{{.Ret.Type}}])
+	cols := {{.Ret.ColumnNamesAsGoSlice}}
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, {{.Ret.ColumnNamesAsGoSlice}})
+		var item T
+		var err error
+		if mapRow {
+			var scanned {{.Ret.Type}}
+			scanned, err = narsilc.Scan[{{.Ret.Type}}](rows, cols)
+			if err == nil {
+				item, err = narsilc.FromRow[T, {{.Ret.Type}}](scanned)
+			}
+		} else {
+			item, err = narsilc.Scan[T](rows, cols)
+		}
 		if err != nil {
 			return nil, {{if $.WrapErrors}}fmt.Errorf("query {{.MethodName}}: %w", err){{else}}err{{end}}
 		}

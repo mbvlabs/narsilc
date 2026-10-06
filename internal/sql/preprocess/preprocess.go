@@ -14,6 +14,7 @@ package preprocess
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/mbvlabs/narsilc/internal/config"
@@ -47,10 +48,8 @@ type EmbedSet []*Embed
 // could identify the node.
 func (es EmbedSet) Find(locations ...int) (*Embed, bool) {
 	for _, e := range es {
-		for _, loc := range locations {
-			if loc == e.Location {
-				return e, true
-			}
+		if slices.Contains(locations, e.Location) {
+			return e, true
 		}
 	}
 	return nil, false

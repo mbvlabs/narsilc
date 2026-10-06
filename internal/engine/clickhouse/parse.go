@@ -32,10 +32,7 @@ func (p *Parser) Parse(r io.Reader) ([]ast.Statement, error) {
 	var stmts []ast.Statement
 	loc := 0
 	for _, stmt := range stmtNodes {
-		start := stmt.Pos().Offset - 1
-		if start < loc {
-			start = loc
-		}
+		start := max(stmt.Pos().Offset-1, loc)
 		end := statementEnd(blob, start)
 
 		converter := &cc{}

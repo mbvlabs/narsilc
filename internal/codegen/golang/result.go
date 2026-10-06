@@ -80,9 +80,13 @@ func buildStructs(req *plugin.GenerateRequest, options *opts.Options) []Struct {
 					Exclusions: options.InflectionExcludeTableNames,
 				})
 			}
+			name := StructName(structName, options)
+			if options.AndurelRowMapping() {
+				name += "Row"
+			}
 			s := Struct{
 				Table:   &plugin.Identifier{Schema: schema.Name, Name: table.Rel.Name},
-				Name:    StructName(structName, options),
+				Name:    name,
 				Comment: table.Comment,
 				IsModel: true,
 			}
@@ -95,11 +99,14 @@ func buildStructs(req *plugin.GenerateRequest, options *opts.Options) []Struct {
 					tags["json"] = JSONTagName(column.Name, options)
 				}
 				addExtraGoStructTags(tags, req, options, column)
+				addAndurelStructTag(tags, options, column)
 				s.Fields = append(s.Fields, Field{
 					Name:    StructName(column.Name, options),
+					DBName:  column.Name,
 					Type:    goType(req, options, column),
 					Tags:    tags,
 					Comment: column.Comment,
+					Column:  column,
 				})
 			}
 			structs = append(structs, s)
@@ -257,7 +264,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 					Column: p.Column,
 				})
 			}
-			s, err := columnsToStruct(req, options, gq.MethodName+"Params", cols, false, models, qualifier)
+			s, err := columnsToStruct(req, options, gq.MethodName+"Params", cols, false, false, models, qualifier)
 			if err != nil {
 				return nil, err
 			}
@@ -310,25 +317,23 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 			var gs *Struct
 			var emit bool
 
-			if !options.AndurelRowMapping() {
-				for _, s := range structs {
-					if len(s.Fields) != len(query.Columns) {
-						continue
+			for _, s := range structs {
+				if len(s.Fields) != len(query.Columns) {
+					continue
+				}
+				same := true
+				for i, f := range s.Fields {
+					c := query.Columns[i]
+					sameName := f.Name == StructName(columnName(c, i), options)
+					sameType := f.Type == goType(req, options, c)
+					sameTable := sdk.SameTableName(c.Table, s.Table, req.Catalog.DefaultSchema)
+					if !sameName || !sameType || !sameTable {
+						same = false
 					}
-					same := true
-					for i, f := range s.Fields {
-						c := query.Columns[i]
-						sameName := f.Name == StructName(columnName(c, i), options)
-						sameType := f.Type == goType(req, options, c)
-						sameTable := sdk.SameTableName(c.Table, s.Table, req.Catalog.DefaultSchema)
-						if !sameName || !sameType || !sameTable {
-							same = false
-						}
-					}
-					if same {
-						gs = &s
-						break
-					}
+				}
+				if same {
+					gs = &s
+					break
 				}
 			}
 
@@ -342,11 +347,11 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 					})
 				}
 				var err error
-				gs, err = columnsToStruct(req, options, gq.MethodName+"Row", columns, true, models, qualifier)
+				gs, err = columnsToStruct(req, options, gq.MethodName+"Row", columns, true, true, models, qualifier)
 				if err != nil {
 					return nil, err
 				}
-				emit = !options.AndurelRowMapping()
+				emit = true
 			}
 			gq.Ret = QueryValue{
 				Emit:           emit,
@@ -384,7 +389,7 @@ func putOutColumns(query *plugin.Query) bool {
 // JSON tags: count, count_2, count_2
 //
 // This is unlikely to happen, so don't fix it yet
-func columnsToStruct(req *plugin.GenerateRequest, options *opts.Options, name string, columns []goColumn, useID bool, models modelTypeSet, qualifier string) (*Struct, error) {
+func columnsToStruct(req *plugin.GenerateRequest, options *opts.Options, name string, columns []goColumn, useID bool, andurelTags bool, models modelTypeSet, qualifier string) (*Struct, error) {
 	gs := Struct{
 		Name: name,
 	}
@@ -423,6 +428,9 @@ func columnsToStruct(req *plugin.GenerateRequest, options *opts.Options, name st
 			tags["json"] = JSONTagName(tagName, options)
 		}
 		addExtraGoStructTags(tags, req, options, c.Column)
+		if andurelTags {
+			addAndurelStructTag(tags, options, c.Column)
+		}
 		f := Field{
 			Name:   fieldName,
 			DBName: colName,

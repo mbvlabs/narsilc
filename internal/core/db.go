@@ -85,7 +85,7 @@ func (c *stmtCache) prepared(ctx context.Context, query string) (*sql.Stmt, erro
 	return stmt, nil
 }
 
-func (c *stmtCache) ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
+func (c *stmtCache) ExecContext(ctx context.Context, query string, args ...any) (sql.Result, error) {
 	stmt, err := c.prepared(ctx, query)
 	if err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func (c *stmtCache) ExecContext(ctx context.Context, query string, args ...inter
 	return stmt.ExecContext(ctx, args...)
 }
 
-func (c *stmtCache) QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
+func (c *stmtCache) QueryContext(ctx context.Context, query string, args ...any) (*sql.Rows, error) {
 	stmt, err := c.prepared(ctx, query)
 	if err != nil {
 		return nil, err
@@ -101,7 +101,7 @@ func (c *stmtCache) QueryContext(ctx context.Context, query string, args ...inte
 	return stmt.QueryContext(ctx, args...)
 }
 
-func (c *stmtCache) QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row {
+func (c *stmtCache) QueryRowContext(ctx context.Context, query string, args ...any) *sql.Row {
 	stmt, err := c.prepared(ctx, query)
 	if err != nil {
 		// *sql.Row carries an error but has no exported constructor, so fall

@@ -9,6 +9,7 @@
 package printer
 
 import (
+	"slices"
 	"strings"
 	"unicode/utf8"
 )
@@ -204,7 +205,7 @@ func (t *Buffer) Print(width int) string {
 			return
 		}
 		sb.WriteByte('\n')
-		for i := 0; i < indent; i++ {
+		for range indent {
 			sb.WriteByte(' ')
 		}
 		col = indent
@@ -237,12 +238,12 @@ func (t *Buffer) Print(width int) string {
 			// forces enclosing groups broken; renders nothing
 		case tokenOpenGroup:
 			flat := f.flat || (f.d.width < breakWidth && f.d.width <= width-col)
-			for i := len(f.d.kids) - 1; i >= 0; i-- {
-				stack = append(stack, frame{d: f.d.kids[i], indent: f.indent, flat: flat})
+			for _, v := range slices.Backward(f.d.kids) {
+				stack = append(stack, frame{d: v, indent: f.indent, flat: flat})
 			}
 		case tokenOpenIndent:
-			for i := len(f.d.kids) - 1; i >= 0; i-- {
-				stack = append(stack, frame{d: f.d.kids[i], indent: f.indent + indentWidth, flat: f.flat})
+			for _, v := range slices.Backward(f.d.kids) {
+				stack = append(stack, frame{d: v, indent: f.indent + indentWidth, flat: f.flat})
 			}
 		}
 	}
