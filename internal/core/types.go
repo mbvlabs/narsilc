@@ -224,7 +224,7 @@ func (c *Catalog) createComparisons(typeOID int64) error {
 	if err != nil {
 		return nil
 	}
-	for _, op := range strings.Split(ops, ",") {
+	for op := range strings.SplitSeq(ops, ",") {
 		if op == "" {
 			continue
 		}
@@ -449,7 +449,7 @@ func (c *Catalog) insertTypeArgs(oid int64, key string, args []TypeArg, argOIDs 
 
 // canonicalOID follows an alias row to the row it stands for.
 func (c *Catalog) canonicalOID(oid int64) (int64, error) {
-	for i := 0; i < 16; i++ {
+	for range 16 {
 		info, err := c.LookupType(oid)
 		if err != nil {
 			return 0, err

@@ -129,7 +129,7 @@ func Generate(ctx context.Context, req *plugin.GenerateRequest) (*plugin.Generat
 	}
 
 	if options.OmitUnusedStructs || options.AndurelRowMapping() {
-		enums, structs = filterUnusedStructs(enums, structs, queries, options.ModelsTypeQualifier(), options.AndurelRowMapping())
+		enums, structs = filterUnusedStructs(enums, structs, queries, options.ModelsTypeQualifier(), false)
 	}
 
 	if err := validate(options, enums, structs, queries); err != nil {

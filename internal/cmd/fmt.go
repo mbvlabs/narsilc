@@ -237,10 +237,7 @@ func formatQueries(f queryFormatter, src string) (string, error) {
 		// above it, so start each segment where the previous one ended: the
 		// gap holds nothing but the previous terminator, whitespace and
 		// comments.
-		segStart := prevEnd
-		if start < segStart {
-			segStart = start
-		}
+		segStart := min(start, prevEnd)
 		if start+length <= prevEnd {
 			continue
 		}

@@ -53,7 +53,8 @@ type Options struct {
 	Initialisms                  *[]string         `json:"initialisms,omitempty" yaml:"initialisms"`
 	// RowMapping selects how :one/:many results are scanned. Empty keeps
 	// sqlc's generated structs. "andurel" emits generic methods that scan
-	// into a caller-provided struct via `andurel:"column"` tags.
+	// into a caller-provided struct via `andurel:"column"` tags, plus a
+	// generated row type so T may implement narsilc.Transformer[Row].
 	RowMapping string `json:"row_mapping,omitempty" yaml:"row_mapping"`
 
 	InitialismsMap map[string]struct{} `json:"-" yaml:"-"`
@@ -186,8 +187,8 @@ func ValidateOpts(opts *Options) error {
 	return nil
 }
 
-// AndurelRowMapping reports whether results should be scanned into a
-// caller-chosen struct via andurel tags instead of generated row types.
+// AndurelRowMapping reports whether results should be scanned via generic
+// methods, andurel tags, and an optional Transform from a generated row.
 func (o *Options) AndurelRowMapping() bool {
 	return o != nil && o.RowMapping == RowMappingAndurel
 }

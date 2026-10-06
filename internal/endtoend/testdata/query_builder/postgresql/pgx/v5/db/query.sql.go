@@ -17,6 +17,12 @@ SELECT id, name, created_at FROM authors
 WHERE tenant_id = $1
 `
 
+type ListAuthorsRow struct {
+	ID        int64              `andurel:"id"`
+	Name      string             `andurel:"name"`
+	CreatedAt pgtype.Timestamptz `andurel:"created_at"`
+}
+
 func (q *Queries) ListAuthors[T any](ctx context.Context, tenantID int64) *ListAuthorsBuilder[T] {
 	return &ListAuthorsBuilder[T]{
 		q:        q,
@@ -142,8 +148,21 @@ func (b *ListAuthorsBuilder[T]) All() ([]T, error) {
 	}
 	defer rows.Close()
 	var items []T
+	var probe T
+	_, mapRow := any(&probe).(narsilc.Transformer[ListAuthorsRow])
+	cols := []string{"id", "name", "created_at"}
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, []string{"id", "name", "created_at"})
+		var item T
+		var err error
+		if mapRow {
+			var scanned ListAuthorsRow
+			scanned, err = narsilc.Scan[ListAuthorsRow](rows, cols)
+			if err == nil {
+				item, err = narsilc.FromRow[T, ListAuthorsRow](scanned)
+			}
+		} else {
+			item, err = narsilc.Scan[T](rows, cols)
+		}
 		if err != nil {
 			return nil, err
 		}

@@ -713,7 +713,7 @@ func (c *cc) convertCast(e *dw.CastExpression) ast.Node {
 		typeName, arrayDims := c.convertTypeExpression(e.CastType)
 		if arrayDims > 0 {
 			typeName.ArrayBounds = &ast.List{}
-			for i := 0; i < arrayDims; i++ {
+			for range arrayDims {
 				typeName.ArrayBounds.Items = append(typeName.ArrayBounds.Items, &ast.Integer{Ival: -1})
 			}
 		}

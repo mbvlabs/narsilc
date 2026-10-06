@@ -184,8 +184,7 @@ func parseType(dt string) (string, bool, int) {
 // Don't create a database per query
 func (a *Analyzer) Analyze(ctx context.Context, n ast.Node, query string, migrations []string, ps *named.ParamSet) (*core.Analysis, error) {
 	extractSqlErr := func(e error) error {
-		var pgErr *pgconn.PgError
-		if errors.As(e, &pgErr) {
+		if pgErr, ok := errors.AsType[*pgconn.PgError](e); ok {
 			return &sqlerr.Error{
 				Code:     pgErr.Code,
 				Message:  pgErr.Message,

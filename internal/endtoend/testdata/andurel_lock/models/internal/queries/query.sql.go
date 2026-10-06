@@ -18,6 +18,12 @@ LEFT JOIN posts p ON p.author_id = a.id
 GROUP BY a.id, a.name
 `
 
+type AuthorPostCountsRow struct {
+	ID        int64  `andurel:"id"`
+	Name      string `andurel:"name"`
+	PostCount int64  `andurel:"post_count"`
+}
+
 func (q *Queries) AuthorPostCounts[T any](ctx context.Context) ([]T, error) {
 	rows, err := q.db.Query(ctx, authorPostCounts)
 	if err != nil {
@@ -25,8 +31,21 @@ func (q *Queries) AuthorPostCounts[T any](ctx context.Context) ([]T, error) {
 	}
 	defer rows.Close()
 	var items []T
+	var probe T
+	_, mapRow := any(&probe).(narsilc.Transformer[AuthorPostCountsRow])
+	cols := []string{"id", "name", "post_count"}
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, []string{"id", "name", "post_count"})
+		var item T
+		var err error
+		if mapRow {
+			var scanned AuthorPostCountsRow
+			scanned, err = narsilc.Scan[AuthorPostCountsRow](rows, cols)
+			if err == nil {
+				item, err = narsilc.FromRow[T, AuthorPostCountsRow](scanned)
+			}
+		} else {
+			item, err = narsilc.Scan[T](rows, cols)
+		}
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +91,7 @@ func (q *Queries) CreateAuthor[T any](ctx context.Context, arg CreateAuthorParam
 		arg.Name,
 		arg.Bio,
 	)
-	return narsilc.Scan[T](row, []string{"id", "public_id", "external_id", "name", "bio"})
+	return narsilc.Read[T, AuthorRow](row, []string{"id", "public_id", "external_id", "name", "bio"})
 }
 
 const deleteAuthor = `-- name: DeleteAuthor :exec
@@ -92,7 +111,7 @@ WHERE id = $1 LIMIT 1
 
 func (q *Queries) GetAuthor[T any](ctx context.Context, id int64) (T, error) {
 	row := q.db.QueryRow(ctx, getAuthor, id)
-	return narsilc.Scan[T](row, []string{"id", "public_id", "external_id", "name", "bio"})
+	return narsilc.Read[T, AuthorRow](row, []string{"id", "public_id", "external_id", "name", "bio"})
 }
 
 const getAuthorByPublicID = `-- name: GetAuthorByPublicID :one
@@ -102,7 +121,7 @@ WHERE public_id = $1 LIMIT 1
 
 func (q *Queries) GetAuthorByPublicID[T any](ctx context.Context, publicID uuid.UUID) (T, error) {
 	row := q.db.QueryRow(ctx, getAuthorByPublicID, publicID)
-	return narsilc.Scan[T](row, []string{"id", "public_id", "external_id", "name", "bio"})
+	return narsilc.Read[T, AuthorRow](row, []string{"id", "public_id", "external_id", "name", "bio"})
 }
 
 const listAuthors = `-- name: ListAuthors :many
@@ -117,8 +136,21 @@ func (q *Queries) ListAuthors[T any](ctx context.Context) ([]T, error) {
 	}
 	defer rows.Close()
 	var items []T
+	var probe T
+	_, mapRow := any(&probe).(narsilc.Transformer[AuthorRow])
+	cols := []string{"id", "public_id", "external_id", "name", "bio"}
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, []string{"id", "public_id", "external_id", "name", "bio"})
+		var item T
+		var err error
+		if mapRow {
+			var scanned AuthorRow
+			scanned, err = narsilc.Scan[AuthorRow](rows, cols)
+			if err == nil {
+				item, err = narsilc.FromRow[T, AuthorRow](scanned)
+			}
+		} else {
+			item, err = narsilc.Scan[T](rows, cols)
+		}
 		if err != nil {
 			return nil, err
 		}

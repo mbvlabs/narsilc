@@ -19,8 +19,7 @@ type Table struct {
 }
 
 func checkMissing(err error, missingOK bool) error {
-	var serr *sqlerr.Error
-	if errors.As(err, &serr) {
+	if serr, ok := errors.AsType[*sqlerr.Error](err); ok {
 		if serr.Err == sqlerr.NotFound && missingOK {
 			return nil
 		}

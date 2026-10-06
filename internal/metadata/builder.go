@@ -83,7 +83,7 @@ func ParseBuilderAnnotations(comments []string) ([]Filter, []Order, error) {
 			}
 			seenFilter[col] = struct{}{}
 			var ops []FilterOp
-			for _, raw := range strings.Split(fields[2], ",") {
+			for raw := range strings.SplitSeq(fields[2], ",") {
 				raw = strings.TrimSpace(raw)
 				if raw == "" {
 					continue
@@ -105,7 +105,7 @@ func ParseBuilderAnnotations(comments []string) ([]Filter, []Order, error) {
 			}
 			// Allow "@order name, created_at, id" split across fields after commas.
 			rest := strings.Join(fields[1:], " ")
-			for _, raw := range strings.Split(rest, ",") {
+			for raw := range strings.SplitSeq(rest, ",") {
 				col := strings.TrimSpace(raw)
 				if col == "" {
 					continue
