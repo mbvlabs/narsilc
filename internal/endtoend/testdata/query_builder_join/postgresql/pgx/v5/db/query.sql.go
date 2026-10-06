@@ -19,6 +19,11 @@ WITH u AS (
 SELECT id, email FROM u
 `
 
+type ListActiveUsersRow struct {
+	ID    int64  `andurel:"id"`
+	Email string `andurel:"email"`
+}
+
 func (q *Queries) ListActiveUsers[T any](ctx context.Context) *ListActiveUsersBuilder[T] {
 	return &ListActiveUsersBuilder[T]{
 		q:        q,
@@ -100,8 +105,21 @@ func (b *ListActiveUsersBuilder[T]) All() ([]T, error) {
 	}
 	defer rows.Close()
 	var items []T
+	var probe T
+	_, mapRow := any(&probe).(narsilc.Transformer[ListActiveUsersRow])
+	cols := []string{"id", "email"}
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, []string{"id", "email"})
+		var item T
+		var err error
+		if mapRow {
+			var scanned ListActiveUsersRow
+			scanned, err = narsilc.Scan[ListActiveUsersRow](rows, cols)
+			if err == nil {
+				item, err = narsilc.FromRow[T, ListActiveUsersRow](scanned)
+			}
+		} else {
+			item, err = narsilc.Scan[T](rows, cols)
+		}
 		if err != nil {
 			return nil, err
 		}
@@ -118,6 +136,13 @@ SELECT u.id, u.email, t.id, t.scope
 FROM users u
 JOIN tokens t ON t.user_id = u.id
 `
+
+type ListUserTokensRow struct {
+	ID    int64       `andurel:"id"`
+	Email string      `andurel:"email"`
+	ID_2  pgtype.UUID `andurel:"id"`
+	Scope string      `andurel:"scope"`
+}
 
 func (q *Queries) ListUserTokens[T any](ctx context.Context) *ListUserTokensBuilder[T] {
 	return &ListUserTokensBuilder[T]{
@@ -238,8 +263,21 @@ func (b *ListUserTokensBuilder[T]) All() ([]T, error) {
 	}
 	defer rows.Close()
 	var items []T
+	var probe T
+	_, mapRow := any(&probe).(narsilc.Transformer[ListUserTokensRow])
+	cols := []string{"id", "email", "id", "scope"}
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, []string{"id", "email", "id", "scope"})
+		var item T
+		var err error
+		if mapRow {
+			var scanned ListUserTokensRow
+			scanned, err = narsilc.Scan[ListUserTokensRow](rows, cols)
+			if err == nil {
+				item, err = narsilc.FromRow[T, ListUserTokensRow](scanned)
+			}
+		} else {
+			item, err = narsilc.Scan[T](rows, cols)
+		}
 		if err != nil {
 			return nil, err
 		}
@@ -254,6 +292,11 @@ func (b *ListUserTokensBuilder[T]) All() ([]T, error) {
 const listUsers = `-- name: ListUsers :many
 SELECT id, email FROM users
 `
+
+type ListUsersRow struct {
+	ID    int64  `andurel:"id"`
+	Email string `andurel:"email"`
+}
 
 func (q *Queries) ListUsers[T any](ctx context.Context) *ListUsersBuilder[T] {
 	return &ListUsersBuilder[T]{
@@ -336,8 +379,21 @@ func (b *ListUsersBuilder[T]) All() ([]T, error) {
 	}
 	defer rows.Close()
 	var items []T
+	var probe T
+	_, mapRow := any(&probe).(narsilc.Transformer[ListUsersRow])
+	cols := []string{"id", "email"}
 	for rows.Next() {
-		item, err := narsilc.Scan[T](rows, []string{"id", "email"})
+		var item T
+		var err error
+		if mapRow {
+			var scanned ListUsersRow
+			scanned, err = narsilc.Scan[ListUsersRow](rows, cols)
+			if err == nil {
+				item, err = narsilc.FromRow[T, ListUsersRow](scanned)
+			}
+		} else {
+			item, err = narsilc.Scan[T](rows, cols)
+		}
 		if err != nil {
 			return nil, err
 		}

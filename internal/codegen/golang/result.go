@@ -264,7 +264,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 					Column: p.Column,
 				})
 			}
-			s, err := columnsToStruct(req, options, gq.MethodName+"Params", cols, false, models, qualifier)
+			s, err := columnsToStruct(req, options, gq.MethodName+"Params", cols, false, false, models, qualifier)
 			if err != nil {
 				return nil, err
 			}
@@ -347,7 +347,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 					})
 				}
 				var err error
-				gs, err = columnsToStruct(req, options, gq.MethodName+"Row", columns, true, models, qualifier)
+				gs, err = columnsToStruct(req, options, gq.MethodName+"Row", columns, true, true, models, qualifier)
 				if err != nil {
 					return nil, err
 				}
@@ -389,7 +389,7 @@ func putOutColumns(query *plugin.Query) bool {
 // JSON tags: count, count_2, count_2
 //
 // This is unlikely to happen, so don't fix it yet
-func columnsToStruct(req *plugin.GenerateRequest, options *opts.Options, name string, columns []goColumn, useID bool, models modelTypeSet, qualifier string) (*Struct, error) {
+func columnsToStruct(req *plugin.GenerateRequest, options *opts.Options, name string, columns []goColumn, useID bool, andurelTags bool, models modelTypeSet, qualifier string) (*Struct, error) {
 	gs := Struct{
 		Name: name,
 	}
@@ -428,7 +428,9 @@ func columnsToStruct(req *plugin.GenerateRequest, options *opts.Options, name st
 			tags["json"] = JSONTagName(tagName, options)
 		}
 		addExtraGoStructTags(tags, req, options, c.Column)
-		addAndurelStructTag(tags, options, c.Column)
+		if andurelTags {
+			addAndurelStructTag(tags, options, c.Column)
+		}
 		f := Field{
 			Name:   fieldName,
 			DBName: colName,
