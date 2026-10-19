@@ -2,6 +2,7 @@ package metadata
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -73,10 +74,8 @@ func ParseColumnRef(name string) (ColumnRef, error) {
 		return ColumnRef{}, fmt.Errorf("empty column reference")
 	}
 	parts := strings.Split(name, ".")
-	for _, p := range parts {
-		if p == "" {
-			return ColumnRef{}, fmt.Errorf("invalid column reference %q (want column, alias.column, or schema.table.column)", name)
-		}
+	if slices.Contains(parts, "") {
+		return ColumnRef{}, fmt.Errorf("invalid column reference %q (want column, alias.column, or schema.table.column)", name)
 	}
 	switch len(parts) {
 	case 1:

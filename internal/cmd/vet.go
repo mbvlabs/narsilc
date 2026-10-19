@@ -17,9 +17,9 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
 	"cel.dev/cel-go/cel"
 	"cel.dev/cel-go/ext"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jackc/pgx/v5"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"

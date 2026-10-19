@@ -62,4 +62,3 @@ func parseTableName(n *tsql.SchemaObjectName) *ast.TableName {
 		Name:   identifierValue(n.BaseIdentifier),
 	}
 }
-

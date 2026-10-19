@@ -7,11 +7,11 @@ import (
 	"runtime/trace"
 	"time"
 
-	"github.com/spf13/cobra"
 	"github.com/mbvlabs/narsilc/internal/config"
 	"github.com/mbvlabs/narsilc/internal/dbmanager"
 	"github.com/mbvlabs/narsilc/internal/migrations"
 	"github.com/mbvlabs/narsilc/internal/sql/sqlpath"
+	"github.com/spf13/cobra"
 )
 
 var createDBCmd = &cobra.Command{

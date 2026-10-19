@@ -68,7 +68,6 @@ func buildLayout(t reflect.Type, columns []string) (layout, error) {
 
 	byCol := make(map[string][]int, t.NumField())
 	for f := range t.Fields() {
-		f := f
 		if !f.IsExported() {
 			continue
 		}
