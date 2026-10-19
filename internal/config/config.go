@@ -102,6 +102,8 @@ type SQL struct {
 	Engine               Engine    `json:"engine,omitempty" yaml:"engine"`
 	Schema               Paths     `json:"schema" yaml:"schema"`
 	Queries              Paths     `json:"queries" yaml:"queries"`
+	QueriesRecursive     bool      `json:"-" yaml:"-"`
+	QueriesExclude       Paths     `json:"-" yaml:"-"`
 	Database             *Database `json:"database" yaml:"database"`
 	StrictFunctionChecks bool      `json:"strict_function_checks" yaml:"strict_function_checks"`
 	StrictOrderBy        *bool     `json:"strict_order_by" yaml:"strict_order_by"`

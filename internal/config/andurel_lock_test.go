@@ -34,6 +34,24 @@ version = "v0.1.0"
 		if len(opts.Overrides) != 2 {
 			t.Fatalf("overrides = %d, want 2", len(opts.Overrides))
 		}
+		if opts.Package != "queries" {
+			t.Fatalf("package = %q, want %q", opts.Package, "queries")
+		}
+		if got := conf.SQL[0].Schema; len(got) != 1 || got[0] != "migrations" {
+			t.Fatalf("schema = %v, want [migrations]", got)
+		}
+		if got := conf.SQL[0].Queries; len(got) != 1 || got[0] != "domains" {
+			t.Fatalf("queries = %v, want [domains]", got)
+		}
+		if !conf.SQL[0].QueriesRecursive {
+			t.Fatal("andurel queries should be discovered recursively")
+		}
+		if got := conf.SQL[0].QueriesExclude; len(got) != 1 || got[0] != "internal/queries" {
+			t.Fatalf("query excludes = %v, want [internal/queries]", got)
+		}
+		if opts.Out != "domains/internal/queries" {
+			t.Fatalf("out = %q, want %q", opts.Out, "domains/internal/queries")
+		}
 	})
 
 	t.Run("pointer nullType", func(t *testing.T) {

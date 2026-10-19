@@ -163,7 +163,15 @@ type statement struct {
 
 func (c *Compiler) parseQueries(o opts.Parser) (*Result, error) {
 	merr := multierr.New()
-	files, err := sqlpath.Glob(c.conf.Queries)
+	var (
+		files []string
+		err   error
+	)
+	if c.conf.QueriesRecursive {
+		files, err = sqlpath.GlobRecursive(c.conf.Queries, c.conf.QueriesExclude)
+	} else {
+		files, err = sqlpath.Glob(c.conf.Queries)
+	}
 	if err != nil {
 		return nil, err
 	}

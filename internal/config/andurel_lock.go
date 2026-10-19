@@ -14,9 +14,9 @@ const (
 	andurelTomlName = "andurel.toml"
 	andurelLockName = "andurel.lock"
 
-	andurelQueriesDir  = "models/queries"
+	andurelQueriesDir  = "domains"
 	andurelSchemaDir   = "migrations"
-	andurelOutDir      = "models/internal/queries"
+	andurelOutDir      = "domains/internal/queries"
 	andurelPackageName = "queries"
 )
 
@@ -82,12 +82,22 @@ func andurelConfigFromEngineNull(engine Engine, nullType, source string) (Config
 		return Config{}, fmt.Errorf("%s database.nullType %q is not supported", source, nullType)
 	}
 
+	// Andurel keeps each domain's queries next to its Go code, so query
+	// discovery descends into domains/. The generated package lives under
+	// that tree and must not be read back as input.
+	var queryExcludes Paths
+	if rel, err := filepath.Rel(andurelQueriesDir, andurelOutDir); err == nil {
+		queryExcludes = Paths{rel}
+	}
+
 	return Config{
 		Version: "2",
 		SQL: []SQL{{
-			Engine:  engine,
-			Schema:  Paths{andurelSchemaDir},
-			Queries: Paths{andurelQueriesDir},
+			Engine:           engine,
+			Schema:           Paths{andurelSchemaDir},
+			Queries:          Paths{andurelQueriesDir},
+			QueriesRecursive: true,
+			QueriesExclude:   queryExcludes,
 			Gen: SQLGen{
 				Go: &golang.Options{
 					Package:                  andurelPackageName,

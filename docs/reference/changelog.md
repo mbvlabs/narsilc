@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+(unreleased)=
+## [unreleased]
+Released 2026-10-19
+
+### Breaking Changes
+
+- (config) `andurel.toml` projects now read queries from `domains/**/*.sql` and write generated Go to `domains/internal/queries`. Andurel v1 layouts that keep queries in `models/queries` are no longer discovered.
+
 (v1-31-1)=
 ## [1.31.1](https://github.com/mbvlabs/narsilc/releases/tag/v1.31.1)
 Released 2026-04-22

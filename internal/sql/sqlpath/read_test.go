@@ -2,6 +2,7 @@ package sqlpath
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -191,6 +192,43 @@ func TestFollowSymlinks(t *testing.T) {
 	}
 	if !cmp.Equal(result, expected) {
 		t.Errorf("Expected %v, but got %v", expected, result)
+	}
+	if err != nil {
+		t.Errorf("Expected no error, but got %v", err)
+	}
+}
+
+func TestGlobRecursive(t *testing.T) {
+	// Arrange
+	root := t.TempDir()
+	for _, name := range []string{
+		"user.sql",
+		"widget.go",
+		"billing/invoice.sql",
+		"billing/notes.txt",
+		"internal/queries/generated.sql",
+		".hidden.sql",
+		"billing/invoice.down.sql",
+	} {
+		path := filepath.Join(root, name)
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(path, []byte("SELECT 1;"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	// Act
+	result, err := GlobRecursive([]string{root}, []string{"internal/queries"})
+
+	// Assert
+	expected := []string{
+		filepath.Join(root, "billing", "invoice.sql"),
+		filepath.Join(root, "user.sql"),
+	}
+	if !cmp.Equal(result, expected) {
+		t.Errorf("Expected %v, but got %v, %v", expected, result, cmp.Diff(expected, result))
 	}
 	if err != nil {
 		t.Errorf("Expected no error, but got %v", err)
