@@ -132,16 +132,16 @@ func (b *ListActiveUsersBuilder[T]) All() ([]T, error) {
 }
 
 const listUserTokens = `-- name: ListUserTokens :many
-SELECT u.id, u.email, t.id, t.scope
+SELECT u.id AS user_id, u.email, t.id AS token_id, t.scope
 FROM users u
 JOIN tokens t ON t.user_id = u.id
 `
 
 type ListUserTokensRow struct {
-	ID    int64       `andurel:"id"`
-	Email string      `andurel:"email"`
-	ID_2  pgtype.UUID `andurel:"id"`
-	Scope string      `andurel:"scope"`
+	UserID  int64       `andurel:"user_id"`
+	Email   string      `andurel:"email"`
+	TokenID pgtype.UUID `andurel:"token_id"`
+	Scope   string      `andurel:"scope"`
 }
 
 func (q *Queries) ListUserTokens[T any](ctx context.Context) *ListUserTokensBuilder[T] {
@@ -265,7 +265,7 @@ func (b *ListUserTokensBuilder[T]) All() ([]T, error) {
 	var items []T
 	var probe T
 	_, mapRow := any(&probe).(narsilc.Transformer[ListUserTokensRow])
-	cols := []string{"id", "email", "id", "scope"}
+	cols := []string{"user_id", "email", "token_id", "scope"}
 	for rows.Next() {
 		var item T
 		var err error

@@ -188,6 +188,20 @@ func (v QueryValue) ColumnNamesAsGoSlice() string {
 	return "[]string{" + strings.Join(escapedNames, ", ") + "}"
 }
 
+// ScanColumnNamesAsGoSlice lists the result columns a generated row scan
+// matches its andurel tags against. It uses the name the query gives the
+// result (the AS alias when there is one), not the underlying table column.
+func (v QueryValue) ScanColumnNamesAsGoSlice() string {
+	if v.Struct == nil {
+		return fmt.Sprintf("[]string{%q}", v.DBName)
+	}
+	names := make([]string, len(v.Struct.Fields))
+	for i, f := range v.Struct.Fields {
+		names[i] = fmt.Sprintf("%q", f.DBName)
+	}
+	return "[]string{" + strings.Join(names, ", ") + "}"
+}
+
 // When true, we have to build the arguments to q.db.QueryContext in addition to
 // munging the SQL
 func (v QueryValue) HasSqlcSlices() bool {

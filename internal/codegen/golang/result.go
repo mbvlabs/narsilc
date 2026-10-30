@@ -99,7 +99,7 @@ func buildStructs(req *plugin.GenerateRequest, options *opts.Options) []Struct {
 					tags["json"] = JSONTagName(column.Name, options)
 				}
 				addExtraGoStructTags(tags, req, options, column)
-				addAndurelStructTag(tags, options, column)
+				addAndurelStructTag(tags, options, column.Name)
 				s.Fields = append(s.Fields, Field{
 					Name:    StructName(column.Name, options),
 					DBName:  column.Name,
@@ -429,7 +429,7 @@ func columnsToStruct(req *plugin.GenerateRequest, options *opts.Options, name st
 		}
 		addExtraGoStructTags(tags, req, options, c.Column)
 		if andurelTags {
-			addAndurelStructTag(tags, options, c.Column)
+			addAndurelStructTag(tags, options, colName)
 		}
 		f := Field{
 			Name:   fieldName,

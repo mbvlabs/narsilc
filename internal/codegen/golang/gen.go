@@ -441,10 +441,19 @@ func validateAndurelQueries(options *opts.Options, queries []Query) error {
 			return fmt.Errorf("row_mapping %q does not support %s", opts.RowMappingAndurel, q.Cmd)
 		}
 		if q.Ret.IsStruct() {
+			seen := map[string]string{}
 			for _, f := range q.Ret.Struct.Fields {
 				if len(f.EmbedFields) > 0 {
 					return fmt.Errorf("row_mapping %q does not support sqlc.embed (query %s)", opts.RowMappingAndurel, q.MethodName)
 				}
+				tag := f.Tags["andurel"]
+				if tag == "" {
+					continue
+				}
+				if first, ok := seen[tag]; ok {
+					return fmt.Errorf("row_mapping %q: query %s: duplicate andurel tag %q (fields %s and %s)", opts.RowMappingAndurel, q.MethodName, tag, first, f.Name)
+				}
+				seen[tag] = f.Name
 			}
 		}
 	}

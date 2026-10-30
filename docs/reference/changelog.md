@@ -9,6 +9,10 @@ Released 2026-10-19
 
 - (config) `andurel.toml` projects now read queries from `domains/**/*.sql` and write generated Go to `domains/internal/queries`. Andurel v1 layouts that keep queries in `models/queries` are no longer discovered.
 
+### Bug Fixes
+
+- (andurel) Row and scan-column names honour `AS` aliases, and generation fails when two fields in one row share an `andurel` tag.
+
 (v1-31-1)=
 ## [1.31.1](https://github.com/mbvlabs/narsilc/releases/tag/v1.31.1)
 Released 2026-04-22

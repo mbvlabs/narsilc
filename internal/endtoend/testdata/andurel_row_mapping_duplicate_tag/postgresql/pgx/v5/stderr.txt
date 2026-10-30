@@ -1,0 +1,2 @@
+# package queries
+error generating code: row_mapping "andurel": query ListPairs: duplicate andurel tag "id" (fields ID and ID_2)

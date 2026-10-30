@@ -25,21 +25,11 @@ func (gf Field) Tag() string {
 	return TagsToString(gf.Tags)
 }
 
-func columnAndurelName(c *plugin.Column) string {
-	if c == nil {
-		return ""
-	}
-	if c.OriginalName != "" {
-		return c.OriginalName
-	}
-	return c.Name
-}
-
-func addAndurelStructTag(tags map[string]string, options *opts.Options, column *plugin.Column) {
-	if options == nil || !options.AndurelRowMapping() || column == nil {
+func addAndurelStructTag(tags map[string]string, options *opts.Options, name string) {
+	if options == nil || !options.AndurelRowMapping() || name == "" {
 		return
 	}
-	tags["andurel"] = columnAndurelName(column)
+	tags["andurel"] = name
 }
 
 func (gf Field) HasSqlcSlice() bool {

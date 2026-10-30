@@ -3,7 +3,7 @@
 -- @filter t.id eq
 -- @filter scope eq
 -- @order  u.id, t.id, scope
-SELECT u.id, u.email, t.id, t.scope
+SELECT u.id AS user_id, u.email, t.id AS token_id, t.scope
 FROM users u
 JOIN tokens t ON t.user_id = u.id;
 

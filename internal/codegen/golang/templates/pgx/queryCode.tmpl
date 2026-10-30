@@ -35,13 +35,13 @@ func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{.Arg.Pair}}) (T,
 	row := q.db.QueryRow(ctx, {{.ConstantName}}, {{.Arg.Params}})
 {{- end}}
 	{{- if $.WrapErrors}}
-	item, err := narsilc.Read[T, {{.Ret.Type}}](row, {{.Ret.ColumnNamesAsGoSlice}})
+	item, err := narsilc.Read[T, {{.Ret.Type}}](row, {{.Ret.ScanColumnNamesAsGoSlice}})
 	if err != nil {
 		err = fmt.Errorf("query {{.MethodName}}: %w", err)
 	}
 	return item, err
 	{{- else}}
-	return narsilc.Read[T, {{.Ret.Type}}](row, {{.Ret.ColumnNamesAsGoSlice}})
+	return narsilc.Read[T, {{.Ret.Type}}](row, {{.Ret.ScanColumnNamesAsGoSlice}})
 	{{- end}}
 }
 {{else}}
@@ -197,7 +197,7 @@ func (b {{.BuilderTypeRef}}) All() ([]T, error) {
 	{{end -}}
 	var probe T
 	_, mapRow := any(&probe).(narsilc.Transformer[{{.Ret.Type}}])
-	cols := {{.Ret.ColumnNamesAsGoSlice}}
+	cols := {{.Ret.ScanColumnNamesAsGoSlice}}
 	for rows.Next() {
 		var item T
 		var err error
@@ -268,7 +268,7 @@ func (q *Queries) {{.MethodName}}[T any](ctx context.Context, {{.Arg.Pair}}) ([]
 	{{end -}}
 	var probe T
 	_, mapRow := any(&probe).(narsilc.Transformer[{{.Ret.Type}}])
-	cols := {{.Ret.ColumnNamesAsGoSlice}}
+	cols := {{.Ret.ScanColumnNamesAsGoSlice}}
 	for rows.Next() {
 		var item T
 		var err error
