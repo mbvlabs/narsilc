@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/mbvlabs/narsilc"
@@ -57,13 +58,13 @@ func (b *ListAuthorsBuilder[T]) NameLike(v string) *ListAuthorsBuilder[T] {
 	return b
 }
 
-func (b *ListAuthorsBuilder[T]) CreatedAtGte(v pgtype.Timestamptz) *ListAuthorsBuilder[T] {
+func (b *ListAuthorsBuilder[T]) CreatedAtGte(v time.Time) *ListAuthorsBuilder[T] {
 	b.args = append(b.args, v)
 	b.conds = append(b.conds, fmt.Sprintf(`created_at >= $%d`, len(b.args)))
 	return b
 }
 
-func (b *ListAuthorsBuilder[T]) CreatedAtLte(v pgtype.Timestamptz) *ListAuthorsBuilder[T] {
+func (b *ListAuthorsBuilder[T]) CreatedAtLte(v time.Time) *ListAuthorsBuilder[T] {
 	b.args = append(b.args, v)
 	b.conds = append(b.conds, fmt.Sprintf(`created_at <= $%d`, len(b.args)))
 	return b

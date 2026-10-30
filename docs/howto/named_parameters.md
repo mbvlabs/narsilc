@@ -60,6 +60,19 @@ SET
 RETURNING *;
 ```
 
+A type cast on an anonymous parameter has no column to take a name from.
+`WHERE release_id = $1::bigint` generates a `dollar_1` argument; name it on the
+parameter instead and the cast still applies:
+
+```sql
+-- name: ListByRelease :many
+SELECT * FROM revisions WHERE release_id = @release_id::bigint;
+```
+
+```go
+func (q *Queries) ListByRelease(ctx context.Context, releaseID int64) ([]Revision, error)
+```
+
 ## Nullable parameters
 
 sqlc infers the nullability of any specified parameters, and often does exactly

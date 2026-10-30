@@ -12,6 +12,7 @@ Released 2026-10-19
 ### Bug Fixes
 
 - (andurel) Row and scan-column names honour `AS` aliases, and generation fails when two fields in one row share an `andurel` tag.
+- (andurel) NOT NULL query parameters use the plain Go type (`time.Time` for date/time columns) instead of a nullable `pgtype` value.
 
 (v1-31-1)=
 ## [1.31.1](https://github.com/mbvlabs/narsilc/releases/tag/v1.31.1)

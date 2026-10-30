@@ -66,6 +66,22 @@ func goType(req *plugin.GenerateRequest, options *opts.Options, col *plugin.Colu
 	return typ
 }
 
+// goParamType is goType for query parameters. Under Andurel row mapping a
+// NOT NULL PostgreSQL date/time value is passed as time.Time: pgx encodes it
+// for these columns, and a value the schema says can never be NULL does not
+// need a pgtype validity flag at the call site. Result rows keep the
+// representation database.nullType selects.
+func goParamType(req *plugin.GenerateRequest, options *opts.Options, col *plugin.Column) string {
+	if options != nil && options.AndurelRowMapping() && col != nil && col.Type != nil &&
+		col.NotNull && !col.IsArray && !col.IsSqlcSlice &&
+		req.Settings != nil && req.Settings.Engine == "postgresql" {
+		if typ, ok := postgresNonNullParamType(sdk.DataType(col.Type)); ok {
+			return typ
+		}
+	}
+	return goType(req, options, col)
+}
+
 func goInnerType(req *plugin.GenerateRequest, options *opts.Options, col *plugin.Column) string {
 	// package overrides have a higher precedence
 	for _, override := range options.Overrides {

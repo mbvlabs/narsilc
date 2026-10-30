@@ -122,6 +122,7 @@ type goColumn struct {
 	id int
 	*plugin.Column
 	embed *goEmbed
+	param bool
 }
 
 type goEmbed struct {
@@ -251,7 +252,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 			gq.Arg = QueryValue{
 				Name:           escape(paramName(p)),
 				DBName:         p.Column.GetName(),
-				Typ:            qualifyType(goType(req, options, p.Column), models, qualifier),
+				Typ:            qualifyType(goParamType(req, options, p.Column), models, qualifier),
 				SQLDriver:      sqlpkg,
 				ModelQualifier: qualifier,
 				Column:         p.Column,
@@ -262,6 +263,7 @@ func buildQueries(req *plugin.GenerateRequest, options *opts.Options, enums []En
 				cols = append(cols, goColumn{
 					id:     int(p.Number),
 					Column: p.Column,
+					param:  true,
 				})
 			}
 			s, err := columnsToStruct(req, options, gq.MethodName+"Params", cols, false, false, models, qualifier)
@@ -438,7 +440,11 @@ func columnsToStruct(req *plugin.GenerateRequest, options *opts.Options, name st
 			Column: c.Column,
 		}
 		if c.embed == nil {
-			f.Type = qualifyType(goType(req, options, c.Column), models, qualifier)
+			if c.param {
+				f.Type = qualifyType(goParamType(req, options, c.Column), models, qualifier)
+			} else {
+				f.Type = qualifyType(goType(req, options, c.Column), models, qualifier)
+			}
 		} else {
 			f.Type = qualifyType(c.embed.modelType, models, qualifier)
 			f.EmbedFields = c.embed.fields

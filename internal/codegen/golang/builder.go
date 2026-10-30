@@ -82,7 +82,7 @@ func buildQueryBuilder(req *plugin.GenerateRequest, options *opts.Options, query
 		if err != nil {
 			return nil, fmt.Errorf("query %s: %w", query.Name, err)
 		}
-		goTyp := goType(req, options, col)
+		goTyp := goParamType(req, options, col)
 		exported := StructName(f.Column, options)
 		for _, op := range f.Operators {
 			placeholder := "?"

@@ -34,6 +34,22 @@ func parseIdentifierString(name string) (*plugin.Identifier, error) {
 	}
 }
 
+// postgresNonNullParamType reports the Go type pgx encodes for a NOT NULL
+// parameter of a PostgreSQL date/time type. postgresType maps these to pgtype
+// structs for pgx/v5 whatever the nullability; a parameter typed from a NOT
+// NULL column does not need the validity flag, so goParamType uses time.Time
+// instead.
+func postgresNonNullParamType(columnType string) (string, bool) {
+	switch columnType {
+	case "date", "pg_catalog.date",
+		"pg_catalog.time", "time", "time without time zone",
+		"pg_catalog.timestamp", "timestamp", "timestamp without time zone",
+		"pg_catalog.timestamptz", "timestamptz", "timestamp with time zone":
+		return "time.Time", true
+	}
+	return "", false
+}
+
 func postgresType(req *plugin.GenerateRequest, options *opts.Options, col *plugin.Column) string {
 	columnType := sdk.DataType(col.Type)
 	notNull := col.NotNull || col.IsArray
