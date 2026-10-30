@@ -3,16 +3,24 @@ All notable changes to this project will be documented in this file.
 
 (unreleased)=
 ## [unreleased]
+
+(v0-6-3)=
+## [0.6.3](https://github.com/mbvlabs/narsilc/releases/tag/v0.6.3)
+Released 2026-10-30
+
+### Bug Fixes
+
+- (andurel) Row and scan-column names honour `AS` aliases, and generation fails when two fields in one row share an `andurel` tag.
+- (andurel) NOT NULL PostgreSQL date/time query parameters use `time.Time` instead of nullable `pgtype` values; generated row representations are unchanged.
+- (docs) Document named cast parameters such as `@release_id::bigint` to preserve meaningful parameter names.
+
+(v0-6-2)=
+## [0.6.2](https://github.com/mbvlabs/narsilc/releases/tag/v0.6.2)
 Released 2026-10-19
 
 ### Breaking Changes
 
 - (config) `andurel.toml` projects now read queries from `domains/**/*.sql` and write generated Go to `domains/internal/queries`. Andurel v1 layouts that keep queries in `models/queries` are no longer discovered.
-
-### Bug Fixes
-
-- (andurel) Row and scan-column names honour `AS` aliases, and generation fails when two fields in one row share an `andurel` tag.
-- (andurel) NOT NULL query parameters use the plain Go type (`time.Time` for date/time columns) instead of a nullable `pgtype` value.
 
 (v1-31-1)=
 ## [1.31.1](https://github.com/mbvlabs/narsilc/releases/tag/v1.31.1)
