@@ -2,4 +2,4 @@ package info
 
 // When no version is set, return the next bug fix version
 // after the most recent tag
-const Version = "v0.6.4"
+const Version = "v1.31.1"
