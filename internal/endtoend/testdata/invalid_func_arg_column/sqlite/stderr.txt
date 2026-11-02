@@ -1,0 +1,16 @@
+# package querytest
+query.sql:2:14: column "nope1" does not exist
+query.sql:5:14: column "nope2" does not exist
+query.sql:8:20: column "nope3" does not exist
+query.sql:11:18: column "nope4" does not exist
+query.sql:14:23: column "nope5" does not exist
+query.sql:17:13: column "nope6" does not exist
+query.sql:20:28: column "nope7" does not exist
+query.sql:23:13: column "nope8" does not exist
+query.sql:26:37: column "nope9" does not exist
+query.sql:29:34: column "nope10" does not exist
+query.sql:32:51: column "nope11" does not exist
+query.sql:35:31: column "nope12" does not exist
+query.sql:38:73: column "nope13" does not exist
+query.sql:41:42: column "nope14" does not exist
+query.sql:44:14: table alias "nosuch" does not exist

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 (unreleased)=
 ## [unreleased]
 
+(v0-6-4)=
+## [0.6.4](https://github.com/mbvlabs/narsilc/releases/tag/v0.6.4)
+Released 2026-11-02
+
+### Bug Fixes
+
+- (compiler) Reject unknown column references in function arguments when their relations are known.
+
 (v0-6-3)=
 ## [0.6.3](https://github.com/mbvlabs/narsilc/releases/tag/v0.6.3)
 Released 2026-10-30

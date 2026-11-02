@@ -189,6 +189,9 @@ func (c *Compiler) _analyzeQuery(raw *ast.RawStmt, query string, pre *preprocess
 	if err := check(err); err != nil {
 		return nil, err
 	}
+	if err := check(c.validateColumnRefs(qc, raw.Stmt)); err != nil {
+		return nil, err
+	}
 
 	edits, err := c.expand(qc, raw)
 	if check(err); err != nil {

@@ -1,0 +1,4 @@
+# package querytest
+query.sql:2:14: column "nonexistent_col" does not exist
+query.sql:5:14: column "nonexistent_col" does not exist
+query.sql:8:14: column "nonexistent_col" does not exist
